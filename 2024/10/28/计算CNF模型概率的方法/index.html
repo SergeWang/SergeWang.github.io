@@ -6,15 +6,15 @@
   
   <title>计算CNF模型概率的方法 | Model The World</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="计算 CNF 模型概率的方法连续归一化流 (CNF) 模型通过一个时间依赖的微分同胚映射将简单分布（如标准正态分布）转化为复杂数据分布。要计算 CNF 模型在任意数据点 x1 的概率，我们需要利用连续性方程和流的轨迹方程。 连续性方程和概率密度的变化连续性方程描述了概率密度的守恒特性： 1d&#x2F;dt pt(x) + div(pt(x)vt(x)) &#x3D; 0  其中：  pt(x) 是时间 t 的概率密">
+  <meta name="description" content="连续归一化流 (CNF) 模型通过一个时间依赖的微分同胚映射将简单分布（如标准正态分布）转化为复杂数据分布。要计算 CNF 模型在任意数据点 x1 的概率，我们需要利用连续性方程和流的轨迹方程。 连续性方程和概率密度的变化连续性方程描述了概率密度的守恒特性： 1d&#x2F;dt pt(x) + div(pt(x)vt(x)) &#x3D; 0  其中：  pt(x) 是时间 t 的概率密度函数。 vt(x) 是时间">
 <meta property="og:type" content="article">
 <meta property="og:title" content="计算CNF模型概率的方法">
 <meta property="og:url" content="https://sergewang.github.io/2024/10/28/%E8%AE%A1%E7%AE%97CNF%E6%A8%A1%E5%9E%8B%E6%A6%82%E7%8E%87%E7%9A%84%E6%96%B9%E6%B3%95/">
 <meta property="og:site_name" content="Model The World">
-<meta property="og:description" content="计算 CNF 模型概率的方法连续归一化流 (CNF) 模型通过一个时间依赖的微分同胚映射将简单分布（如标准正态分布）转化为复杂数据分布。要计算 CNF 模型在任意数据点 x1 的概率，我们需要利用连续性方程和流的轨迹方程。 连续性方程和概率密度的变化连续性方程描述了概率密度的守恒特性： 1d&#x2F;dt pt(x) + div(pt(x)vt(x)) &#x3D; 0  其中：  pt(x) 是时间 t 的概率密">
+<meta property="og:description" content="连续归一化流 (CNF) 模型通过一个时间依赖的微分同胚映射将简单分布（如标准正态分布）转化为复杂数据分布。要计算 CNF 模型在任意数据点 x1 的概率，我们需要利用连续性方程和流的轨迹方程。 连续性方程和概率密度的变化连续性方程描述了概率密度的守恒特性： 1d&#x2F;dt pt(x) + div(pt(x)vt(x)) &#x3D; 0  其中：  pt(x) 是时间 t 的概率密度函数。 vt(x) 是时间">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-10-28T05:51:41.000Z">
-<meta property="article:modified_time" content="2024-10-28T06:03:40.201Z">
+<meta property="article:modified_time" content="2024-10-28T06:13:00.514Z">
 <meta property="article:author" content="Serge Wang">
 <meta property="article:tag" content="机器学习">
 <meta property="article:tag" content="人工智能">
@@ -104,7 +104,7 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <h2 id="计算-CNF-模型概率的方法"><a href="#计算-CNF-模型概率的方法" class="headerlink" title="计算 CNF 模型概率的方法"></a>计算 CNF 模型概率的方法</h2><p>连续归一化流 (CNF) 模型通过一个时间依赖的微分同胚映射将简单分布（如标准正态分布）转化为复杂数据分布。要计算 CNF 模型在任意数据点 x1 的概率，我们需要利用连续性方程和流的轨迹方程。</p>
+        <p>连续归一化流 (CNF) 模型通过一个时间依赖的微分同胚映射将简单分布（如标准正态分布）转化为复杂数据分布。要计算 CNF 模型在任意数据点 x1 的概率，我们需要利用连续性方程和流的轨迹方程。</p>
 <h3 id="连续性方程和概率密度的变化"><a href="#连续性方程和概率密度的变化" class="headerlink" title="连续性方程和概率密度的变化"></a>连续性方程和概率密度的变化</h3><p>连续性方程描述了概率密度的守恒特性：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">d/dt pt(x) + div(pt(x)vt(x)) = 0</span><br></pre></td></tr></table></figure>
 
