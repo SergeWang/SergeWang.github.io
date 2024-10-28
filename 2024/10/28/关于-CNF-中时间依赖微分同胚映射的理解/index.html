@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  
+  <title>关于 CNF 中时间依赖微分同胚映射的理解 | Model The World</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="关于 CNF 中时间依赖微分同胚映射的理解在连续归一化流 (CNF) 中，时间依赖微分同胚映射是将简单分布（如标准正态分布）转化为复杂数据分布的关键机制。它通过一个随时间变化的向量场 vt(x) 来实现，这个向量场决定了概率密度函数从初始分布 p0(x) 到目标分布 p1(x) 的演化过程。这个演化过程可以通过一个微分同胚映射 φt 来描述，它将时间 t 的概率密度函数 pt(x)  “推” 向时">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于 CNF 中时间依赖微分同胚映射的理解">
+<meta property="og:url" content="https://sergewang.github.io/2024/10/28/%E5%85%B3%E4%BA%8E-CNF-%E4%B8%AD%E6%97%B6%E9%97%B4%E4%BE%9D%E8%B5%96%E5%BE%AE%E5%88%86%E5%90%8C%E8%83%9A%E6%98%A0%E5%B0%84%E7%9A%84%E7%90%86%E8%A7%A3/">
+<meta property="og:site_name" content="Model The World">
+<meta property="og:description" content="关于 CNF 中时间依赖微分同胚映射的理解在连续归一化流 (CNF) 中，时间依赖微分同胚映射是将简单分布（如标准正态分布）转化为复杂数据分布的关键机制。它通过一个随时间变化的向量场 vt(x) 来实现，这个向量场决定了概率密度函数从初始分布 p0(x) 到目标分布 p1(x) 的演化过程。这个演化过程可以通过一个微分同胚映射 φt 来描述，它将时间 t 的概率密度函数 pt(x)  “推” 向时">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2024-10-28T06:10:07.000Z">
+<meta property="article:modified_time" content="2024-10-28T06:10:50.360Z">
+<meta property="article:author" content="Serge Wang">
+<meta property="article:tag" content="机器学习">
+<meta property="article:tag" content="人工智能">
+<meta property="article:tag" content="扩散模型">
+<meta name="twitter:card" content="summary">
+  
+  
+    <link rel="shortcut icon" href="/logo.ico">
+  
+  
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+    
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
+
+  
+  
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.2.0/css/fork-awesome.min.css">
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Model The World</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Serge&#39;s blogs</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+          <a class="main-nav-link" href="/about">About</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        
+        <a class="nav-icon nav-search-btn" title="Suche"><span class="fa fa-search"></span></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Suche"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://SergeWang.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+
+      <div class="outer">
+        <section id="main"><article id="post-关于-CNF-中时间依赖微分同胚映射的理解" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
+  <div class="article-meta">
+    <a href="/2024/10/28/%E5%85%B3%E4%BA%8E-CNF-%E4%B8%AD%E6%97%B6%E9%97%B4%E4%BE%9D%E8%B5%96%E5%BE%AE%E5%88%86%E5%90%8C%E8%83%9A%E6%98%A0%E5%B0%84%E7%9A%84%E7%90%86%E8%A7%A3/" class="article-date">
+  <time class="dt-published" datetime="2024-10-28T06:10:07.000Z" itemprop="datePublished">2024-10-28</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/Diffusion-Model/">Diffusion Model</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="p-name article-title" itemprop="headline name">
+      关于 CNF 中时间依赖微分同胚映射的理解
+    </h1>
+  
+
+      </header>
+    
+    <div class="e-content article-entry" itemprop="articleBody">
+      
+        <h2 id="关于-CNF-中时间依赖微分同胚映射的理解"><a href="#关于-CNF-中时间依赖微分同胚映射的理解" class="headerlink" title="关于 CNF 中时间依赖微分同胚映射的理解"></a>关于 CNF 中时间依赖微分同胚映射的理解</h2><p>在连续归一化流 (CNF) 中，时间依赖微分同胚映射是将简单分布（如标准正态分布）转化为复杂数据分布的关键机制。它通过一个随时间变化的向量场 vt(x) 来实现，这个向量场决定了概率密度函数从初始分布 p0(x) 到目标分布 p1(x) 的演化过程。这个演化过程可以通过一个微分同胚映射 φt 来描述，它将时间 t 的概率密度函数 pt(x)  “推” 向时间 t+dt 的概率密度函数 pt+dt(x)。</p>
+<h3 id="微分同胚映射的定义"><a href="#微分同胚映射的定义" class="headerlink" title="微分同胚映射的定义"></a>微分同胚映射的定义</h3><p>微分同胚映射 φt 拥有以下性质：</p>
+<ul>
+<li><strong>双射:</strong>  φt 是一个一一映射，也就是说，对于每一个 x，都有唯一一个 y 与之对应，反之亦然。</li>
+<li><strong>可微:</strong>  φt 和它的逆映射 φ−1t  都是可微的，这意味着它们是光滑且连续的。</li>
+<li><strong>保向:</strong>  φt 保持空间的方向，也就是说，它不会翻转或扭曲空间。</li>
+</ul>
+<p>这些性质保证了 φt 可以将一个概率密度函数平滑地转化为另一个概率密度函数，并且不会丢失任何信息。</p>
+<h3 id="微分同胚映射的构建"><a href="#微分同胚映射的构建" class="headerlink" title="微分同胚映射的构建"></a>微分同胚映射的构建</h3><p>微分同胚映射 φt 是通过求解以下常微分方程 (ODE) 得到的:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">d/dt φt(x) = vt(φt(x)) </span><br><span class="line">φ0(x) = x</span><br></pre></td></tr></table></figure>
+
+<p>其中 vt(x) 是 CNF 模型学习到的时间依赖向量场。这个 ODE 描述了在向量场 vt(x) 的作用下，点 x 随时间的运动轨迹。φt(x)  则表示从初始时刻 t&#x3D;0 开始，沿着这条轨迹运动到时间 t 时所到达的点。</p>
+<h3 id="连续性方程的作用"><a href="#连续性方程的作用" class="headerlink" title="连续性方程的作用"></a>连续性方程的作用</h3><p>连续性方程可以用来验证向量场  vt(x) 是否能够正确地引导概率密度函数的演化。它表明概率密度的变化率必须与其“流动”情况相互抵消，以保证总概率守恒。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>时间依赖微分同胚映射是 CNF 模型的核心概念之一，它通过一个随时间变化的向量场来实现概率密度函数的平滑转化。连续性方程则确保了这个转化过程的有效性。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="https://sergewang.github.io/2024/10/28/%E5%85%B3%E4%BA%8E-CNF-%E4%B8%AD%E6%97%B6%E9%97%B4%E4%BE%9D%E8%B5%96%E5%BE%AE%E5%88%86%E5%90%8C%E8%83%9A%E6%98%A0%E5%B0%84%E7%9A%84%E7%90%86%E8%A7%A3/" data-id="cm2smfiqt0000dkvx1gqsg1ce" data-title="关于 CNF 中时间依赖微分同胚映射的理解" class="article-share-link"><span class="fa fa-share">Teilen</span></a>
+      
+      
+      
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" rel="tag">人工智能</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%89%A9%E6%95%A3%E6%A8%A1%E5%9E%8B/" rel="tag">扩散模型</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2024/10/28/%E5%AF%B9%E8%BF%9E%E7%BB%AD%E6%80%A7%E6%96%B9%E7%A8%8B%E7%9A%84%E6%B7%B1%E5%85%A5%E8%A7%A3%E8%AF%BB/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Älter</strong>
+      <div class="article-nav-title">对连续性方程的深入解读</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archiv</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2024/10/">十月 2024</a><span class="archive-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">letzter Beitrag</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2024/10/28/%E5%85%B3%E4%BA%8E-CNF-%E4%B8%AD%E6%97%B6%E9%97%B4%E4%BE%9D%E8%B5%96%E5%BE%AE%E5%88%86%E5%90%8C%E8%83%9A%E6%98%A0%E5%B0%84%E7%9A%84%E7%90%86%E8%A7%A3/">关于 CNF 中时间依赖微分同胚映射的理解</a>
+          </li>
+        
+          <li>
+            <a href="/2024/10/28/%E5%AF%B9%E8%BF%9E%E7%BB%AD%E6%80%A7%E6%96%B9%E7%A8%8B%E7%9A%84%E6%B7%B1%E5%85%A5%E8%A7%A3%E8%AF%BB/">对连续性方程的深入解读</a>
+          </li>
+        
+          <li>
+            <a href="/2024/10/28/%E8%BF%9E%E7%BB%AD%E6%80%A7%E6%96%B9%E7%A8%8B%E5%9C%A8%E6%B5%81%E5%8C%B9%E9%85%8D%E4%B8%AD%E7%9A%84%E7%90%86%E8%A7%A3/">连续性方程在流匹配中的理解</a>
+          </li>
+        
+          <li>
+            <a href="/2024/10/28/%E6%B5%81%E5%8C%B9%E9%85%8D%20(Flow%20Matching)%20%E7%AE%80%E4%BB%8B/">流匹配 (Flow Matching) 简介</a>
+          </li>
+        
+          <li>
+            <a href="/2024/10/28/%E8%AE%A1%E7%AE%97CNF%E6%A8%A1%E5%9E%8B%E6%A6%82%E7%8E%87%E7%9A%84%E6%96%B9%E6%B3%95/">计算CNF模型概率的方法</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Kategorien</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Diffusion-Model/">Diffusion Model</a><span class="category-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" rel="tag">人工智能</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%89%A9%E6%95%A3%E6%A8%A1%E5%9E%8B/" rel="tag">扩散模型</a><span class="tag-list-count">5</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" rel="tag">机器学习</a><span class="tag-list-count">5</span></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD/" style="font-size: 10px;">人工智能</a> <a href="/tags/%E6%89%A9%E6%95%A3%E6%A8%A1%E5%9E%8B/" style="font-size: 10px;">扩散模型</a> <a href="/tags/%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0/" style="font-size: 10px;">机器学习</a>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      
+      &copy; 2024 Serge Wang<br>
+      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/about" class="mobile-nav-link">About</a>
+  
+</nav>
+    
+
+
+<script src="/js/jquery-3.6.4.min.js"></script>
+
+
+
+  
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+<script src="/js/script.js"></script>
+
+
+
+
+
+  </div>
+</body>
+</html>
