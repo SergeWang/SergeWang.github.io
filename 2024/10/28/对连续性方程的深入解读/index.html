@@ -6,15 +6,15 @@
   
   <title>对连续性方程的深入解读 | Model The World</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="我理解您对连续性方程仍有困惑，我会尽力为您详细解释。连续性方程本质上是一个描述守恒量的方程。在流匹配的语境下，这个守恒量就是概率密度。  概率密度的守恒想象一下液体在管道中流动。如果液体不可压缩，那么无论管道粗细如何变化，单位时间内流过任何一个截面的液体总量都应该保持不变。这就是质量守恒定律的体现。 概率密度也遵循类似的守恒原则。假设我们有一个概率密度函数 pt(x)，它描述了在时间 t 时，随机">
+  <meta name="description" content="连续性方程本质上是一个描述守恒量的方程。在流匹配的语境下，这个守恒量就是概率密度。  概率密度的守恒想象一下液体在管道中流动。如果液体不可压缩，那么无论管道粗细如何变化，单位时间内流过任何一个截面的液体总量都应该保持不变。这就是质量守恒定律的体现。 概率密度也遵循类似的守恒原则。假设我们有一个概率密度函数 pt(x)，它描述了在时间 t 时，随机变量 X 取值 x 的概率密度。随着时间的推移，pt">
 <meta property="og:type" content="article">
 <meta property="og:title" content="对连续性方程的深入解读">
 <meta property="og:url" content="https://sergewang.github.io/2024/10/28/%E5%AF%B9%E8%BF%9E%E7%BB%AD%E6%80%A7%E6%96%B9%E7%A8%8B%E7%9A%84%E6%B7%B1%E5%85%A5%E8%A7%A3%E8%AF%BB/">
 <meta property="og:site_name" content="Model The World">
-<meta property="og:description" content="我理解您对连续性方程仍有困惑，我会尽力为您详细解释。连续性方程本质上是一个描述守恒量的方程。在流匹配的语境下，这个守恒量就是概率密度。  概率密度的守恒想象一下液体在管道中流动。如果液体不可压缩，那么无论管道粗细如何变化，单位时间内流过任何一个截面的液体总量都应该保持不变。这就是质量守恒定律的体现。 概率密度也遵循类似的守恒原则。假设我们有一个概率密度函数 pt(x)，它描述了在时间 t 时，随机">
+<meta property="og:description" content="连续性方程本质上是一个描述守恒量的方程。在流匹配的语境下，这个守恒量就是概率密度。  概率密度的守恒想象一下液体在管道中流动。如果液体不可压缩，那么无论管道粗细如何变化，单位时间内流过任何一个截面的液体总量都应该保持不变。这就是质量守恒定律的体现。 概率密度也遵循类似的守恒原则。假设我们有一个概率密度函数 pt(x)，它描述了在时间 t 时，随机变量 X 取值 x 的概率密度。随着时间的推移，pt">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2024-10-28T06:07:01.000Z">
-<meta property="article:modified_time" content="2024-10-28T06:08:54.522Z">
+<meta property="article:modified_time" content="2024-10-28T06:22:51.846Z">
 <meta property="article:author" content="Serge Wang">
 <meta property="article:tag" content="机器学习">
 <meta property="article:tag" content="人工智能">
@@ -104,7 +104,7 @@
     
     <div class="e-content article-entry" itemprop="articleBody">
       
-        <p>我理解您对连续性方程仍有困惑，我会尽力为您详细解释。连续性方程本质上是一个描述守恒量的方程。在流匹配的语境下，这个守恒量就是概率密度。 </p>
+        <p>连续性方程本质上是一个描述守恒量的方程。在流匹配的语境下，这个守恒量就是概率密度。 </p>
 <h3 id="概率密度的守恒"><a href="#概率密度的守恒" class="headerlink" title="概率密度的守恒"></a>概率密度的守恒</h3><p>想象一下液体在管道中流动。如果液体不可压缩，那么无论管道粗细如何变化，单位时间内流过任何一个截面的液体总量都应该保持不变。这就是质量守恒定律的体现。</p>
 <p>概率密度也遵循类似的守恒原则。假设我们有一个概率密度函数 pt(x)，它描述了在时间 t 时，随机变量 X 取值 x 的概率密度。随着时间的推移，pt(x) 的形状可能会发生变化，但它所代表的总概率必须保持为 1。</p>
 <p>连续性方程正是用来描述概率密度这种守恒特性的数学工具。</p>
@@ -134,7 +134,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="https://sergewang.github.io/2024/10/28/%E5%AF%B9%E8%BF%9E%E7%BB%AD%E6%80%A7%E6%96%B9%E7%A8%8B%E7%9A%84%E6%B7%B1%E5%85%A5%E8%A7%A3%E8%AF%BB/" data-id="cm2smqb8m0001b8vx4p4ka77p" data-title="对连续性方程的深入解读" class="article-share-link"><span class="fa fa-share">Teilen</span></a>
+      <a data-url="https://sergewang.github.io/2024/10/28/%E5%AF%B9%E8%BF%9E%E7%BB%AD%E6%80%A7%E6%96%B9%E7%A8%8B%E7%9A%84%E6%B7%B1%E5%85%A5%E8%A7%A3%E8%AF%BB/" data-id="cm2smtyeh00017ovx4lwi7kjl" data-title="对连续性方程的深入解读" class="article-share-link"><span class="fa fa-share">Teilen</span></a>
       
       
       
