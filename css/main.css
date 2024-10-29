@@ -1235,7 +1235,7 @@ pre code {
   vertical-align: middle;
 }
 .links-of-author a::before {
-  background: #c696ff;
+  background: #ff2fc4;
   display: inline-block;
   margin-right: 3px;
   transform: translateY(-2px);
@@ -1863,10 +1863,6 @@ pre code {
   top: 1.25em;
   width: 4px;
 }
-.posts-collapse .post-content .MathJax {
-  overflow-x: auto;
-  white-space: nowrap;
-}
 .post-body {
   font-family: Lato, 'PingFang SC', 'Microsoft YaHei', sans-serif;
   overflow-wrap: break-word;
@@ -1985,6 +1981,17 @@ pre code {
   position: absolute;
   top: 0;
   width: 100%;
+}
+.post-body .MathJax {
+  padding: 0; /* Remove padding */
+  margin: 0; /* Remove margin */
+  overflow-x: auto;
+  white-space: nowrap;
+  scrollbar-width: thin; /* Firefox: Makes scrollbar thinner */
+  scrollbar-color: transparent transparent; /* Firefox: Hides scrollbar */
+}
+.post-body .MathJax::-webkit-scrollbar {
+  display: none; /* Hides scrollbar in WebKit browsers */
 }
 .post-gallery {
   display: flex;
