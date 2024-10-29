@@ -1069,7 +1069,7 @@ pre .javascript .function {
   display: block;
 }
 .menu {
-  margin-top: 20px;
+  margin-top: 50px;
   padding-left: 0;
   text-align: center;
 }
@@ -1196,7 +1196,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #746cc8;
+  background: #b4eb74;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
