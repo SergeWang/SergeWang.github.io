@@ -676,7 +676,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2024-10-29 16:05:31" itemprop="dateModified" datetime="2024-10-29T16:05:31+08:00">2024-10-29</time>
+                <time title="Modified: 2024-10-29 16:53:18" itemprop="dateModified" datetime="2024-10-29T16:53:18+08:00">2024-10-29</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -726,15 +726,15 @@
 </ul>
 <p>这个方程表明，概率密度的变化率必须与其“流动”情况相互抵消，以保证总概率守恒。</p>
 <h3 id="计算概率密度的步骤"><a href="#计算概率密度的步骤" class="headerlink" title="计算概率密度的步骤"></a>计算概率密度的步骤</h3><p><strong>步骤 1： 瞬时变量的变化</strong></p>
-<p>将连续性方程与流的轨迹方程 (\(\frac{d}{dt}φ_t(x) &#x3D; v_t(φ_t(x))\)) 结合，可以得到以下瞬时变量的变化：</p>
-<p>$$\frac{d}{dt}\log p_t(φ_t(x)) + div(v_t(φ_t(x)) &#x3D; 0$$</p>
+<p>将连续性方程与流的轨迹方程 (\(\frac{d}{dt}\phi_t(x) &#x3D; v_t(\phi_t(x))\)) 结合，可以得到以下瞬时变量的变化：</p>
+<p>$$\frac{d}{dt}\log p_t(\phi_t(x)) + div(v_t(\phi_t(x)) &#x3D; 0$$</p>
 <p><strong>步骤 2：积分计算对数概率</strong></p>
 <p>对上述方程在时间区间[0,1]上积分，得到：</p>
-<p>$$<br>\log p_1(φ_1(x)) - \log p_0(φ_0(x)) &#x3D; -\int^1_0 div(v_t(φ_t(x)))dt<br>$$</p>
+<p>$$<br>\log p_1(\phi_1(x)) - \log p_0(\phi_0(x)) &#x3D; -\int^1_0 div(v_t(\phi_t(x)))dt<br>$$</p>
 <p><strong>步骤 3：求解常微分方程</strong></p>
 <p>为了计算 \(\log p_1(x_1)\)，我们需要求解以下常微分方程 (ODE)：</p>
-<p>$$<br>\frac{d}{dt}\begin{bmatrix}φ_t(x)\cr f(t)\end{bmatrix} &#x3D; \begin{bmatrix}v_t(φ_t(x))\cr -div(v_t(φ_t(x)))\end{bmatrix}<br>$$</p>
-<p>其中 \(f(t)\) 是一个辅助变量，用于记录 \(\log p_t(φ_t(x))\) 的变化。初始条件为：<br>$$<br>\begin{bmatrix}φ_0(x)\cr f(0)\end{bmatrix} &#x3D; \begin{bmatrix}x_0\cr c\end{bmatrix}<br>$$</p>
+<p>$$<br>\frac{d}{dt}\begin{bmatrix}\phi_t(x)\cr f(t)\end{bmatrix} &#x3D; \begin{bmatrix}v_t(\phi_t(x))\cr -div(v_t(\phi_t(x)))\end{bmatrix}<br>$$</p>
+<p>其中 \(f(t)\) 是一个辅助变量，用于记录 \(\log p_t(\phi_t(x))\) 的变化。初始条件为：<br>$$<br>\begin{bmatrix}\phi_0(x)\cr f(0)\end{bmatrix} &#x3D; \begin{bmatrix}x_0\cr c\end{bmatrix}<br>$$</p>
 <p>其中 \(x_0\) 是初始分布 \(p_0(x) \)中的样本，\(c\) 是一个常数。</p>
 <p><strong>步骤 4：计算最终概率</strong></p>
 <p>求解上述 ODE 后，我们可以得到 \(f(1)\)。根据步骤 2 中的积分公式，我们可以得到：</p>
