@@ -1235,7 +1235,7 @@ pre code {
   vertical-align: middle;
 }
 .links-of-author a::before {
-  background: #55ffe7;
+  background: #9490be;
   display: inline-block;
   margin-right: 3px;
   transform: translateY(-2px);
@@ -1862,6 +1862,10 @@ pre code {
   position: absolute;
   top: 1.25em;
   width: 4px;
+}
+.posts-collapse .post-content .MathJax {
+  overflow-x: auto;
+  white-space: nowrap;
 }
 .post-body {
   font-family: Lato, 'PingFang SC', 'Microsoft YaHei', sans-serif;
