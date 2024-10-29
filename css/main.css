@@ -972,6 +972,7 @@ pre .javascript .function {
 .header-inner {
   margin: 0 auto;
   width: 700px;
+  padding-top: 0px !important;
 }
 @media (min-width: 1200px) {
   .header-inner {
@@ -1069,7 +1070,7 @@ pre .javascript .function {
   display: block;
 }
 .menu {
-  margin-top: 20px;
+  margin-top: 10px;
   padding-left: 0;
   text-align: center;
 }
@@ -1196,7 +1197,7 @@ pre .javascript .function {
 }
 .links-of-author a::before,
 .links-of-author span.exturl::before {
-  background: #18ffd1;
+  background: #ffff58;
   border-radius: 50%;
   content: ' ';
   display: inline-block;
