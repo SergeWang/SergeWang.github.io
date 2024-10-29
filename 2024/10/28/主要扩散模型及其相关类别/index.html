@@ -20,22 +20,24 @@
     var CONFIG = {"hostname":"sergewang.github.io","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="连续性方程本质上是一个描述守恒量的方程。在流匹配的语境下，这个守恒量就是概率密度。  概率密度的守恒想象一下液体在管道中流动。如果液体不可压缩，那么无论管道粗细如何变化，单位时间内流过任何一个截面的液体总量都应该保持不变。这就是质量守恒定律的体现。 概率密度也遵循类似的守恒原则。假设我们有一个概率密度函数 \(p_t(x)\)，它描述了在时间 \(t\) 时，随机变量 \(X\) 取值 \(x">
+  <meta name="description" content="1.基于分数匹配的扩散模型● 噪声条件评分网络 (NCSN): 这是一种早期的基于分数匹配的扩散模型，它使用神经网络来学习数据分布的评分函数。● 潜空间评分生成模型 (LSGM): LSGM 使用变分自编码器 (VAE) 将数据压缩到潜空间，然后在潜空间中应用评分匹配来学习数据分布。● 基于分数的随机微分方程 (Score-SDE): Score-SDE 使用随机微分方程 (SDE) 来描述扩散">
 <meta property="og:type" content="article">
-<meta property="og:title" content="对连续性方程的深入解读">
-<meta property="og:url" content="https://sergewang.github.io/2024/10/28/%E5%AF%B9%E8%BF%9E%E7%BB%AD%E6%80%A7%E6%96%B9%E7%A8%8B%E7%9A%84%E6%B7%B1%E5%85%A5%E8%A7%A3%E8%AF%BB/">
+<meta property="og:title" content="主要扩散模型及其相关类别">
+<meta property="og:url" content="https://sergewang.github.io/2024/10/28/%E4%B8%BB%E8%A6%81%E6%89%A9%E6%95%A3%E6%A8%A1%E5%9E%8B%E5%8F%8A%E5%85%B6%E7%9B%B8%E5%85%B3%E7%B1%BB%E5%88%AB/">
 <meta property="og:site_name" content="Model The World">
-<meta property="og:description" content="连续性方程本质上是一个描述守恒量的方程。在流匹配的语境下，这个守恒量就是概率密度。  概率密度的守恒想象一下液体在管道中流动。如果液体不可压缩，那么无论管道粗细如何变化，单位时间内流过任何一个截面的液体总量都应该保持不变。这就是质量守恒定律的体现。 概率密度也遵循类似的守恒原则。假设我们有一个概率密度函数 \(p_t(x)\)，它描述了在时间 \(t\) 时，随机变量 \(X\) 取值 \(x">
+<meta property="og:description" content="1.基于分数匹配的扩散模型● 噪声条件评分网络 (NCSN): 这是一种早期的基于分数匹配的扩散模型，它使用神经网络来学习数据分布的评分函数。● 潜空间评分生成模型 (LSGM): LSGM 使用变分自编码器 (VAE) 将数据压缩到潜空间，然后在潜空间中应用评分匹配来学习数据分布。● 基于分数的随机微分方程 (Score-SDE): Score-SDE 使用随机微分方程 (SDE) 来描述扩散">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2024-10-28T06:07:01.000Z">
-<meta property="article:modified_time" content="2024-10-29T08:41:21.871Z">
+<meta property="og:image" content="https://sergewang.github.io/images/diffusion-models.png">
+<meta property="article:published_time" content="2024-10-28T08:27:27.000Z">
+<meta property="article:modified_time" content="2024-10-29T07:17:44.598Z">
 <meta property="article:author" content="Serge Wang">
 <meta property="article:tag" content="机器学习">
 <meta property="article:tag" content="人工智能">
 <meta property="article:tag" content="扩散模型">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://sergewang.github.io/images/diffusion-models.png">
 
-<link rel="canonical" href="https://sergewang.github.io/2024/10/28/%E5%AF%B9%E8%BF%9E%E7%BB%AD%E6%80%A7%E6%96%B9%E7%A8%8B%E7%9A%84%E6%B7%B1%E5%85%A5%E8%A7%A3%E8%AF%BB/">
+<link rel="canonical" href="https://sergewang.github.io/2024/10/28/%E4%B8%BB%E8%A6%81%E6%89%A9%E6%95%A3%E6%A8%A1%E5%9E%8B%E5%8F%8A%E5%85%B6%E7%9B%B8%E5%85%B3%E7%B1%BB%E5%88%AB/">
 
 
 <script id="page-configurations">
@@ -48,7 +50,7 @@
   };
 </script>
 
-  <title>对连续性方程的深入解读 | Model The World</title>
+  <title>主要扩散模型及其相关类别 | Model The World</title>
   
 
 
@@ -159,7 +161,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://sergewang.github.io/2024/10/28/%E5%AF%B9%E8%BF%9E%E7%BB%AD%E6%80%A7%E6%96%B9%E7%A8%8B%E7%9A%84%E6%B7%B1%E5%85%A5%E8%A7%A3%E8%AF%BB/">
+    <link itemprop="mainEntityOfPage" href="https://sergewang.github.io/2024/10/28/%E4%B8%BB%E8%A6%81%E6%89%A9%E6%95%A3%E6%A8%A1%E5%9E%8B%E5%8F%8A%E5%85%B6%E7%9B%B8%E5%85%B3%E7%B1%BB%E5%88%AB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -172,7 +174,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          对连续性方程的深入解读
+          主要扩散模型及其相关类别
         </h1>
 
         <div class="post-meta">
@@ -182,14 +184,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2024-10-28 14:07:01" itemprop="dateCreated datePublished" datetime="2024-10-28T14:07:01+08:00">2024-10-28</time>
+              <time title="创建时间：2024-10-28 16:27:27" itemprop="dateCreated datePublished" datetime="2024-10-28T16:27:27+08:00">2024-10-28</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2024-10-29 16:41:21" itemprop="dateModified" datetime="2024-10-29T16:41:21+08:00">2024-10-29</time>
+                <time title="修改时间：2024-10-29 15:17:44" itemprop="dateModified" datetime="2024-10-29T15:17:44+08:00">2024-10-29</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -212,33 +214,12 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
-<p>连续性方程本质上是一个描述守恒量的方程。在流匹配的语境下，这个守恒量就是概率密度。 </p>
-<h3 id="概率密度的守恒"><a href="#概率密度的守恒" class="headerlink" title="概率密度的守恒"></a>概率密度的守恒</h3><p>想象一下液体在管道中流动。如果液体不可压缩，那么无论管道粗细如何变化，单位时间内流过任何一个截面的液体总量都应该保持不变。这就是质量守恒定律的体现。</p>
-<p>概率密度也遵循类似的守恒原则。假设我们有一个概率密度函数 \(p_t(x)\)，它描述了在时间 \(t\) 时，随机变量 \(X\) 取值 \(x\) 的概率密度。随着时间的推移，\(p_t(x)\) 的形状可能会发生变化，但它所代表的总概率必须保持为 1。</p>
-<p>连续性方程正是用来描述概率密度这种守恒特性的数学工具。</p>
-<h3 id="连续性方程的数学表达"><a href="#连续性方程的数学表达" class="headerlink" title="连续性方程的数学表达"></a>连续性方程的数学表达</h3><p>连续性方程的表达式如下：</p>
-<p>$$<br>\frac{d}{dt} p_t(x) + div(p_t(x)v_t(x)) &#x3D; 0<br>$$</p>
-<ul>
-<li><strong>\(\frac{d}{dt} p_t(x)\)</strong> 表示概率密度函数 \(p_t(x)\) 随时间的变化率。</li>
-<li><strong>\(div(p_t(x)v_t(x))\)</strong> 表示概率密度的“流动”情况，其中 \(v_t(x)\) 是一个向量场，描述了概率密度在空间中的运动方向和速度。散度算子 \(div\) 则度量了向量场在某一点的“扩张”或“收缩”程度。</li>
-</ul>
-<p><strong>连续性方程的意义：</strong></p>
-<ul>
-<li>如果 \(\frac{d}{dt} p_t(x)\) 为正，说明在 x 点的概率密度正在增加，这可能是由于周围的概率密度流入了 \(x\) 点。</li>
-<li>如果 \(div(p_t(x)v_t(x))\) 为负，说明在 x 点的概率密度正在减少，这可能是由于 \(x\) 点的概率密度流向了周围。</li>
-</ul>
-<p>连续性方程指出，概率密度的变化率与概率密度的“流动”情况必须相互抵消，以保证总概率守恒。</p>
-<h3 id="连续性方程在流匹配中的应用"><a href="#连续性方程在流匹配中的应用" class="headerlink" title="连续性方程在流匹配中的应用"></a>连续性方程在流匹配中的应用</h3><p>在流匹配中，我们希望训练一个连续归一化流 (CNF) 模型，使其能够生成与目标数据分布相似的样本。这个 CNF 模型可以用一个向量场 \(v_t(x)\) 来表示，它决定了概率密度函数从初始分布 \(p_0(x)\) 到目标分布 \(p_1(x)\) 的演化过程。</p>
-<p>连续性方程的作用就是确保 CNF 模型所定义的向量场 \(v_t(x)\) 能够正确地引导概率密度函数的演化，并最终生成我们期望的目标分布。</p>
-<p><strong>具体来说，连续性方程的应用体现在以下几个方面：</strong></p>
-<ol>
-<li><strong>验证模型的有效性：</strong> 通过检查学习到的向量场 \(v_t(x)\) 是否满足连续性方程，我们可以判断 CNF 模型是否能够生成有效的概率路径。</li>
-<li><strong>设计训练目标函数：</strong>  一些流匹配的训练目标函数的设计是基于连续性方程的。例如，条件流匹配 (CFM) 的目标函数就是为了最小化模型向量场与目标向量场之间的差异，而目标向量场的构建正是基于连续性方程。</li>
-<li><strong>计算模型的概率密度：</strong> 利用连续性方程和流的轨迹方程，我们可以推导出计算 CNF 模型在任意数据点概率密度的方法。</li>
-</ol>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>连续性方程是理解流匹配的关键概念之一。它提供了一种数学工具来描述概率密度的守恒特性，并确保 CNF 模型能够生成有效的概率路径。 </p>
+        <p><img src="/images/diffusion-models.png" alt="主要扩散模型"></p>
+<h2 id="1-基于分数匹配的扩散模型"><a href="#1-基于分数匹配的扩散模型" class="headerlink" title="1.基于分数匹配的扩散模型"></a>1.基于分数匹配的扩散模型</h2><p>● 噪声条件评分网络 (NCSN): 这是一种早期的基于分数匹配的扩散模型，它使用神经网络来学习数据分布的评分函数。<br>● 潜空间评分生成模型 (LSGM): LSGM 使用变分自编码器 (VAE) 将数据压缩到潜空间，然后在潜空间中应用评分匹配来学习数据分布。<br>● 基于分数的随机微分方程 (Score-SDE): Score-SDE 使用随机微分方程 (SDE) 来描述扩散过程，并使用神经网络来学习 SDE 的漂移项，该漂移项与数据分布的评分函数相关。<br>● ScoreFlow: ScoreFlow 通过最大化似然函数的上界来训练基于分数的扩散模型。</p>
+<h2 id="2-潜变量模型"><a href="#2-潜变量模型" class="headerlink" title="2.潜变量模型"></a>2.潜变量模型</h2><p>● 潜扩散模型 (LDM): LDM 使用预训练的 VAE 将图像压缩到潜空间，然后在潜空间中应用扩散模型来生成图像。这种方法可以提高训练和推理效率，并生成更高质量的图像。</p>
+<h2 id="3-条件引导的扩散模型"><a href="#3-条件引导的扩散模型" class="headerlink" title="3.条件引导的扩散模型"></a>3.条件引导的扩散模型</h2><p>● 引导扩散 (GLIDE): GLIDE 使用分类器引导来控制扩散模型的生成过程，使其生成符合特定条件的图像。<br>● 分类器引导扩散 (CfDG): CfDG 是一种改进的分类器引导方法，它可以更有效地将条件信息整合到扩散模型中。<br>● 稳定扩散 (Stable Diffusion): Stable Diffusion 是一种流行的文本到图像扩散模型，它使用 LDM 和 CfDG 来生成高质量的图像。</p>
+<h2 id="4-基于-Transformer-的扩散模型"><a href="#4-基于-Transformer-的扩散模型" class="headerlink" title="4.基于 Transformer 的扩散模型"></a>4.基于 Transformer 的扩散模型</h2><p>● U-ViT: U-ViT 将 Transformer 模块引入到 U 形结构中，作为扩散模型的主干网络，它将所有输入视为 token，并在浅层和深层之间使用长跳跃连接。<br>● 扩散 Transformer (DiT): DiT 使用视觉 Transformer (ViT) 作为主干网络来代替 U-Net，并进一步证明了 Transformer 在图像生成任务中的可扩展性。<br>● PixArt-α: PixArt-α 简化了扩散 Transformer 中计算密集的类条件分支，方法是加入交叉注意模块来注入通过 T5 编码的文本条件。</p>
+<h2 id="5-基于状态空间模型-SSM-的扩散模型"><a href="#5-基于状态空间模型-SSM-的扩散模型" class="headerlink" title="5.基于状态空间模型 (SSM) 的扩散模型"></a>5.基于状态空间模型 (SSM) 的扩散模型</h2><p>● Mamba: Mamba 结合了 SSM 架构，并提出了硬件感知算法，可实现高效的训练和推理。<br>● DiM: DiM 引入 Mamba 作为扩散主干网络，用于生成高分辨率图像。<br>● ZigMa: ZigMa 通过在图像中加入基于连续性的归纳偏差，使 Mamba 模块适用于二维图像，并通过执行三维序列的时空分解，将其扩展到视频生成任务。<br>类别之间的关系:<br>这些类别之间存在着一些联系。例如，许多基于分数匹配的扩散模型也使用了潜变量模型，例如 LSGM 和 LDM。条件引导的扩散模型可以使用各种主干网络，包括基于 U-Net、Transformer 或 SSM 的网络。</p>
 
     </div>
 
@@ -259,13 +240,10 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2024/10/28/%E8%BF%9E%E7%BB%AD%E6%80%A7%E6%96%B9%E7%A8%8B%E5%9C%A8%E6%B5%81%E5%8C%B9%E9%85%8D%E4%B8%AD%E7%9A%84%E7%90%86%E8%A7%A3/" rel="prev" title="连续性方程在流匹配中的理解">
-      <i class="fa fa-chevron-left"></i> 连续性方程在流匹配中的理解
+    <a href="/2024/10/28/%E5%85%B3%E4%BA%8E-CNF-%E4%B8%AD%E6%97%B6%E9%97%B4%E4%BE%9D%E8%B5%96%E5%BE%AE%E5%88%86%E5%90%8C%E8%83%9A%E6%98%A0%E5%B0%84%E7%9A%84%E7%90%86%E8%A7%A3/" rel="prev" title="关于 CNF 中时间依赖微分同胚映射的理解">
+      <i class="fa fa-chevron-left"></i> 关于 CNF 中时间依赖微分同胚映射的理解
     </a></div>
-      <div class="post-nav-item">
-    <a href="/2024/10/28/%E5%85%B3%E4%BA%8E-CNF-%E4%B8%AD%E6%97%B6%E9%97%B4%E4%BE%9D%E8%B5%96%E5%BE%AE%E5%88%86%E5%90%8C%E8%83%9A%E6%98%A0%E5%B0%84%E7%9A%84%E7%90%86%E8%A7%A3/" rel="next" title="关于 CNF 中时间依赖微分同胚映射的理解">
-      关于 CNF 中时间依赖微分同胚映射的理解 <i class="fa fa-chevron-right"></i>
-    </a></div>
+      <div class="post-nav-item"></div>
     </div>
       </footer>
     
@@ -324,7 +302,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A6%82%E7%8E%87%E5%AF%86%E5%BA%A6%E7%9A%84%E5%AE%88%E6%81%92"><span class="nav-number">1.</span> <span class="nav-text">概率密度的守恒</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9E%E7%BB%AD%E6%80%A7%E6%96%B9%E7%A8%8B%E7%9A%84%E6%95%B0%E5%AD%A6%E8%A1%A8%E8%BE%BE"><span class="nav-number">2.</span> <span class="nav-text">连续性方程的数学表达</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9E%E7%BB%AD%E6%80%A7%E6%96%B9%E7%A8%8B%E5%9C%A8%E6%B5%81%E5%8C%B9%E9%85%8D%E4%B8%AD%E7%9A%84%E5%BA%94%E7%94%A8"><span class="nav-number">3.</span> <span class="nav-text">连续性方程在流匹配中的应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%9F%BA%E4%BA%8E%E5%88%86%E6%95%B0%E5%8C%B9%E9%85%8D%E7%9A%84%E6%89%A9%E6%95%A3%E6%A8%A1%E5%9E%8B"><span class="nav-number">1.</span> <span class="nav-text">1.基于分数匹配的扩散模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%BD%9C%E5%8F%98%E9%87%8F%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.</span> <span class="nav-text">2.潜变量模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%9D%A1%E4%BB%B6%E5%BC%95%E5%AF%BC%E7%9A%84%E6%89%A9%E6%95%A3%E6%A8%A1%E5%9E%8B"><span class="nav-number">3.</span> <span class="nav-text">3.条件引导的扩散模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%9F%BA%E4%BA%8E-Transformer-%E7%9A%84%E6%89%A9%E6%95%A3%E6%A8%A1%E5%9E%8B"><span class="nav-number">4.</span> <span class="nav-text">4.基于 Transformer 的扩散模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E5%9F%BA%E4%BA%8E%E7%8A%B6%E6%80%81%E7%A9%BA%E9%97%B4%E6%A8%A1%E5%9E%8B-SSM-%E7%9A%84%E6%89%A9%E6%95%A3%E6%A8%A1%E5%9E%8B"><span class="nav-number">5.</span> <span class="nav-text">5.基于状态空间模型 (SSM) 的扩散模型</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
