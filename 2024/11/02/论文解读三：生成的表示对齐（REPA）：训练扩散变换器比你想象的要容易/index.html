@@ -12,7 +12,7 @@
 <meta property="article:tag" content="扩散模型">
 <meta property="article:tag" content="论文阅读">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://sergewang.github.io/2024/11/02/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB%E4%B8%89%EF%BC%9A%E7%94%9F%E6%88%90%E7%9A%84%E8%A1%A8%E7%A4%BA%E5%AF%B9%E9%BD%90%EF%BC%88REPA%EF%BC%89%EF%BC%9A%E8%AE%AD%E7%BB%83%E6%89%A9%E6%95%A3%E5%8F%98%E6%8D%A2%E5%99%A8%E6%AF%94%E4%BD%A0%E6%83%B3%E8%B1%A1%E7%9A%84%E8%A6%81%E5%AE%B9%E6%98%93/diffusion-models.png"><link rel="shortcut icon" href="/img/newlogo.png"><link rel="canonical" href="https://sergewang.github.io/2024/11/02/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB%E4%B8%89%EF%BC%9A%E7%94%9F%E6%88%90%E7%9A%84%E8%A1%A8%E7%A4%BA%E5%AF%B9%E9%BD%90%EF%BC%88REPA%EF%BC%89%EF%BC%9A%E8%AE%AD%E7%BB%83%E6%89%A9%E6%95%A3%E5%8F%98%E6%8D%A2%E5%99%A8%E6%AF%94%E4%BD%A0%E6%83%B3%E8%B1%A1%E7%9A%84%E8%A6%81%E5%AE%B9%E6%98%93/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+<meta name="twitter:image" content="https://sergewang.github.io/2024/11/02/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB%E4%B8%89%EF%BC%9A%E7%94%9F%E6%88%90%E7%9A%84%E8%A1%A8%E7%A4%BA%E5%AF%B9%E9%BD%90%EF%BC%88REPA%EF%BC%89%EF%BC%9A%E8%AE%AD%E7%BB%83%E6%89%A9%E6%95%A3%E5%8F%98%E6%8D%A2%E5%99%A8%E6%AF%94%E4%BD%A0%E6%83%B3%E8%B1%A1%E7%9A%84%E8%A6%81%E5%AE%B9%E6%98%93/diffusion-models.png"><link rel="shortcut icon" href="/img/newlogo.png"><link rel="canonical" href="https://sergewang.github.io/2024/11/02/%E8%AE%BA%E6%96%87%E8%A7%A3%E8%AF%BB%E4%B8%89%EF%BC%9A%E7%94%9F%E6%88%90%E7%9A%84%E8%A1%A8%E7%A4%BA%E5%AF%B9%E9%BD%90%EF%BC%88REPA%EF%BC%89%EF%BC%9A%E8%AE%AD%E7%BB%83%E6%89%A9%E6%95%A3%E5%8F%98%E6%8D%A2%E5%99%A8%E6%AF%94%E4%BD%A0%E6%83%B3%E8%B1%A1%E7%9A%84%E8%A6%81%E5%AE%B9%E6%98%93/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="google-site-verification" content="IDUolVgWkW_cmu1mtW5hsxrrIjQfCHvq5hOTOkXeVNE"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
     (() => {
       
     const saveToLocal = {
@@ -103,12 +103,22 @@
     detectApple()
   
     })()
-  </script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=IDUolVgWkW_cmu1mtW5hsxrrIjQfCHvq5hOTOkXeVNE"></script><script>window.dataLayer = window.dataLayer || []
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?9dcb7eb7a8a6225c2b1f242f3b0894bf";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-XERFYF0N5K"></script><script>window.dataLayer = window.dataLayer || []
 function gtag(){dataLayer.push(arguments)}
 gtag('js', new Date())
-gtag('config', 'IDUolVgWkW_cmu1mtW5hsxrrIjQfCHvq5hOTOkXeVNE')
+gtag('config', 'G-XERFYF0N5K')
 btf.addGlobalFn('pjaxComplete', () => {
-  gtag('config', 'IDUolVgWkW_cmu1mtW5hsxrrIjQfCHvq5hOTOkXeVNE', {'page_path': window.location.pathname})
+  gtag('config', 'G-XERFYF0N5K', {'page_path': window.location.pathname})
 }, 'google_analytics')
 </script><script>const GLOBAL_CONFIG = {
   root: '/',
