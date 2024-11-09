@@ -1,6 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>What&#39;s derive mean in Rust</title>
+    <url>/2024/10/30/What&#39;s%20derive%20mean%20in%20Rust/</url>
+    <content><![CDATA[<p>In Rust, the term “derive” typically refers to a procedural macro that automatically implements certain traits for your structs or enums. This feature helps reduce boilerplate code by generating implementations based on the structure of your types.</p>
+<h3 id="Common-Usage-of-derive">Common Usage of <code>derive</code></h3>
+<p>When you use the <code>#[derive(...)]</code> attribute above a struct or enum, you’re telling the Rust compiler to automatically generate implementations of specified traits. Some common traits that can be derived include:</p>
+<ul>
+<li><strong><code>Debug</code></strong>: Enables formatting the struct for debugging.</li>
+<li><strong><code>Clone</code></strong>: Allows creating a copy of the struct.</li>
+<li><strong><code>Copy</code></strong>: A marker trait for types that can be duplicated simply by copying bits (usually simple types).</li>
+<li><strong><code>PartialEq</code></strong>: Enables comparison using <code>==</code> and <code>!=</code>.</li>
+<li><strong><code>Eq</code></strong>: A marker trait for types that can be compared for equality.</li>
+<li><strong><code>PartialOrd</code></strong>: Allows comparison using <code>&lt;</code>, <code>&gt;</code>, etc.</li>
+<li><strong><code>Ord</code></strong>: A trait for types that have a total ordering.</li>
+</ul>
+<h3 id="Example">Example</h3>
+<p>Here’s a simple example of using <code>derive</code> in Rust:</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="meta">#[derive(Debug, Clone, PartialEq)]</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Point</span> &#123;</span><br><span class="line">    x: <span class="type">f64</span>,</span><br><span class="line">    y: <span class="type">f64</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">p1</span> = Point &#123; x: <span class="number">1.0</span>, y: <span class="number">2.0</span> &#125;;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">p2</span> = p1.<span class="title function_ invoke__">clone</span>(); <span class="comment">// Using the derived Clone trait</span></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;:?&#125;&quot;</span>, p1); <span class="comment">// Using the derived Debug trait</span></span><br><span class="line">    <span class="built_in">assert_eq!</span>(p1, p2); <span class="comment">// Using the derived PartialEq trait</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Custom-Derive-Macros">Custom Derive Macros</h3>
+<p>You can also create your own custom derive macros to implement traits specific to your application. This involves writing a procedural macro that generates the appropriate code.</p>
+<h3 id="Summary">Summary</h3>
+<p>In summary, <code>derive</code> in Rust is a powerful feature that simplifies the implementation of common traits for your types, allowing for cleaner and more maintainable code.</p>
+<p>In Rust, if you derive the <code>Default</code> trait for a struct or enum, it allows you to create a default value for that type. The <code>Default</code> trait provides a way to create a “default” instance of a type, which is useful when you want to initialize a struct or enum with default values.</p>
+<h3 id="Using-derive-Default">Using <code>derive(Default)</code></h3>
+<p>When you use <code>#[derive(Default)]</code>, Rust automatically generates an implementation of the <code>Default</code> trait for your type. The default value for each field is determined by its type’s own default.</p>
+<h3 id="Example-2">Example</h3>
+<p>Here’s a simple example:</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="meta">#[derive(Debug, Default)]</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Point</span> &#123;</span><br><span class="line">    x: <span class="type">f64</span>,</span><br><span class="line">    y: <span class="type">f64</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">default_point</span> = Point::<span class="title function_ invoke__">default</span>(); <span class="comment">// Creates a Point with default values (x: 0.0, y: 0.0)</span></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;:?&#125;&quot;</span>, default_point);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Behavior-of-Default">Behavior of Default</h3>
+<ul>
+<li>For primitive types like <code>f64</code>, the default value is <code>0.0</code>.</li>
+<li>For <code>bool</code>, the default is <code>false</code>.</li>
+<li>For <code>String</code>, the default is an empty string (<code>&quot;&quot;</code>).</li>
+<li>For <code>Option&lt;T&gt;</code>, the default is <code>None</code>.</li>
+</ul>
+<h3 id="Custom-Default-Implementation">Custom Default Implementation</h3>
+<p>If you want to specify custom default values, you can implement the <code>Default</code> trait manually instead of deriving it:</p>
+<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Point</span> &#123;</span><br><span class="line">    x: <span class="type">f64</span>,</span><br><span class="line">    y: <span class="type">f64</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">impl</span> <span class="title class_">Default</span> <span class="keyword">for</span> <span class="title class_">Point</span> &#123;</span><br><span class="line">    <span class="keyword">fn</span> <span class="title function_">default</span>() <span class="punctuation">-&gt;</span> <span class="keyword">Self</span> &#123;</span><br><span class="line">        Point &#123; x: <span class="number">10.0</span>, y: <span class="number">20.0</span> &#125; <span class="comment">// Custom default values</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">custom_default_point</span> = Point::<span class="title function_ invoke__">default</span>();</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;:?&#125;&quot;</span>, custom_default_point); <span class="comment">// Outputs: Point &#123; x: 10.0, y: 20.0 &#125;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Summary-2">Summary</h3>
+<p>Using <code>#[derive(Default)]</code> simplifies creating default values for your types, while implementing the <code>Default</code> trait manually allows for more control over what those default values are.</p>
+]]></content>
+      <categories>
+        <category>Rust</category>
+      </categories>
+      <tags>
+        <tag>Rust</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>What&#39;s &#39;static mean in Rust</title>
     <url>/2024/10/30/What&#39;s%20&#39;static%20mean%20in%20Rust/</url>
     <content><![CDATA[<p>In Rust, <code>'static</code> is a special lifetime that signifies that the data lives for the entire duration of the program. Here are some key points about <code>'static</code>:</p>
@@ -102,54 +150,6 @@
 <p>In this function, the lifetime of the reference <code>x</code> is tied to the lifetime <code>'a</code>.</p>
 <h3 id="Conclusion">Conclusion</h3>
 <p>Lifetimes in Rust are an essential feature for ensuring safe memory management without a garbage collector. They enable the compiler to enforce rules about how references can be used, helping to prevent common bugs like dangling references and memory leaks. Understanding lifetimes is crucial for writing safe and efficient Rust code.</p>
-]]></content>
-      <categories>
-        <category>Rust</category>
-      </categories>
-      <tags>
-        <tag>Rust</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>What&#39;s derive mean in Rust</title>
-    <url>/2024/10/30/What&#39;s%20derive%20mean%20in%20Rust/</url>
-    <content><![CDATA[<p>In Rust, the term “derive” typically refers to a procedural macro that automatically implements certain traits for your structs or enums. This feature helps reduce boilerplate code by generating implementations based on the structure of your types.</p>
-<h3 id="Common-Usage-of-derive">Common Usage of <code>derive</code></h3>
-<p>When you use the <code>#[derive(...)]</code> attribute above a struct or enum, you’re telling the Rust compiler to automatically generate implementations of specified traits. Some common traits that can be derived include:</p>
-<ul>
-<li><strong><code>Debug</code></strong>: Enables formatting the struct for debugging.</li>
-<li><strong><code>Clone</code></strong>: Allows creating a copy of the struct.</li>
-<li><strong><code>Copy</code></strong>: A marker trait for types that can be duplicated simply by copying bits (usually simple types).</li>
-<li><strong><code>PartialEq</code></strong>: Enables comparison using <code>==</code> and <code>!=</code>.</li>
-<li><strong><code>Eq</code></strong>: A marker trait for types that can be compared for equality.</li>
-<li><strong><code>PartialOrd</code></strong>: Allows comparison using <code>&lt;</code>, <code>&gt;</code>, etc.</li>
-<li><strong><code>Ord</code></strong>: A trait for types that have a total ordering.</li>
-</ul>
-<h3 id="Example">Example</h3>
-<p>Here’s a simple example of using <code>derive</code> in Rust:</p>
-<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="meta">#[derive(Debug, Clone, PartialEq)]</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Point</span> &#123;</span><br><span class="line">    x: <span class="type">f64</span>,</span><br><span class="line">    y: <span class="type">f64</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">p1</span> = Point &#123; x: <span class="number">1.0</span>, y: <span class="number">2.0</span> &#125;;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">p2</span> = p1.<span class="title function_ invoke__">clone</span>(); <span class="comment">// Using the derived Clone trait</span></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;:?&#125;&quot;</span>, p1); <span class="comment">// Using the derived Debug trait</span></span><br><span class="line">    <span class="built_in">assert_eq!</span>(p1, p2); <span class="comment">// Using the derived PartialEq trait</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="Custom-Derive-Macros">Custom Derive Macros</h3>
-<p>You can also create your own custom derive macros to implement traits specific to your application. This involves writing a procedural macro that generates the appropriate code.</p>
-<h3 id="Summary">Summary</h3>
-<p>In summary, <code>derive</code> in Rust is a powerful feature that simplifies the implementation of common traits for your types, allowing for cleaner and more maintainable code.</p>
-<p>In Rust, if you derive the <code>Default</code> trait for a struct or enum, it allows you to create a default value for that type. The <code>Default</code> trait provides a way to create a “default” instance of a type, which is useful when you want to initialize a struct or enum with default values.</p>
-<h3 id="Using-derive-Default">Using <code>derive(Default)</code></h3>
-<p>When you use <code>#[derive(Default)]</code>, Rust automatically generates an implementation of the <code>Default</code> trait for your type. The default value for each field is determined by its type’s own default.</p>
-<h3 id="Example-2">Example</h3>
-<p>Here’s a simple example:</p>
-<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="meta">#[derive(Debug, Default)]</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">Point</span> &#123;</span><br><span class="line">    x: <span class="type">f64</span>,</span><br><span class="line">    y: <span class="type">f64</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">default_point</span> = Point::<span class="title function_ invoke__">default</span>(); <span class="comment">// Creates a Point with default values (x: 0.0, y: 0.0)</span></span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;:?&#125;&quot;</span>, default_point);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="Behavior-of-Default">Behavior of Default</h3>
-<ul>
-<li>For primitive types like <code>f64</code>, the default value is <code>0.0</code>.</li>
-<li>For <code>bool</code>, the default is <code>false</code>.</li>
-<li>For <code>String</code>, the default is an empty string (<code>&quot;&quot;</code>).</li>
-<li>For <code>Option&lt;T&gt;</code>, the default is <code>None</code>.</li>
-</ul>
-<h3 id="Custom-Default-Implementation">Custom Default Implementation</h3>
-<p>If you want to specify custom default values, you can implement the <code>Default</code> trait manually instead of deriving it:</p>
-<figure class="highlight rust"><table><tr><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">Point</span> &#123;</span><br><span class="line">    x: <span class="type">f64</span>,</span><br><span class="line">    y: <span class="type">f64</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">impl</span> <span class="title class_">Default</span> <span class="keyword">for</span> <span class="title class_">Point</span> &#123;</span><br><span class="line">    <span class="keyword">fn</span> <span class="title function_">default</span>() <span class="punctuation">-&gt;</span> <span class="keyword">Self</span> &#123;</span><br><span class="line">        Point &#123; x: <span class="number">10.0</span>, y: <span class="number">20.0</span> &#125; <span class="comment">// Custom default values</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fn</span> <span class="title function_">main</span>() &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="variable">custom_default_point</span> = Point::<span class="title function_ invoke__">default</span>();</span><br><span class="line">    <span class="built_in">println!</span>(<span class="string">&quot;&#123;:?&#125;&quot;</span>, custom_default_point); <span class="comment">// Outputs: Point &#123; x: 10.0, y: 20.0 &#125;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="Summary-2">Summary</h3>
-<p>Using <code>#[derive(Default)]</code> simplifies creating default values for your types, while implementing the <code>Default</code> trait manually allows for more control over what those default values are.</p>
 ]]></content>
       <categories>
         <category>Rust</category>
