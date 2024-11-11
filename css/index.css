@@ -6243,3 +6243,75 @@ blockquote.pullquote.right {
   color: #f47466;
   font-weight: 600;
 }
+.typewriter {
+  font-size: 24px;
+  line-height: 1.5;
+  overflow: hidden;
+}
+/* Hide all words initially */
+.word {
+  opacity: 0;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  filter: alpha(opacity=0);
+  display: inline-block;
+  white-space: nowrap;
+  -webkit-animation: typewriterWord 1s forwards;
+  -moz-animation: typewriterWord 1s forwards;
+  -o-animation: typewriterWord 1s forwards;
+  -ms-animation: typewriterWord 1s forwards;
+  animation: typewriterWord 1s forwards;
+  margin-right: 5px; /* space between words */
+}
+/* Keyframes for animating words one by one */
+/* Animating each word with a delay */
+.line {
+  display: block;
+}
+@-moz-keyframes typewriterWord {
+  0% {
+    opacity: 0;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    filter: alpha(opacity=0);
+  }
+  100% {
+    opacity: 1;
+    -ms-filter: none;
+    filter: none;
+  }
+}
+@-webkit-keyframes typewriterWord {
+  0% {
+    opacity: 0;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    filter: alpha(opacity=0);
+  }
+  100% {
+    opacity: 1;
+    -ms-filter: none;
+    filter: none;
+  }
+}
+@-o-keyframes typewriterWord {
+  0% {
+    opacity: 0;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    filter: alpha(opacity=0);
+  }
+  100% {
+    opacity: 1;
+    -ms-filter: none;
+    filter: none;
+  }
+}
+@keyframes typewriterWord {
+  0% {
+    opacity: 0;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    filter: alpha(opacity=0);
+  }
+  100% {
+    opacity: 1;
+    -ms-filter: none;
+    filter: none;
+  }
+}
