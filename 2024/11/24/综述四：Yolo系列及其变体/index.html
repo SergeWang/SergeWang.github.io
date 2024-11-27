@@ -1,0 +1,397 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>综述四：Yolo系列及其变体 | Model The World</title><meta name="author" content="Serge Wang"><meta name="copyright" content="Serge Wang"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="YOLO（You Only Look Once）是最著名的目标检测系列之一，由Joseph Redmon及其团队开发。YOLO的核心特点是速度快，因为它采用单次前向传递进行目标检测，比许多其他检测模型要快。随着时间的推移，YOLO经历了多个版本的迭代和改进，每个版本都在精度、速度和处理不同应用场景的能力上有所提升。 以下是YOLO的主要版本及其变种的列表：  1. YOLOv1（2015年）  关">
+<meta property="og:type" content="article">
+<meta property="og:title" content="综述四：Yolo系列及其变体">
+<meta property="og:url" content="https://sergewang.github.io/2024/11/24/%E7%BB%BC%E8%BF%B0%E5%9B%9B%EF%BC%9AYolo%E7%B3%BB%E5%88%97%E5%8F%8A%E5%85%B6%E5%8F%98%E4%BD%93/">
+<meta property="og:site_name" content="Model The World">
+<meta property="og:description" content="YOLO（You Only Look Once）是最著名的目标检测系列之一，由Joseph Redmon及其团队开发。YOLO的核心特点是速度快，因为它采用单次前向传递进行目标检测，比许多其他检测模型要快。随着时间的推移，YOLO经历了多个版本的迭代和改进，每个版本都在精度、速度和处理不同应用场景的能力上有所提升。 以下是YOLO的主要版本及其变种的列表：  1. YOLOv1（2015年）  关">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://sergewang.github.io/images/mamba.png">
+<meta property="article:published_time" content="2024-11-24T11:04:52.000Z">
+<meta property="article:modified_time" content="2024-11-27T07:55:33.896Z">
+<meta property="article:author" content="Serge Wang">
+<meta property="article:tag" content="综述">
+<meta property="article:tag" content="目标检测">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://sergewang.github.io/images/mamba.png"><link rel="shortcut icon" href="/img/newlogo.png"><link rel="canonical" href="https://sergewang.github.io/2024/11/24/%E7%BB%BC%E8%BF%B0%E5%9B%9B%EF%BC%9AYolo%E7%B3%BB%E5%88%97%E5%8F%8A%E5%85%B6%E5%8F%98%E4%BD%93/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="google-site-verification" content="IDUolVgWkW_cmu1mtW5hsxrrIjQfCHvq5hOTOkXeVNE"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        if (name && globalFn[key][name]) return
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?9dcb7eb7a8a6225c2b1f242f3b0894bf";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-XERFYF0N5K"></script><script>window.dataLayer = window.dataLayer || []
+function gtag(){dataLayer.push(arguments)}
+gtag('js', new Date())
+gtag('config', 'G-XERFYF0N5K')
+btf.addGlobalFn('pjaxComplete', () => {
+  gtag('config', 'G-XERFYF0N5K', {'page_path': window.location.pathname})
+}, 'google_analytics')
+</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '综述四：Yolo系列及其变体',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-11-27 15:55:33'
+}</script></head><body><div id="web_bg" style="background-image: url(/img/background.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/newlogo.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">65</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">39</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/images/mamba.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/img/newlogo.png" alt="Logo"><span class="site-name">Model The World</span></a><a class="nav-page-title" href="/"><span class="site-name">综述四：Yolo系列及其变体</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">综述四：Yolo系列及其变体</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-11-24T11:04:52.000Z" title="发表于 2024-11-24 19:04:52">2024-11-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-11-27T07:55:33.896Z" title="更新于 2024-11-27 15:55:33">2024-11-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Yolo/">Yolo</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>YOLO（You Only Look Once）是最著名的目标检测系列之一，由Joseph Redmon及其团队开发。YOLO的核心特点是速度快，因为它采用单次前向传递进行目标检测，比许多其他检测模型要快。随着时间的推移，YOLO经历了多个版本的迭代和改进，每个版本都在精度、速度和处理不同应用场景的能力上有所提升。</p>
+<p>以下是YOLO的主要版本及其变种的列表：</p>
+<hr>
+<h3 id="1-YOLOv1（2015年）">1. <strong>YOLOv1（2015年）</strong></h3>
+<ul>
+<li><strong>关键特性</strong>：
+<ul>
+<li>YOLO的第一个版本。</li>
+<li>提出了一个单一的神经网络来进行端到端的目标检测。</li>
+<li>将目标检测视为回归问题，直接从图像中预测边界框和类别概率。</li>
+</ul>
+</li>
+<li><strong>变种</strong>：
+<ul>
+<li><strong>Tiny YOLOv1</strong>：YOLOv1的轻量版，优化了速度，牺牲了精度，适用于实时应用和低资源设备。</li>
+</ul>
+</li>
+<li><strong>局限性</strong>：
+<ul>
+<li>对小物体和密集场景的检测较差。</li>
+<li>定位精度比当时的其他方法差。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="2-YOLOv2（2016年）-—-“Darknet-19”">2. <strong>YOLOv2（2016年） — “Darknet-19”</strong></h3>
+<ul>
+<li><strong>关键特性</strong>：
+<ul>
+<li>也被称为**“YOLO9000”**。</li>
+<li>相较于YOLOv1，采用了更强的架构（Darknet-19，19层网络）。</li>
+<li>引入了<strong>锚框</strong>（预定义的边界框形状），使得模型更擅长预测不同长宽比的边界框。</li>
+<li>引入了<strong>多尺度训练</strong>（在不同分辨率下训练），可以处理不同尺度的物体。</li>
+<li><strong>YOLO9000</strong>：通过联合训练目标检测和图像分类任务，能够检测超过9000个类别。</li>
+</ul>
+</li>
+<li><strong>变种</strong>：
+<ul>
+<li><strong>Tiny YOLOv2</strong>：YOLOv2的轻量版，优化了速度，适用于低资源设备。</li>
+</ul>
+</li>
+<li><strong>改进</strong>：
+<ul>
+<li>相比YOLOv1，精度和速度都有显著提高。</li>
+<li>对小物体和密集场景的处理得到了改善。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="3-YOLOv3（2018年）">3. <strong>YOLOv3（2018年）</strong></h3>
+<ul>
+<li><strong>关键特性</strong>：
+<ul>
+<li>进一步提高了精度、速度和鲁棒性。</li>
+<li>采用了<strong>Darknet-53</strong>作为骨干网络（比之前版本更深，53层）。</li>
+<li>引入了<strong>多标签分类</strong>，处理图像中存在多个物体的情况。</li>
+<li>采用不同尺度的特征图（在三个分辨率下进行检测）以更好地处理小物体。</li>
+<li>使用了<strong>逻辑损失</strong>来预测边界框，<strong>Softmax损失</strong>用于类别预测。</li>
+</ul>
+</li>
+<li><strong>变种</strong>：
+<ul>
+<li><strong>YOLOv3-tiny</strong>：YOLOv3的轻量版，优化了速度，牺牲了精度，适合实时检测任务。</li>
+<li><strong>YOLOv3-anchors</strong>：优化了锚框的YOLOv3版本，以提高定位性能。</li>
+</ul>
+</li>
+<li><strong>改进</strong>：
+<ul>
+<li>对小物体的检测得到了显著提高。</li>
+<li>相比YOLOv2，YOLOv3在精度和速度上都有明显提升。</li>
+<li>更好地处理了重叠和遮挡的物体。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="4-YOLOv4（2020年）">4. <strong>YOLOv4（2020年）</strong></h3>
+<ul>
+<li><strong>关键特性</strong>：
+<ul>
+<li>引入了<strong>CSPDarknet53</strong>骨干网络（CSPNet：Cross-Stage Partial Networks），提高了性能。</li>
+<li>使用<strong>Mish激活函数</strong>代替ReLU，改善了梯度流动，提升了学习效率。</li>
+<li>引入了<strong>DropBlock正则化</strong>，增强了模型的泛化能力。</li>
+<li>使用了<strong>自对抗训练</strong>（SAT）来提高在挑战性场景下的检测能力。</li>
+<li>引入了<strong>加权残差连接</strong>和<strong>跨阶段部分连接</strong>以优化网络。</li>
+<li>使用了多种优化技术，如<strong>Mosaic数据增强</strong>、<strong>自动混合精度（AMP）<strong>和</strong>CIoU损失</strong>来预测边界框。</li>
+</ul>
+</li>
+<li><strong>变种</strong>：
+<ul>
+<li><strong>Tiny YOLOv4</strong>：YOLOv4的轻量版，专为边缘设备优化，速度更快。</li>
+<li><strong>YOLOv4x-mish</strong>：使用Mish激活函数的YOLOv4版本，提供更好的性能。</li>
+</ul>
+</li>
+<li><strong>改进</strong>：
+<ul>
+<li>相比YOLOv3，YOLOv4在精度和鲁棒性方面都有显著提升。</li>
+<li>在各种场景中（如不同尺度的物体和遮挡）表现更为出色。</li>
+<li>更高效，特别适用于实时应用，速度、精度和内存使用上都有优化。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="5-YOLOv4-CSP（2020年）">5. <strong>YOLOv4-CSP（2020年）</strong></h3>
+<ul>
+<li><strong>关键特性</strong>：
+<ul>
+<li>基于YOLOv4的改进版，集成了<strong>CSPDarknet53</strong>骨干网络，进一步提高了学习效率。</li>
+<li>进一步优化了骨干网络，提升了训练效率。</li>
+</ul>
+</li>
+<li><strong>目的</strong>：为需要在精度和速度之间达到良好平衡的场景设计。</li>
+</ul>
+<hr>
+<h3 id="6-YOLOv5（2020年）-—-“非官方”">6. <strong>YOLOv5（2020年） — “非官方”</strong></h3>
+<ul>
+<li><strong>关键特性</strong>：
+<ul>
+<li>YOLOv5是由<strong>Ultralytics</strong>（一个独立公司）开发的，因此<strong>并非官方YOLO版本</strong>，但由于其卓越的性能，获得了广泛关注。</li>
+<li>基于<strong>PyTorch</strong>而非Darknet，便于使用、部署和微调。</li>
+<li>聚焦于<strong>更好的可扩展性和灵活性</strong>，提供了不同的模型尺寸（小型、中型、大型）。</li>
+<li>引入了新的功能，如<strong>自动学习边界框锚点</strong>、改进的损失函数和广泛的超参数调优支持。</li>
+<li>在多个数据集上表现出色，并适用于实时应用。</li>
+</ul>
+</li>
+<li><strong>变种</strong>：
+<ul>
+<li><strong>YOLOv5s</strong>（小型）：优化了速度，参数更少。</li>
+<li><strong>YOLOv5m</strong>（中型）：在精度和速度之间取得平衡。</li>
+<li><strong>YOLOv5l</strong>（大型）：在精度上表现更好，但速度较慢。</li>
+<li><strong>YOLOv5x</strong>（超大）：最准确，但最慢。</li>
+</ul>
+</li>
+<li><strong>改进</strong>：
+<ul>
+<li>相比其他YOLO版本，更加易用和灵活。</li>
+<li>实时性能优秀，且精度在许多情况下超越YOLOv4。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="7-YOLOv4-tiny（2020年）">7. <strong>YOLOv4-tiny（2020年）</strong></h3>
+<ul>
+<li><strong>关键特性</strong>：
+<ul>
+<li>YOLOv4的轻量版，优化了速度，适用于移动设备和嵌入式设备。</li>
+<li>专注于速度与精度之间的权衡。</li>
+<li>使用了更小的架构，在牺牲精度的情况下加快推理速度。</li>
+</ul>
+</li>
+<li><strong>目的</strong>：适用于资源受限的设备和实时应用。</li>
+</ul>
+<hr>
+<h3 id="8-YOLOv7（2022年）">8. <strong>YOLOv7（2022年）</strong></h3>
+<ul>
+<li><strong>关键特性</strong>：
+<ul>
+<li>由<strong>Chien-Yao Wang</strong>等人在<strong>加州大学</strong>发布。</li>
+<li>集成了多种先进技术：<strong>动态头</strong>、<strong>排斥损失</strong>、<strong>焦点层</strong>等。</li>
+<li>设计为更灵活和通用的模型，能够处理更广泛的任务和场景。</li>
+<li><strong>混合任务级联</strong>：聚焦于跨多个检测头优化任务特定的性能。</li>
+<li>在实时目标检测中表现出色，精度较YOLOv4和YOLOv5更高。</li>
+</ul>
+</li>
+<li><strong>变种</strong>：
+<ul>
+<li><strong>YOLOv7-tiny</strong>：轻量级版本，优化速度，牺牲一些精度。</li>
+<li><strong>YOLOv7-5x</strong>：更大的版本，专注于更高的精度，适用于高性能任务。</li>
+</ul>
+</li>
+<li><strong>改进</strong>：
+<ul>
+<li>精度和效率上超越YOLOv4和YOLOv5。</li>
+<li>适应性强，能够应对更具挑战性的现实检测任务。</li>
+<li>在速度和精度之间提供了更好的权衡。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="9-YOLOv8（2023年）">9. <strong>YOLOv8（2023年）</strong></h3>
+<ul>
+<li><strong>关键特性</strong>：
+<ul>
+<li>最新的YOLO版本（由Ultralytics发布），建立在YOLOv5和YOLOv7的基础上。</li>
+<li>包含更多优化，如更强的骨干网络、改进的损失函数和先进的数据增强技术。</li>
+<li>更适合边缘设备，提供更灵活和高效的部署选项。</li>
+</ul>
+</li>
+<li><strong>变种</strong>：
+<ul>
+<li><strong>YOLOv8-s</strong>：小型版本，优化了实时应用中的速度。</li>
+<li><strong>YOLOv8-m</strong>：中型版本，精度和速度之间取得平衡。</li>
+<li><strong>YOLOv8-l</strong>：大型版本，优先考虑精度，但较慢。</li>
+</ul>
+</li>
+<li><strong>改进</strong>：
+<ul>
+<li>在精度、效率和灵活性方面进一步优化。</li>
+<li>在目标检测基准测试中取得了最先进的结果。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="YOLO版本及其变种总结：">YOLO版本及其变种总结：</h3>
+<ol>
+<li><strong>YOLOv1（2015年）</strong> — 初始版本，奠定基础。</li>
+<li><strong>YOLOv2（2016年）</strong> — YOLO9000、多尺度训练、锚框。</li>
+<li><strong>YOLOv3（2018年）</strong> — Darknet-53、多标签分类、改进的小物体检测。</li>
+<li><strong>YOLOv4（2020年）</strong> — CSPDarknet53、Mish激活、增强的性能。</li>
+<li><strong>YOLOv5（2020年）</strong> — 基于PyTorch，灵活和可扩展（非官方版本）。</li>
+<li><strong>YOLOv4-CSP（2020年）</strong> — 改进的CSP架构，提高效率。</li>
+<li><strong>YOLOv7（2022年）</strong> — 先进技术、混合任务级联、更高性能。</li>
+<li><strong>YOLOv8（2023年）</strong> — 最新优化，边缘设备高效部署。</li>
+</ol>
+<p>每个版本的YOLO都在精度、速度和处理能力上有所提升，YOLO系列已经成为广泛使用的目标检测工具，在实时计算和高效性能上都有着非常突出的表现。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://SergeWang.github.io">Serge Wang</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://sergewang.github.io/2024/11/24/%E7%BB%BC%E8%BF%B0%E5%9B%9B%EF%BC%9AYolo%E7%B3%BB%E5%88%97%E5%8F%8A%E5%85%B6%E5%8F%98%E4%BD%93/">https://sergewang.github.io/2024/11/24/%E7%BB%BC%E8%BF%B0%E5%9B%9B%EF%BC%9AYolo%E7%B3%BB%E5%88%97%E5%8F%8A%E5%85%B6%E5%8F%98%E4%BD%93/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://SergeWang.github.io" target="_blank">Model The World</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%BB%BC%E8%BF%B0/">综述</a><a class="post-meta__tags" href="/tags/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B/">目标检测</a></div><div class="post-share"><div class="social-share" data-image="/images/mamba.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/11/24/%E7%BB%BC%E8%BF%B0%E5%85%AD%EF%BC%9A%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96%E6%8A%80%E6%9C%AF/" title="综述六：模型量化技术"><img class="cover" src="/images/mamba.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">综述六：模型量化技术</div></div><div class="info-2"><div class="info-item-1">量化技术在机器学习（ML）和大型语言模型（LLM）中的应用，指的是将模型的权重和激活值的数值精度降低，通常目的是提高计算效率、减少内存占用，并加速推理过程，而不显著降低准确度。随着时间的推移，这些方法在传统机器学习和深度学习的研究中不断发展。 以下是按引入时间排序的 量化方法 列表：  1. 定点量化（Fixed-Point Quantization） (1980年代 - 1990年代初)  核心思想：将浮点数（32位）转换为定点数（例如16位或8位整数）。这可以减少内存需求，并加速计算，因为定点操作通常比浮点操作在硬件上更高效。 应用：早期的信号处理和硬件实现。   2. 向量量化（Vector Quantization）(1980年代 - 1990年代)  核心思想：通过使用较少的质心或码本来表示高维向量（如特征表示）。这是一种有损压缩技术，用于减少表示的维度。 应用：用于图像和语音压缩。 重要论文：Gray, “Vector Quantization and Signal Compression”, 1984。   3. 产品量化（Product...</div></div></div></a><a class="pagination-related" href="/2024/11/23/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E4%B8%89%E5%8D%81%E5%85%AB%EF%BC%9ATaQ-DiT%EF%BC%9A%E7%94%A8%E4%BA%8E%E6%89%A9%E6%95%A3Transformer%E7%9A%84%E6%97%B6%E9%97%B4%E6%84%9F%E7%9F%A5%E9%87%8F%E5%8C%96/" title="论文阅读三十八：TaQ-DiT：用于扩散Transformer的时间感知量化"><img class="cover" src="/images/TaQ-DiT.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">论文阅读三十八：TaQ-DiT：用于扩散Transformer的时间感知量化</div></div><div class="info-2"><div class="info-item-1">摘要 基于Transformer的扩散模型，称为扩散Transformers（DiTs），已经在图像和视频生成任务中取得先进性能。然而，它们的大型模型尺寸和缓慢推理速度限制它们的实际应用，呼唤模型压缩方法，如量化。不幸地是，现有DiT量化方法忽略了（1）重建的影响和（2）跨不同层的不同的量化敏感度，阻碍它们的性能。为了解决这些问题，我们提出创新的用于DiTs的时间感知量化（TaQ-DiT）。具体地，（1）当在量化阶段分别重建权重和激活，我们观察到不收敛问题，并引入联合重建方法来解决这个问题。（2）我们发现Post-GELU激活对量化尤其敏感，因为它们在不同的去噪步骤中具有显著的可变性，并且在每个步骤中都存在极端的不对称性和变化。为此，我们提出时变感知变换来促进更有效的量化。实现结果表明，当量化DiT的权重到4位和激活到8位（W4A8）时，我们的方法显著超越先前量化方法。 引言 由于分层架构的高效性，基于 UNet 的扩散模型（DM）[1]...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/11/24/%E7%BB%BC%E8%BF%B0%E4%B8%80%EF%BC%9ATransformer%E5%8F%8A%E5%85%B6%E5%8F%98%E4%BD%93/" title="综述一：Transformer及其变体"><img class="cover" src="/images/transformer.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-24</div><div class="info-item-2">综述一：Transformer及其变体</div></div><div class="info-2"><div class="info-item-1">Transformer架构，因其自注意力机制而闻名，能够让模型根据输入序列中不同的标记之间的关系进行加权。这种机制消除了循环神经网络的需求，使得训练变得更加高效。自从2017年原始Transformer的提出以来，已经出现了多个变种，旨在优化性能、扩展其适用范围或解决一些挑战。以下是一些著名的Transformer变种，特别是那些专注于自注意力机制的： 1. 原始Transformer (Vanilla Transformer)  关键特性：原始Transformer架构包括一个编码器-解码器结构，采用自注意力机制。 目的：消除了递归神经网络的需求，使得模型训练更加并行化和高效。 自注意力机制：多头自注意力，通过计算输入序列中所有标记之间的关系来决定重要性。  2. BERT（双向编码器表示）  关键特性：BERT只使用Transformer的编码器部分，采用双向自注意力机制来捕获标记的左右上下文。 目的：通过掩蔽语言模型（MLM）进行预训练，并可以通过微调来提升在下游NLP任务中的表现。  3....</div></div></div></a><a class="pagination-related" href="/2024/11/24/%E7%BB%BC%E8%BF%B0%E4%B8%83%EF%BC%9ACNN%E6%A8%A1%E5%9E%8B/" title="综述七：CNN模型"><img class="cover" src="/images/mamba.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-24</div><div class="info-item-2">综述七：CNN模型</div></div><div class="info-2"><div class="info-item-1">Here’s a list of major CNN (Convolutional Neural Network) variants ordered by the time of their publication. CNNs have evolved over the years to improve accuracy, reduce computational costs, and adapt to different domains.  1. LeNet (1998)  Key Idea: One of the first CNN architectures, designed for handwritten digit recognition (MNIST). It used convolutional layers followed by pooling and fully connected layers. Application: Digit classification. Notable Paper: Yann LeCun et al.,...</div></div></div></a><a class="pagination-related" href="/2024/11/24/%E7%BB%BC%E8%BF%B0%E4%B8%89%EF%BC%9A%E6%8C%81%E7%BB%AD%E5%AD%A6%E4%B9%A0%E5%8F%8A%E5%85%B6%E6%96%B9%E6%B3%95/" title="综述三：持续学习及其方法"><img class="cover" src="/images/mamba.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-24</div><div class="info-item-2">综述三：持续学习及其方法</div></div><div class="info-2"><div class="info-item-1">持续学习（Continual Learning，CL），也称为终身学习（Lifelong Learning），指的是模型能够从持续不断的数据流中学习，并随着时间的推移不断适应和获得新知识，而不会遗忘先前学习的内容。持续学习面临的一个主要挑战是灾难性遗忘（Catastrophic Forgetting），即在学习新任务时，模型容易遗忘之前学习的任务。 为了应对这些挑战，提出了多种方法，这些方法可以根据它们如何处理遗忘、如何存储知识以及如何使用新数据进行分类。 下面是主要的持续学习方法，按它们所采用的主要策略进行组织： 1....</div></div></div></a><a class="pagination-related" href="/2024/11/24/%E7%BB%BC%E8%BF%B0%E4%BA%8C%EF%BC%9ADiTs%E5%8F%8A%E5%85%B6%E5%8F%98%E4%BD%93/" title="综述二：DiTs及其变体"><img class="cover" src="/images/SIT.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-24</div><div class="info-item-2">综述二：DiTs及其变体</div></div><div class="info-2"><div class="info-item-1">**DiT（去噪扩散Transformer模型）**是结合了Transformer架构和扩散模型的一类生成模型，特别专注于在扩散框架内的去噪过程。扩散模型通过逐步添加和去除噪声的过程来建模复杂的分布，近年来在生成任务中非常流行。 下面是一些著名的DiT变种，它们在不同方面扩展了原始的DiT模型： 1. DiT（原始版本）  关键特性：原始的DiT模型将Transformer架构与去噪扩散过程结合，利用Transformer的注意力机制改进生成质量和训练的可扩展性。 目的：生成高质量的图像，并与传统的卷积神经网络相比，提高训练效率。  2. DiT++（增强版DiT）  关键特性：DiT++是在原始DiT基础上进行增强的版本，可能包括模型架构的改进、训练方法的优化或额外的正则化技术。 目的：通过改进Transformer架构和扩散过程中的噪声调度，提升生成稳定性和性能。  3....</div></div></div></a><a class="pagination-related" href="/2024/11/24/%E7%BB%BC%E8%BF%B0%E4%BA%94%EF%BC%9A%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%8F%8A%E5%85%B6%E5%88%86%E7%B1%BB/" title="综述五：强化学习及其分类"><img class="cover" src="/images/mamba.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-24</div><div class="info-item-2">综述五：强化学习及其分类</div></div><div class="info-2"><div class="info-item-1">强化学习的变种 强化学习（Reinforcement Learning，简称RL）是一种机器学习方法，其中代理（Agent）通过与环境的交互来学习做出决策。代理的目标是通过采取适当的行动，最大化长期累积的奖励。强化学习是一个广泛的领域，许多不同的变种和算法已被开发出来，以解决学习、探索和决策等不同方面的问题。 以下是强化学习的主要变种及其子类别：  1. 无模型 vs 有模型强化学习  无模型强化学习（Model-Free RL）：代理不构建或使用环境的动态模型，而是直接通过与环境的交互来学习。  示例：  Q学习（Q-Learning，包括表格化和深度Q学习） 策略梯度方法（例如，REINFORCE） Actor-Critic方法（例如A3C，PPO）     有模型强化学习（Model-Based RL）：代理试图学习环境的转移动态和奖励函数，并利用这些模型来做出更有信息量的决策。  示例：  Dyna-Q（Q学习与规划结合） World Models 蒙特卡洛树搜索（MCTS）       2....</div></div></div></a><a class="pagination-related" href="/2024/11/24/%E7%BB%BC%E8%BF%B0%E5%85%AB%EF%BC%9A%E9%AB%98%E6%96%AF%E6%B3%BC%E6%BA%85/" title="综述八：高斯泼溅"><img class="cover" src="/images/mamba.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-24</div><div class="info-item-2">综述八：高斯泼溅</div></div><div class="info-2"><div class="info-item-1">模型 3d gaussian splatting for real-time radiance field rendering （23/08） 论文阅读三十一：3D高斯溅射用于实时辐射场渲染 贡献：  引入各向异性（anisotropic）3D高斯作为高质量、非结构化的辐射场表示。 3D高斯属性的优化方法，与自适应密度控制交织，为捕获的场景创建高质量的表示。 快速可微GPU渲染方法，具有可见性感知，允许各向异性泼溅和快速后向传播，从而获得高质量的新视图合成。     </div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/newlogo.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Serge Wang</div><div class="author-info-description">今日事，今日毕</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">65</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">39</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/SergeWang"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/SergeWang" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sergew027@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">Welcome to my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-YOLOv1%EF%BC%882015%E5%B9%B4%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">1. YOLOv1（2015年）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-YOLOv2%EF%BC%882016%E5%B9%B4%EF%BC%89-%E2%80%94-%E2%80%9CDarknet-19%E2%80%9D"><span class="toc-number">2.</span> <span class="toc-text">2. YOLOv2（2016年） — “Darknet-19”</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-YOLOv3%EF%BC%882018%E5%B9%B4%EF%BC%89"><span class="toc-number">3.</span> <span class="toc-text">3. YOLOv3（2018年）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-YOLOv4%EF%BC%882020%E5%B9%B4%EF%BC%89"><span class="toc-number">4.</span> <span class="toc-text">4. YOLOv4（2020年）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-YOLOv4-CSP%EF%BC%882020%E5%B9%B4%EF%BC%89"><span class="toc-number">5.</span> <span class="toc-text">5. YOLOv4-CSP（2020年）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-YOLOv5%EF%BC%882020%E5%B9%B4%EF%BC%89-%E2%80%94-%E2%80%9C%E9%9D%9E%E5%AE%98%E6%96%B9%E2%80%9D"><span class="toc-number">6.</span> <span class="toc-text">6. YOLOv5（2020年） — “非官方”</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-YOLOv4-tiny%EF%BC%882020%E5%B9%B4%EF%BC%89"><span class="toc-number">7.</span> <span class="toc-text">7. YOLOv4-tiny（2020年）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-YOLOv7%EF%BC%882022%E5%B9%B4%EF%BC%89"><span class="toc-number">8.</span> <span class="toc-text">8. YOLOv7（2022年）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-YOLOv8%EF%BC%882023%E5%B9%B4%EF%BC%89"><span class="toc-number">9.</span> <span class="toc-text">9. YOLOv8（2023年）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#YOLO%E7%89%88%E6%9C%AC%E5%8F%8A%E5%85%B6%E5%8F%98%E7%A7%8D%E6%80%BB%E7%BB%93%EF%BC%9A"><span class="toc-number">10.</span> <span class="toc-text">YOLO版本及其变种总结：</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/11/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E5%9B%9B%E5%8D%81%E5%9B%9B%EF%BC%9A%E7%94%A8%E4%BA%8E%E9%AB%98%E6%95%88%E7%BB%86%E8%87%B4%E8%A1%A8%E9%9D%A2%E9%87%8D%E5%BB%BA%E7%9A%84%E4%BA%8C%E6%AC%A1%E9%AB%98%E6%96%AF%E6%B3%BC%E6%BA%85/" title="论文阅读四十四：用于高效细致表面重建的二次高斯泼溅"><img src="/images/QGS.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="论文阅读四十四：用于高效细致表面重建的二次高斯泼溅"/></a><div class="content"><a class="title" href="/2024/11/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E5%9B%9B%E5%8D%81%E5%9B%9B%EF%BC%9A%E7%94%A8%E4%BA%8E%E9%AB%98%E6%95%88%E7%BB%86%E8%87%B4%E8%A1%A8%E9%9D%A2%E9%87%8D%E5%BB%BA%E7%9A%84%E4%BA%8C%E6%AC%A1%E9%AB%98%E6%96%AF%E6%B3%BC%E6%BA%85/" title="论文阅读四十四：用于高效细致表面重建的二次高斯泼溅">论文阅读四十四：用于高效细致表面重建的二次高斯泼溅</a><time datetime="2024-11-27T02:15:57.000Z" title="发表于 2024-11-27 10:15:57">2024-11-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/11/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E5%9B%9B%E5%8D%81%E4%B8%89%EF%BC%9A%E6%B5%8B%E8%AF%95%E6%97%B6%E9%AB%98%E6%95%88%E5%AD%A6%E4%B9%A0%EF%BC%9ALLMs%E7%9A%84%E4%B8%BB%E5%8A%A8%E5%BE%AE%E8%B0%83/" title="论文阅读四十三：测试时高效学习：LLMs的主动微调"><img src="/images/SIFT.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="论文阅读四十三：测试时高效学习：LLMs的主动微调"/></a><div class="content"><a class="title" href="/2024/11/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E5%9B%9B%E5%8D%81%E4%B8%89%EF%BC%9A%E6%B5%8B%E8%AF%95%E6%97%B6%E9%AB%98%E6%95%88%E5%AD%A6%E4%B9%A0%EF%BC%9ALLMs%E7%9A%84%E4%B8%BB%E5%8A%A8%E5%BE%AE%E8%B0%83/" title="论文阅读四十三：测试时高效学习：LLMs的主动微调">论文阅读四十三：测试时高效学习：LLMs的主动微调</a><time datetime="2024-11-26T13:05:57.000Z" title="发表于 2024-11-26 21:05:57">2024-11-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/11/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E5%9B%9B%E5%8D%81%E4%BA%8C%EF%BC%9A1%E4%BD%8DAI%E6%9E%B6%E6%9E%84%EF%BC%9A%E9%83%A8%E5%88%861-1%EF%BC%8C%E5%9F%BA%E4%BA%8EGPU%E7%9A%84%E5%BF%AB%E9%80%9F%E6%97%A0%E6%8D%9FBitNet-b1-58%E6%8E%A8%E7%90%86/" title="论文阅读四十二：1位AI架构：部分1.1，基于GPU的快速无损BitNet b1.58推理"><img src="/images/bitnet.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="论文阅读四十二：1位AI架构：部分1.1，基于GPU的快速无损BitNet b1.58推理"/></a><div class="content"><a class="title" href="/2024/11/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E5%9B%9B%E5%8D%81%E4%BA%8C%EF%BC%9A1%E4%BD%8DAI%E6%9E%B6%E6%9E%84%EF%BC%9A%E9%83%A8%E5%88%861-1%EF%BC%8C%E5%9F%BA%E4%BA%8EGPU%E7%9A%84%E5%BF%AB%E9%80%9F%E6%97%A0%E6%8D%9FBitNet-b1-58%E6%8E%A8%E7%90%86/" title="论文阅读四十二：1位AI架构：部分1.1，基于GPU的快速无损BitNet b1.58推理">论文阅读四十二：1位AI架构：部分1.1，基于GPU的快速无损BitNet b1.58推理</a><time datetime="2024-11-26T10:57:57.000Z" title="发表于 2024-11-26 18:57:57">2024-11-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/11/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E5%9B%9B%E5%8D%81%E4%B8%80%EF%BC%9ATransformer%E4%B8%AD%E9%87%8D%E8%A6%81%E7%9A%84%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E5%B9%B6%E9%9D%9E%E6%89%80%E6%9C%89%E7%9A%84%E6%B3%A8%E6%84%8F%E5%8A%9B%E9%83%BD%E9%9C%80%E8%A6%81/" title="论文阅读四十一：Transformer中重要的是什么？并非所有的注意力都需要"><img src="/images/llm-drop.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="论文阅读四十一：Transformer中重要的是什么？并非所有的注意力都需要"/></a><div class="content"><a class="title" href="/2024/11/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E5%9B%9B%E5%8D%81%E4%B8%80%EF%BC%9ATransformer%E4%B8%AD%E9%87%8D%E8%A6%81%E7%9A%84%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E5%B9%B6%E9%9D%9E%E6%89%80%E6%9C%89%E7%9A%84%E6%B3%A8%E6%84%8F%E5%8A%9B%E9%83%BD%E9%9C%80%E8%A6%81/" title="论文阅读四十一：Transformer中重要的是什么？并非所有的注意力都需要">论文阅读四十一：Transformer中重要的是什么？并非所有的注意力都需要</a><time datetime="2024-11-26T10:55:38.000Z" title="发表于 2024-11-26 18:55:38">2024-11-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/11/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E5%9B%9B%E5%8D%81%EF%BC%9A%E5%A4%A7%E5%9E%8B%E8%A7%86%E8%A7%89%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%A4%9A%E6%A8%A1%E6%80%81%E8%87%AA%E5%9B%9E%E5%BD%92%E9%A2%84%E8%AE%AD%E7%BB%83/" title="论文阅读四十：大型视觉编码器的多模态自回归预训练"><img src="/images/AIMv2.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="论文阅读四十：大型视觉编码器的多模态自回归预训练"/></a><div class="content"><a class="title" href="/2024/11/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E5%9B%9B%E5%8D%81%EF%BC%9A%E5%A4%A7%E5%9E%8B%E8%A7%86%E8%A7%89%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%A4%9A%E6%A8%A1%E6%80%81%E8%87%AA%E5%9B%9E%E5%BD%92%E9%A2%84%E8%AE%AD%E7%BB%83/" title="论文阅读四十：大型视觉编码器的多模态自回归预训练">论文阅读四十：大型视觉编码器的多模态自回归预训练</a><time datetime="2024-11-26T10:52:16.000Z" title="发表于 2024-11-26 18:52:16">2024-11-26</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By Serge Wang</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (false) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>

@@ -1,0 +1,509 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>综述五：强化学习及其分类 | Model The World</title><meta name="author" content="Serge Wang"><meta name="copyright" content="Serge Wang"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="强化学习的变种 强化学习（Reinforcement Learning，简称RL）是一种机器学习方法，其中代理（Agent）通过与环境的交互来学习做出决策。代理的目标是通过采取适当的行动，最大化长期累积的奖励。强化学习是一个广泛的领域，许多不同的变种和算法已被开发出来，以解决学习、探索和决策等不同方面的问题。 以下是强化学习的主要变种及其子类别：  1. 无模型 vs 有模型强化学习  无模型强化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="综述五：强化学习及其分类">
+<meta property="og:url" content="https://sergewang.github.io/2024/11/24/%E7%BB%BC%E8%BF%B0%E4%BA%94%EF%BC%9A%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%8F%8A%E5%85%B6%E5%88%86%E7%B1%BB/">
+<meta property="og:site_name" content="Model The World">
+<meta property="og:description" content="强化学习的变种 强化学习（Reinforcement Learning，简称RL）是一种机器学习方法，其中代理（Agent）通过与环境的交互来学习做出决策。代理的目标是通过采取适当的行动，最大化长期累积的奖励。强化学习是一个广泛的领域，许多不同的变种和算法已被开发出来，以解决学习、探索和决策等不同方面的问题。 以下是强化学习的主要变种及其子类别：  1. 无模型 vs 有模型强化学习  无模型强化">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://sergewang.github.io/images/mamba.png">
+<meta property="article:published_time" content="2024-11-24T11:04:52.000Z">
+<meta property="article:modified_time" content="2024-11-27T07:55:10.371Z">
+<meta property="article:author" content="Serge Wang">
+<meta property="article:tag" content="综述">
+<meta property="article:tag" content="RL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://sergewang.github.io/images/mamba.png"><link rel="shortcut icon" href="/img/newlogo.png"><link rel="canonical" href="https://sergewang.github.io/2024/11/24/%E7%BB%BC%E8%BF%B0%E4%BA%94%EF%BC%9A%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%8F%8A%E5%85%B6%E5%88%86%E7%B1%BB/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="google-site-verification" content="IDUolVgWkW_cmu1mtW5hsxrrIjQfCHvq5hOTOkXeVNE"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        if (name && globalFn[key][name]) return
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?9dcb7eb7a8a6225c2b1f242f3b0894bf";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-XERFYF0N5K"></script><script>window.dataLayer = window.dataLayer || []
+function gtag(){dataLayer.push(arguments)}
+gtag('js', new Date())
+gtag('config', 'G-XERFYF0N5K')
+btf.addGlobalFn('pjaxComplete', () => {
+  gtag('config', 'G-XERFYF0N5K', {'page_path': window.location.pathname})
+}, 'google_analytics')
+</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '综述五：强化学习及其分类',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-11-27 15:55:10'
+}</script></head><body><div id="web_bg" style="background-image: url(/img/background.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/newlogo.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">65</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">39</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/images/mamba.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/img/newlogo.png" alt="Logo"><span class="site-name">Model The World</span></a><a class="nav-page-title" href="/"><span class="site-name">综述五：强化学习及其分类</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">综述五：强化学习及其分类</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-11-24T11:04:52.000Z" title="发表于 2024-11-24 19:04:52">2024-11-24</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-11-27T07:55:10.371Z" title="更新于 2024-11-27 15:55:10">2024-11-27</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/RL/">RL</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h3 id="强化学习的变种">强化学习的变种</h3>
+<p>强化学习（Reinforcement Learning，简称RL）是一种机器学习方法，其中代理（Agent）通过与环境的交互来学习做出决策。代理的目标是通过采取适当的行动，最大化长期累积的奖励。强化学习是一个广泛的领域，许多不同的变种和算法已被开发出来，以解决学习、探索和决策等不同方面的问题。</p>
+<p>以下是强化学习的主要<strong>变种</strong>及其子类别：</p>
+<hr>
+<h3 id="1-无模型-vs-有模型强化学习">1. <strong>无模型 vs 有模型强化学习</strong></h3>
+<ul>
+<li><strong>无模型强化学习（Model-Free RL）</strong>：代理不构建或使用环境的动态模型，而是直接通过与环境的交互来学习。
+<ul>
+<li><strong>示例</strong>：
+<ul>
+<li><strong>Q学习</strong>（Q-Learning，包括表格化和深度Q学习）</li>
+<li><strong>策略梯度方法</strong>（例如，REINFORCE）</li>
+<li><strong>Actor-Critic方法</strong>（例如A3C，PPO）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>有模型强化学习（Model-Based RL）</strong>：代理试图学习环境的转移动态和奖励函数，并利用这些模型来做出更有信息量的决策。
+<ul>
+<li><strong>示例</strong>：
+<ul>
+<li><strong>Dyna-Q</strong>（Q学习与规划结合）</li>
+<li><strong>World Models</strong></li>
+<li><strong>蒙特卡洛树搜索（MCTS）</strong></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="2-基于价值的方法">2. <strong>基于价值的方法</strong></h3>
+<ul>
+<li>
+<p>这些方法专注于学习状态或状态-动作对的价值，目标是通过改进价值函数间接地估计最优策略。</p>
+</li>
+<li>
+<p><strong>Q学习</strong>（Off-Policy）：</p>
+<ul>
+<li><strong>关键思想</strong>：学习状态-动作值函数（Q函数），它告诉我们在某一状态下采取某一动作的期望奖励。</li>
+<li><strong>变种</strong>：
+<ul>
+<li><strong>深度Q网络（DQN）</strong>：使用深度学习来近似Q函数，使得强化学习可以应用于高维度的环境（如图像）。</li>
+<li><strong>双Q学习（Double Q-Learning）</strong>：通过维持两个Q值估计来减少Q学习中的过度估计偏差。</li>
+<li><strong>Dueling DQN</strong>：将值函数和优势函数分开，有助于提高Q函数的稳定性。</li>
+<li><strong>优先经验回放（Prioritized Experience Replay）</strong>：优先选择那些时间差误差（TD Error）较大的经验进行回放。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>SARSA</strong>（State-Action-Reward-State-Action）（On-Policy）：</p>
+<ul>
+<li><strong>关键思想</strong>：与Q学习相似，但更新Q值时基于实际采取的动作（On-Policy）。</li>
+<li><strong>变种</strong>：
+<ul>
+<li><strong>期望SARSA</strong>：使用所有可能动作的期望值而不是某个特定的动作来更新Q值。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="3-基于策略的方法">3. <strong>基于策略的方法</strong></h3>
+<ul>
+<li>
+<p>这些方法直接优化策略，而不是学习价值函数。代理学习的是状态到动作的映射，而不显式地学习价值函数。</p>
+</li>
+<li>
+<p><strong>REINFORCE</strong>（蒙特卡洛策略梯度）：</p>
+<ul>
+<li><strong>关键思想</strong>：直接优化策略，使用梯度上升法基于总奖励进行更新。</li>
+</ul>
+</li>
+<li>
+<p><strong>Actor-Critic方法</strong>：</p>
+<ul>
+<li><strong>关键思想</strong>：结合了基于价值和基于策略的方法。&quot;Actor&quot;选择动作，&quot;Critic&quot;使用价值函数来评估这些动作。</li>
+<li><strong>变种</strong>：
+<ul>
+<li><strong>A3C（异步优势Actor-Critic）</strong>：使用多个并行代理来加速训练，并稳定学习过程。</li>
+<li><strong>PPO（Proximal Policy Optimization）</strong>：一种比其他策略梯度方法更稳定且样本效率更高的算法。</li>
+<li><strong>TRPO（Trust Region Policy Optimization）</strong>：一种通过强制实施信任区域约束，确保策略更新不会导致性能大幅下降的方法。</li>
+<li><strong>ACKTR（使用Kronecker-Factored Trust Region的Actor-Critic）</strong>：在A3C基础上，使用二阶优化方法来提高稳定性。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="4-逆向强化学习（IRL）">4. <strong>逆向强化学习（IRL）</strong></h3>
+<ul>
+<li><strong>关键思想</strong>：代理通过观察专家的行为来学习奖励函数。IRL假设专家是在优化与代理相同的奖励函数。</li>
+<li><strong>变种</strong>：
+<ul>
+<li><strong>最大熵逆向强化学习（MaxEnt IRL）</strong>：基于最大熵原则的方法，避免过拟合专家行为。</li>
+<li><strong>深度逆向强化学习（Deep-IRL）</strong>：一种基于深度学习的逆向强化学习方法。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="5-Off-Policy与On-Policy方法">5. <strong>Off-Policy与On-Policy方法</strong></h3>
+<ul>
+<li><strong>On-Policy RL</strong>：代理使用当前策略生成的数据来更新策略。
+<ul>
+<li><strong>示例</strong>：SARSA、A3C、REINFORCE。</li>
+</ul>
+</li>
+<li><strong>Off-Policy RL</strong>：代理可以使用任何策略生成的数据来学习，而不需要依赖当前策略。
+<ul>
+<li><strong>示例</strong>：Q学习、DQN、深度确定性策略梯度（DDPG）。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="6-探索与利用">6. <strong>探索与利用</strong></h3>
+<ul>
+<li>
+<p>强化学习需要平衡<strong>探索</strong>（尝试新动作）与<strong>利用</strong>（选择已知最佳动作）。许多方法不同程度地处理了这种平衡。</p>
+</li>
+<li>
+<p><strong>探索</strong>为主的方法：</p>
+<ul>
+<li><strong>Epsilon-Greedy</strong>：一种简单的策略，其中代理以概率(\epsilon)选择随机动作，以概率(1-\epsilon)选择最佳动作。</li>
+<li><strong>Boltzmann探索</strong>：一种基于动作值的概率选择方法（Softmax）。</li>
+</ul>
+</li>
+<li>
+<p><strong>汤普森采样（Thompson Sampling）</strong>：一种通过采样来平衡探索和利用的概率方法，常用于多臂老虎机问题。</p>
+</li>
+</ul>
+<hr>
+<h3 id="7-深度强化学习（DRL）">7. <strong>深度强化学习（DRL）</strong></h3>
+<ul>
+<li>
+<p>这些方法将深度学习与强化学习结合起来，用于处理高维输入空间（如图像），并且在复杂问题（如视频游戏和机器人控制）中表现出色。</p>
+</li>
+<li>
+<p><strong>深度Q网络（DQN）</strong>：</p>
+<ul>
+<li><strong>关键思想</strong>：使用神经网络来近似Q函数，使强化学习能够扩展到包含高维输入的环境（例如游戏中的原始像素）。</li>
+<li><strong>变种</strong>：
+<ul>
+<li><strong>双DQN（Double DQN）</strong>：减少Q值过度估计的偏差。</li>
+<li><strong>Dueling DQN</strong>：将值函数和优势函数分开，提高Q函数的近似精度。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>深度确定性策略梯度（DDPG）</strong>：</p>
+<ul>
+<li><strong>关键思想</strong>：一种无模型的、Off-Policy算法，适用于连续动作空间，将DQN扩展到连续动作领域。</li>
+<li><strong>变种</strong>：
+<ul>
+<li><strong>TD3（Twin Delayed DDPG）</strong>：一种改进的DDPG，减少Q值的过度估计，并稳定训练过程。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>软策略梯度（SAC）</strong>：</p>
+<ul>
+<li><strong>关键思想</strong>：一种通过最大化期望回报和熵的折中，促进探索并提高稳定性的算法。</li>
+</ul>
+</li>
+<li>
+<p><strong>PPO（Proximal Policy Optimization）</strong>：</p>
+<ul>
+<li><strong>关键思想</strong>：一种策略梯度方法，通过约束策略更新的大小来避免不稳定，提供了一种稳定的学习方式。</li>
+</ul>
+</li>
+<li>
+<p><strong>TRPO（Trust Region Policy Optimization）</strong>：</p>
+<ul>
+<li><strong>关键思想</strong>：保证策略更新不会偏离当前策略太远，稳定训练过程。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="8-层次化强化学习（HRL）">8. <strong>层次化强化学习（HRL）</strong></h3>
+<ul>
+<li><strong>关键思想</strong>：将任务分解为子任务，并分别解决每个子任务，使得处理复杂的环境时能够提高效率。</li>
+<li><strong>变种</strong>：
+<ul>
+<li><strong>Option-Critics</strong>：通过学习一组&quot;选项&quot;（子策略）来解决子任务。</li>
+<li><strong>MAXQ</strong>：将任务分解为子任务，并通过分配层次化的价值函数来解决这些子任务。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="9-多智能体强化学习（MARL）">9. <strong>多智能体强化学习（MARL）</strong></h3>
+<ul>
+<li><strong>关键思想</strong>：多个智能体互相与环境交互。MARL可以是合作式或竞争式，取决于具体场景。</li>
+<li><strong>变种</strong>：
+<ul>
+<li><strong>合作式MARL</strong>：所有代理共同合作，最大化共享的奖励（例如，多机器人协调）。</li>
+<li><strong>竞争式MARL</strong>：代理有相互冲突的目标，通常是零和博弈（例如，象棋或扑克）。</li>
+<li><strong>独立Q学习</strong>：每个代理独立学习Q函数，但可能需要考虑其他代理的行为。</li>
+<li><strong>集中训练，分散执行</strong>：在训练时代理共享信息来改进策略，但部署时每个代理独立执行（例如，多智能体的交通控制系统）。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="10-进化强化学习">10. <strong>进化强化学习</strong></h3>
+<ul>
+<li><strong>关键思想</strong>：从进化算法的灵感中得到启发，这些方法通过在时间上进化策略或神经网络来实现学习。</li>
+<li><strong>变种</strong>：
+<ul>
+<li><strong>NEAT（神经进化的增强拓扑）</strong>：一种进化算法，通过改变神经网络的结构和权重来实现进化。</li>
+<li><strong>PPO与进化策略</strong>：将进化策略与Proximal Policy Optimization（PPO）结合，提升探索与利用的平衡。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="11-强化学习中的迁移学习">11. <strong>强化学习中的迁移学习</strong></h3>
+<ul>
+<li><strong>关键思想</strong>：迁移学习使得智能体能够将从一个任务中获得的知识转移到不同但相关的任务中，帮助其加速学习。</li>
+<li><strong>变种</strong>：
+<ul>
+<li><strong>微调（Fine-Tuning）</strong>：将一个在源任务上训练的模型迁移到目标任务，并对其进行微调以适应新的环境。</li>
+<li><strong>预训练（Pretraining）</strong>：在一个相关任务上进行预训练，并将学到的知识作为目标任务的起始阶段。</li>
+<li><strong>多任务强化学习（Multi-Task RL）</strong>：智能体同时学习多个任务，通过共享知识提升在所有任务中的表现。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="12-自监督强化学习">12. <strong>自监督强化学习</strong></h3>
+<ul>
+<li><strong>关键思想</strong>：自监督强化学习结合了自监督学习和强化学习的思想。智能体通过生成伪标签或自生成奖励来进行学习，而无需显式的监督或标签数据。</li>
+<li><strong>变种</strong>：
+<ul>
+<li><strong>对比强化学习（Contrastive RL）</strong>：智能体通过区分“好”状态和“坏”状态或动作来学习，使用对比损失来进行优化。</li>
+<li><strong>基于探索的自监督RL</strong>：智能体通过自身的探索来生成奖励并进行学习，依赖于环境交互而不是外部反馈。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="13-终身学习-持续学习中的强化学习">13. <strong>终身学习 / 持续学习中的强化学习</strong></h3>
+<ul>
+<li><strong>关键思想</strong>：智能体可以不断学习，不会遗忘先前学习的知识，解决了强化学习中的灾难性遗忘问题。</li>
+<li><strong>变种</strong>：
+<ul>
+<li><strong>渐进式神经网络（Progressive Neural Networks）</strong>：当智能体学习新任务时，添加新的神经网络组件，同时保持原有任务的知识。</li>
+<li><strong>弹性权重固化（EWC）</strong>：一种正则化技术，通过惩罚重要的权重变动来防止灾难性遗忘。</li>
+<li><strong>元强化学习（Meta-RL）</strong>：智能体学习如何学习，通过在多个任务上学习，提升其适应新任务的能力。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="14-层次化深度强化学习">14. <strong>层次化深度强化学习</strong></h3>
+<ul>
+<li><strong>关键思想</strong>：与层次化强化学习类似，但采用深度学习模型来学习高层次的策略或动作，以便在更复杂和高效的环境中进行学习。</li>
+<li><strong>变种</strong>：
+<ul>
+<li><strong>层次化DQN（h-DQN）</strong>：扩展DQN，通过学习不同层次的抽象，智能体先学习高层次目标，然后将这些目标分解成子目标。</li>
+<li><strong>深度选项-评论家（Deep Option-Critic）</strong>：在选项-评论家架构的基础上，使用深度强化学习方法来学习子任务。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="15-模仿学习">15. <strong>模仿学习</strong></h3>
+<ul>
+<li><strong>关键思想</strong>：智能体通过模仿专家的行为来进行学习，通常用于智能体无法有效探索或环境奖励收集困难的情况。</li>
+<li><strong>变种</strong>：
+<ul>
+<li><strong>行为克隆（Behavior Cloning）</strong>：一种监督学习方法，智能体通过直接模仿专家的行为来学习策略，通常基于状态-动作对。</li>
+<li><strong>生成对抗模仿学习（GAIL）</strong>：基于生成对抗网络（GAN）的方法，智能体通过与一个判别器对抗来学习专家的行为。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="16-部分可观测马尔可夫决策过程（POMDPs）">16. <strong>部分可观测马尔可夫决策过程（POMDPs）</strong></h3>
+<ul>
+<li><strong>关键思想</strong>：强化学习中的环境具有部分可观测性，智能体无法完全感知当前的环境状态，因此面临决策的挑战。</li>
+<li><strong>变种</strong>：
+<ul>
+<li><strong>深度递归Q网络（DRQN）</strong>：使用递归神经网络（RNN）来处理部分可观测的状态，从而适应这种不完全信息的环境。</li>
+<li><strong>部分可观测Q学习（POQL）</strong>：在POMDP中，智能体使用信念状态（状态的可能分布）来进行决策。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="17-连续控制">17. <strong>连续控制</strong></h3>
+<ul>
+<li><strong>关键思想</strong>：这些方法专门针对具有连续动作空间的环境（如机器人控制和物理系统），这类环境中的决策和动作选择通常需要更细致的控制。</li>
+<li><strong>变种</strong>：
+<ul>
+<li><strong>深度确定性策略梯度（DDPG）</strong>：一种无模型的Off-Policy算法，适用于连续动作空间，扩展了DQN的应用。</li>
+<li><strong>双延迟DDPG（TD3）</strong>：对DDPG的改进，减少Q值过度估计，增加了训练的稳定性。</li>
+<li><strong>软演员-评论家（SAC）</strong>：通过最大化预期回报和策略熵来促进探索和稳定的学习过程。</li>
+<li><strong>PPO（Proximal Policy Optimization）</strong>：PPO也可以应用于连续动作空间，是一种非常稳定的强化学习算法。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="18-贝叶斯强化学习">18. <strong>贝叶斯强化学习</strong></h3>
+<ul>
+<li><strong>关键思想</strong>：智能体通过保持模型或策略的概率分布来处理不确定性，进行更稳健的探索和决策。</li>
+<li><strong>变种</strong>：
+<ul>
+<li><strong>贝叶斯Q学习</strong>：一种基于贝叶斯推断的方法，通过建模Q值的不确定性来更新Q值。</li>
+<li><strong>汤普森采样强化学习</strong>：通过采样不同的模型或策略分布来进行决策，从而平衡探索与利用。</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h3 id="强化学习变种总结：">强化学习变种总结：</h3>
+<ul>
+<li><strong>无模型 vs 有模型强化学习</strong></li>
+<li><strong>基于价值的方法</strong>：Q学习、DQN、SARSA</li>
+<li><strong>基于策略的方法</strong>：REINFORCE、Actor-Critic、A3C、PPO</li>
+<li><strong>逆向强化学习</strong>：从专家演示中学习奖励函数</li>
+<li><strong>探索与利用</strong>：Epsilon-Greedy、汤普森采样</li>
+<li><strong>深度强化学习</strong>：DQN、DDPG、SAC、PPO</li>
+<li><strong>层次化强化学习</strong>：MAXQ、Option-Critics</li>
+<li><strong>多智能体强化学习</strong>：合作式、竞争式、独立Q学习</li>
+<li><strong>进化强化学习</strong>：NEAT、PPO与进化策略</li>
+<li><strong>迁移学习</strong>：微调、多任务学习</li>
+<li><strong>自监督强化学习</strong>：对比RL、基于探索的自监督方法</li>
+<li><strong>终身学习</strong>：渐进式神经网络、元强化学习</li>
+<li><strong>模仿学习</strong>：行为克隆、GAIL</li>
+<li><strong>POMDPs</strong>：DRQN、POQL</li>
+<li><strong>连续控制</strong>：DDPG、TD3、SAC、PPO</li>
+<li><strong>贝叶斯强化学习</strong>：贝叶斯Q学习、汤普森采样</li>
+</ul>
+<p>强化学习是一个活跃的研究领域，随着新技术的出现，方法和变种持续发展，不断使得强化学习能够处理更加复杂和现实的问题，如机器人、游戏、自动驾驶和金融等多个领域。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://SergeWang.github.io">Serge Wang</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://sergewang.github.io/2024/11/24/%E7%BB%BC%E8%BF%B0%E4%BA%94%EF%BC%9A%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%8F%8A%E5%85%B6%E5%88%86%E7%B1%BB/">https://sergewang.github.io/2024/11/24/%E7%BB%BC%E8%BF%B0%E4%BA%94%EF%BC%9A%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%8F%8A%E5%85%B6%E5%88%86%E7%B1%BB/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://SergeWang.github.io" target="_blank">Model The World</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%BB%BC%E8%BF%B0/">综述</a><a class="post-meta__tags" href="/tags/RL/">RL</a></div><div class="post-share"><div class="social-share" data-image="/images/mamba.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/11/24/%E7%BB%BC%E8%BF%B0%E4%BA%8C%EF%BC%9ADiTs%E5%8F%8A%E5%85%B6%E5%8F%98%E4%BD%93/" title="综述二：DiTs及其变体"><img class="cover" src="/images/SIT.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">综述二：DiTs及其变体</div></div><div class="info-2"><div class="info-item-1">**DiT（去噪扩散Transformer模型）**是结合了Transformer架构和扩散模型的一类生成模型，特别专注于在扩散框架内的去噪过程。扩散模型通过逐步添加和去除噪声的过程来建模复杂的分布，近年来在生成任务中非常流行。 下面是一些著名的DiT变种，它们在不同方面扩展了原始的DiT模型： 1. DiT（原始版本）  关键特性：原始的DiT模型将Transformer架构与去噪扩散过程结合，利用Transformer的注意力机制改进生成质量和训练的可扩展性。 目的：生成高质量的图像，并与传统的卷积神经网络相比，提高训练效率。  2. DiT++（增强版DiT）  关键特性：DiT++是在原始DiT基础上进行增强的版本，可能包括模型架构的改进、训练方法的优化或额外的正则化技术。 目的：通过改进Transformer架构和扩散过程中的噪声调度，提升生成稳定性和性能。  3....</div></div></div></a><a class="pagination-related" href="/2024/11/24/%E7%BB%BC%E8%BF%B0%E5%85%AB%EF%BC%9A%E9%AB%98%E6%96%AF%E6%B3%BC%E6%BA%85/" title="综述八：高斯泼溅"><img class="cover" src="/images/mamba.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">综述八：高斯泼溅</div></div><div class="info-2"><div class="info-item-1">模型 3d gaussian splatting for real-time radiance field rendering （23/08） 论文阅读三十一：3D高斯溅射用于实时辐射场渲染 贡献：  引入各向异性（anisotropic）3D高斯作为高质量、非结构化的辐射场表示。 3D高斯属性的优化方法，与自适应密度控制交织，为捕获的场景创建高质量的表示。 快速可微GPU渲染方法，具有可见性感知，允许各向异性泼溅和快速后向传播，从而获得高质量的新视图合成。     </div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/11/24/%E7%BB%BC%E8%BF%B0%E4%B8%80%EF%BC%9ATransformer%E5%8F%8A%E5%85%B6%E5%8F%98%E4%BD%93/" title="综述一：Transformer及其变体"><img class="cover" src="/images/transformer.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-24</div><div class="info-item-2">综述一：Transformer及其变体</div></div><div class="info-2"><div class="info-item-1">Transformer架构，因其自注意力机制而闻名，能够让模型根据输入序列中不同的标记之间的关系进行加权。这种机制消除了循环神经网络的需求，使得训练变得更加高效。自从2017年原始Transformer的提出以来，已经出现了多个变种，旨在优化性能、扩展其适用范围或解决一些挑战。以下是一些著名的Transformer变种，特别是那些专注于自注意力机制的： 1. 原始Transformer (Vanilla Transformer)  关键特性：原始Transformer架构包括一个编码器-解码器结构，采用自注意力机制。 目的：消除了递归神经网络的需求，使得模型训练更加并行化和高效。 自注意力机制：多头自注意力，通过计算输入序列中所有标记之间的关系来决定重要性。  2. BERT（双向编码器表示）  关键特性：BERT只使用Transformer的编码器部分，采用双向自注意力机制来捕获标记的左右上下文。 目的：通过掩蔽语言模型（MLM）进行预训练，并可以通过微调来提升在下游NLP任务中的表现。  3....</div></div></div></a><a class="pagination-related" href="/2024/11/24/%E7%BB%BC%E8%BF%B0%E4%B8%83%EF%BC%9ACNN%E6%A8%A1%E5%9E%8B/" title="综述七：CNN模型"><img class="cover" src="/images/mamba.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-24</div><div class="info-item-2">综述七：CNN模型</div></div><div class="info-2"><div class="info-item-1">Here’s a list of major CNN (Convolutional Neural Network) variants ordered by the time of their publication. CNNs have evolved over the years to improve accuracy, reduce computational costs, and adapt to different domains.  1. LeNet (1998)  Key Idea: One of the first CNN architectures, designed for handwritten digit recognition (MNIST). It used convolutional layers followed by pooling and fully connected layers. Application: Digit classification. Notable Paper: Yann LeCun et al.,...</div></div></div></a><a class="pagination-related" href="/2024/11/24/%E7%BB%BC%E8%BF%B0%E4%B8%89%EF%BC%9A%E6%8C%81%E7%BB%AD%E5%AD%A6%E4%B9%A0%E5%8F%8A%E5%85%B6%E6%96%B9%E6%B3%95/" title="综述三：持续学习及其方法"><img class="cover" src="/images/mamba.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-24</div><div class="info-item-2">综述三：持续学习及其方法</div></div><div class="info-2"><div class="info-item-1">持续学习（Continual Learning，CL），也称为终身学习（Lifelong Learning），指的是模型能够从持续不断的数据流中学习，并随着时间的推移不断适应和获得新知识，而不会遗忘先前学习的内容。持续学习面临的一个主要挑战是灾难性遗忘（Catastrophic Forgetting），即在学习新任务时，模型容易遗忘之前学习的任务。 为了应对这些挑战，提出了多种方法，这些方法可以根据它们如何处理遗忘、如何存储知识以及如何使用新数据进行分类。 下面是主要的持续学习方法，按它们所采用的主要策略进行组织： 1....</div></div></div></a><a class="pagination-related" href="/2024/11/24/%E7%BB%BC%E8%BF%B0%E4%BA%8C%EF%BC%9ADiTs%E5%8F%8A%E5%85%B6%E5%8F%98%E4%BD%93/" title="综述二：DiTs及其变体"><img class="cover" src="/images/SIT.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-24</div><div class="info-item-2">综述二：DiTs及其变体</div></div><div class="info-2"><div class="info-item-1">**DiT（去噪扩散Transformer模型）**是结合了Transformer架构和扩散模型的一类生成模型，特别专注于在扩散框架内的去噪过程。扩散模型通过逐步添加和去除噪声的过程来建模复杂的分布，近年来在生成任务中非常流行。 下面是一些著名的DiT变种，它们在不同方面扩展了原始的DiT模型： 1. DiT（原始版本）  关键特性：原始的DiT模型将Transformer架构与去噪扩散过程结合，利用Transformer的注意力机制改进生成质量和训练的可扩展性。 目的：生成高质量的图像，并与传统的卷积神经网络相比，提高训练效率。  2. DiT++（增强版DiT）  关键特性：DiT++是在原始DiT基础上进行增强的版本，可能包括模型架构的改进、训练方法的优化或额外的正则化技术。 目的：通过改进Transformer架构和扩散过程中的噪声调度，提升生成稳定性和性能。  3....</div></div></div></a><a class="pagination-related" href="/2024/11/24/%E7%BB%BC%E8%BF%B0%E5%85%AB%EF%BC%9A%E9%AB%98%E6%96%AF%E6%B3%BC%E6%BA%85/" title="综述八：高斯泼溅"><img class="cover" src="/images/mamba.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-24</div><div class="info-item-2">综述八：高斯泼溅</div></div><div class="info-2"><div class="info-item-1">模型 3d gaussian splatting for real-time radiance field rendering （23/08） 论文阅读三十一：3D高斯溅射用于实时辐射场渲染 贡献：  引入各向异性（anisotropic）3D高斯作为高质量、非结构化的辐射场表示。 3D高斯属性的优化方法，与自适应密度控制交织，为捕获的场景创建高质量的表示。 快速可微GPU渲染方法，具有可见性感知，允许各向异性泼溅和快速后向传播，从而获得高质量的新视图合成。     </div></div></div></a><a class="pagination-related" href="/2024/11/24/%E7%BB%BC%E8%BF%B0%E5%85%AD%EF%BC%9A%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96%E6%8A%80%E6%9C%AF/" title="综述六：模型量化技术"><img class="cover" src="/images/mamba.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-24</div><div class="info-item-2">综述六：模型量化技术</div></div><div class="info-2"><div class="info-item-1">量化技术在机器学习（ML）和大型语言模型（LLM）中的应用，指的是将模型的权重和激活值的数值精度降低，通常目的是提高计算效率、减少内存占用，并加速推理过程，而不显著降低准确度。随着时间的推移，这些方法在传统机器学习和深度学习的研究中不断发展。 以下是按引入时间排序的 量化方法 列表：  1. 定点量化（Fixed-Point Quantization） (1980年代 - 1990年代初)  核心思想：将浮点数（32位）转换为定点数（例如16位或8位整数）。这可以减少内存需求，并加速计算，因为定点操作通常比浮点操作在硬件上更高效。 应用：早期的信号处理和硬件实现。   2. 向量量化（Vector Quantization）(1980年代 - 1990年代)  核心思想：通过使用较少的质心或码本来表示高维向量（如特征表示）。这是一种有损压缩技术，用于减少表示的维度。 应用：用于图像和语音压缩。 重要论文：Gray, “Vector Quantization and Signal Compression”, 1984。   3. 产品量化（Product...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/newlogo.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Serge Wang</div><div class="author-info-description">今日事，今日毕</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">65</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">39</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">17</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/SergeWang"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/SergeWang" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sergew027@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">Welcome to my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E7%9A%84%E5%8F%98%E7%A7%8D"><span class="toc-number">1.</span> <span class="toc-text">强化学习的变种</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%97%A0%E6%A8%A1%E5%9E%8B-vs-%E6%9C%89%E6%A8%A1%E5%9E%8B%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0"><span class="toc-number">2.</span> <span class="toc-text">1. 无模型 vs 有模型强化学习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%9F%BA%E4%BA%8E%E4%BB%B7%E5%80%BC%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">3.</span> <span class="toc-text">2. 基于价值的方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%9F%BA%E4%BA%8E%E7%AD%96%E7%95%A5%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">4.</span> <span class="toc-text">3. 基于策略的方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E9%80%86%E5%90%91%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%EF%BC%88IRL%EF%BC%89"><span class="toc-number">5.</span> <span class="toc-text">4. 逆向强化学习（IRL）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-Off-Policy%E4%B8%8EOn-Policy%E6%96%B9%E6%B3%95"><span class="toc-number">6.</span> <span class="toc-text">5. Off-Policy与On-Policy方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-%E6%8E%A2%E7%B4%A2%E4%B8%8E%E5%88%A9%E7%94%A8"><span class="toc-number">7.</span> <span class="toc-text">6. 探索与利用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-%E6%B7%B1%E5%BA%A6%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%EF%BC%88DRL%EF%BC%89"><span class="toc-number">8.</span> <span class="toc-text">7. 深度强化学习（DRL）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-%E5%B1%82%E6%AC%A1%E5%8C%96%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%EF%BC%88HRL%EF%BC%89"><span class="toc-number">9.</span> <span class="toc-text">8. 层次化强化学习（HRL）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%EF%BC%88MARL%EF%BC%89"><span class="toc-number">10.</span> <span class="toc-text">9. 多智能体强化学习（MARL）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#10-%E8%BF%9B%E5%8C%96%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0"><span class="toc-number">11.</span> <span class="toc-text">10. 进化强化学习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#11-%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0"><span class="toc-number">12.</span> <span class="toc-text">11. 强化学习中的迁移学习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#12-%E8%87%AA%E7%9B%91%E7%9D%A3%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0"><span class="toc-number">13.</span> <span class="toc-text">12. 自监督强化学习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#13-%E7%BB%88%E8%BA%AB%E5%AD%A6%E4%B9%A0-%E6%8C%81%E7%BB%AD%E5%AD%A6%E4%B9%A0%E4%B8%AD%E7%9A%84%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0"><span class="toc-number">14.</span> <span class="toc-text">13. 终身学习 &#x2F; 持续学习中的强化学习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#14-%E5%B1%82%E6%AC%A1%E5%8C%96%E6%B7%B1%E5%BA%A6%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0"><span class="toc-number">15.</span> <span class="toc-text">14. 层次化深度强化学习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#15-%E6%A8%A1%E4%BB%BF%E5%AD%A6%E4%B9%A0"><span class="toc-number">16.</span> <span class="toc-text">15. 模仿学习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#16-%E9%83%A8%E5%88%86%E5%8F%AF%E8%A7%82%E6%B5%8B%E9%A9%AC%E5%B0%94%E5%8F%AF%E5%A4%AB%E5%86%B3%E7%AD%96%E8%BF%87%E7%A8%8B%EF%BC%88POMDPs%EF%BC%89"><span class="toc-number">17.</span> <span class="toc-text">16. 部分可观测马尔可夫决策过程（POMDPs）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#17-%E8%BF%9E%E7%BB%AD%E6%8E%A7%E5%88%B6"><span class="toc-number">18.</span> <span class="toc-text">17. 连续控制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#18-%E8%B4%9D%E5%8F%B6%E6%96%AF%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0"><span class="toc-number">19.</span> <span class="toc-text">18. 贝叶斯强化学习</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BC%BA%E5%8C%96%E5%AD%A6%E4%B9%A0%E5%8F%98%E7%A7%8D%E6%80%BB%E7%BB%93%EF%BC%9A"><span class="toc-number">20.</span> <span class="toc-text">强化学习变种总结：</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/11/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E5%9B%9B%E5%8D%81%E5%9B%9B%EF%BC%9A%E7%94%A8%E4%BA%8E%E9%AB%98%E6%95%88%E7%BB%86%E8%87%B4%E8%A1%A8%E9%9D%A2%E9%87%8D%E5%BB%BA%E7%9A%84%E4%BA%8C%E6%AC%A1%E9%AB%98%E6%96%AF%E6%B3%BC%E6%BA%85/" title="论文阅读四十四：用于高效细致表面重建的二次高斯泼溅"><img src="/images/QGS.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="论文阅读四十四：用于高效细致表面重建的二次高斯泼溅"/></a><div class="content"><a class="title" href="/2024/11/27/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E5%9B%9B%E5%8D%81%E5%9B%9B%EF%BC%9A%E7%94%A8%E4%BA%8E%E9%AB%98%E6%95%88%E7%BB%86%E8%87%B4%E8%A1%A8%E9%9D%A2%E9%87%8D%E5%BB%BA%E7%9A%84%E4%BA%8C%E6%AC%A1%E9%AB%98%E6%96%AF%E6%B3%BC%E6%BA%85/" title="论文阅读四十四：用于高效细致表面重建的二次高斯泼溅">论文阅读四十四：用于高效细致表面重建的二次高斯泼溅</a><time datetime="2024-11-27T02:15:57.000Z" title="发表于 2024-11-27 10:15:57">2024-11-27</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/11/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E5%9B%9B%E5%8D%81%E4%B8%89%EF%BC%9A%E6%B5%8B%E8%AF%95%E6%97%B6%E9%AB%98%E6%95%88%E5%AD%A6%E4%B9%A0%EF%BC%9ALLMs%E7%9A%84%E4%B8%BB%E5%8A%A8%E5%BE%AE%E8%B0%83/" title="论文阅读四十三：测试时高效学习：LLMs的主动微调"><img src="/images/SIFT.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="论文阅读四十三：测试时高效学习：LLMs的主动微调"/></a><div class="content"><a class="title" href="/2024/11/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E5%9B%9B%E5%8D%81%E4%B8%89%EF%BC%9A%E6%B5%8B%E8%AF%95%E6%97%B6%E9%AB%98%E6%95%88%E5%AD%A6%E4%B9%A0%EF%BC%9ALLMs%E7%9A%84%E4%B8%BB%E5%8A%A8%E5%BE%AE%E8%B0%83/" title="论文阅读四十三：测试时高效学习：LLMs的主动微调">论文阅读四十三：测试时高效学习：LLMs的主动微调</a><time datetime="2024-11-26T13:05:57.000Z" title="发表于 2024-11-26 21:05:57">2024-11-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/11/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E5%9B%9B%E5%8D%81%E4%BA%8C%EF%BC%9A1%E4%BD%8DAI%E6%9E%B6%E6%9E%84%EF%BC%9A%E9%83%A8%E5%88%861-1%EF%BC%8C%E5%9F%BA%E4%BA%8EGPU%E7%9A%84%E5%BF%AB%E9%80%9F%E6%97%A0%E6%8D%9FBitNet-b1-58%E6%8E%A8%E7%90%86/" title="论文阅读四十二：1位AI架构：部分1.1，基于GPU的快速无损BitNet b1.58推理"><img src="/images/bitnet.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="论文阅读四十二：1位AI架构：部分1.1，基于GPU的快速无损BitNet b1.58推理"/></a><div class="content"><a class="title" href="/2024/11/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E5%9B%9B%E5%8D%81%E4%BA%8C%EF%BC%9A1%E4%BD%8DAI%E6%9E%B6%E6%9E%84%EF%BC%9A%E9%83%A8%E5%88%861-1%EF%BC%8C%E5%9F%BA%E4%BA%8EGPU%E7%9A%84%E5%BF%AB%E9%80%9F%E6%97%A0%E6%8D%9FBitNet-b1-58%E6%8E%A8%E7%90%86/" title="论文阅读四十二：1位AI架构：部分1.1，基于GPU的快速无损BitNet b1.58推理">论文阅读四十二：1位AI架构：部分1.1，基于GPU的快速无损BitNet b1.58推理</a><time datetime="2024-11-26T10:57:57.000Z" title="发表于 2024-11-26 18:57:57">2024-11-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/11/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E5%9B%9B%E5%8D%81%E4%B8%80%EF%BC%9ATransformer%E4%B8%AD%E9%87%8D%E8%A6%81%E7%9A%84%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E5%B9%B6%E9%9D%9E%E6%89%80%E6%9C%89%E7%9A%84%E6%B3%A8%E6%84%8F%E5%8A%9B%E9%83%BD%E9%9C%80%E8%A6%81/" title="论文阅读四十一：Transformer中重要的是什么？并非所有的注意力都需要"><img src="/images/llm-drop.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="论文阅读四十一：Transformer中重要的是什么？并非所有的注意力都需要"/></a><div class="content"><a class="title" href="/2024/11/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E5%9B%9B%E5%8D%81%E4%B8%80%EF%BC%9ATransformer%E4%B8%AD%E9%87%8D%E8%A6%81%E7%9A%84%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F%E5%B9%B6%E9%9D%9E%E6%89%80%E6%9C%89%E7%9A%84%E6%B3%A8%E6%84%8F%E5%8A%9B%E9%83%BD%E9%9C%80%E8%A6%81/" title="论文阅读四十一：Transformer中重要的是什么？并非所有的注意力都需要">论文阅读四十一：Transformer中重要的是什么？并非所有的注意力都需要</a><time datetime="2024-11-26T10:55:38.000Z" title="发表于 2024-11-26 18:55:38">2024-11-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/11/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E5%9B%9B%E5%8D%81%EF%BC%9A%E5%A4%A7%E5%9E%8B%E8%A7%86%E8%A7%89%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%A4%9A%E6%A8%A1%E6%80%81%E8%87%AA%E5%9B%9E%E5%BD%92%E9%A2%84%E8%AE%AD%E7%BB%83/" title="论文阅读四十：大型视觉编码器的多模态自回归预训练"><img src="/images/AIMv2.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="论文阅读四十：大型视觉编码器的多模态自回归预训练"/></a><div class="content"><a class="title" href="/2024/11/26/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E5%9B%9B%E5%8D%81%EF%BC%9A%E5%A4%A7%E5%9E%8B%E8%A7%86%E8%A7%89%E7%BC%96%E7%A0%81%E5%99%A8%E7%9A%84%E5%A4%9A%E6%A8%A1%E6%80%81%E8%87%AA%E5%9B%9E%E5%BD%92%E9%A2%84%E8%AE%AD%E7%BB%83/" title="论文阅读四十：大型视觉编码器的多模态自回归预训练">论文阅读四十：大型视觉编码器的多模态自回归预训练</a><time datetime="2024-11-26T10:52:16.000Z" title="发表于 2024-11-26 18:52:16">2024-11-26</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By Serge Wang</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (false) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
