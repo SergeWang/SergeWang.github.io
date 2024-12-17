@@ -1,0 +1,248 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>综述十：多模态模型 | Model The World</title><meta name="author" content="Serge Wang"><meta name="copyright" content="Serge Wang"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="模型 基础模型 LLaVA: Visual Instruction Tuning (23&#x2F;04) 论文地址 代码 核心思想：指令调优大型语言模型（LLMs）使用机器生成指令遵循数据，被证明在新任务上提升零样本能力，但这一想法在多模态领域的探索较少。提出第一个尝试，使用仅语言GPT-4来生成多模态语言图像指令遵循数据。通过在这种生成数据上指令调优，引入LLaVA:大型语言和视觉助手，一种端到端训练的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="综述十：多模态模型">
+<meta property="og:url" content="https://sergewang.github.io/2024/12/01/%E7%BB%BC%E8%BF%B0%E5%8D%81%EF%BC%9A%E5%A4%9A%E6%A8%A1%E6%80%81%E6%A8%A1%E5%9E%8B/">
+<meta property="og:site_name" content="Model The World">
+<meta property="og:description" content="模型 基础模型 LLaVA: Visual Instruction Tuning (23&#x2F;04) 论文地址 代码 核心思想：指令调优大型语言模型（LLMs）使用机器生成指令遵循数据，被证明在新任务上提升零样本能力，但这一想法在多模态领域的探索较少。提出第一个尝试，使用仅语言GPT-4来生成多模态语言图像指令遵循数据。通过在这种生成数据上指令调优，引入LLaVA:大型语言和视觉助手，一种端到端训练的">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://sergewang.github.io/images/mamba.png">
+<meta property="article:published_time" content="2024-12-01T11:04:52.000Z">
+<meta property="article:modified_time" content="2024-12-17T11:08:23.815Z">
+<meta property="article:author" content="Serge Wang">
+<meta property="article:tag" content="综述">
+<meta property="article:tag" content="LMMs">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://sergewang.github.io/images/mamba.png"><link rel="shortcut icon" href="/img/newlogo.png"><link rel="canonical" href="https://sergewang.github.io/2024/12/01/%E7%BB%BC%E8%BF%B0%E5%8D%81%EF%BC%9A%E5%A4%9A%E6%A8%A1%E6%80%81%E6%A8%A1%E5%9E%8B/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="google-site-verification" content="IDUolVgWkW_cmu1mtW5hsxrrIjQfCHvq5hOTOkXeVNE"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        if (name && globalFn[key][name]) return
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?9dcb7eb7a8a6225c2b1f242f3b0894bf";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+btf.addGlobalFn('pjaxComplete', () => {
+  _hmt.push(['_trackPageview',window.location.pathname])
+}, 'baidu_analytics')
+</script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-XERFYF0N5K"></script><script>window.dataLayer = window.dataLayer || []
+function gtag(){dataLayer.push(arguments)}
+gtag('js', new Date())
+gtag('config', 'G-XERFYF0N5K')
+btf.addGlobalFn('pjaxComplete', () => {
+  gtag('config', 'G-XERFYF0N5K', {'page_path': window.location.pathname})
+}, 'google_analytics')
+</script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '综述十：多模态模型',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-12-17 19:08:23'
+}</script></head><body><div id="web_bg" style="background-image: url(/img/background.png);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/newlogo.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">74</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">20</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/images/mamba.png);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/img/newlogo.png" alt="Logo"><span class="site-name">Model The World</span></a><a class="nav-page-title" href="/"><span class="site-name">综述十：多模态模型</span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">综述十：多模态模型</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2024-12-01T11:04:52.000Z" title="发表于 2024-12-01 19:04:52">2024-12-01</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2024-12-17T11:08:23.815Z" title="更新于 2024-12-17 19:08:23">2024-12-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/LMMs/">LMMs</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="模型">模型</h2>
+<h3 id="基础模型">基础模型</h3>
+<h4 id="LLaVA-Visual-Instruction-Tuning-23-04">LLaVA: Visual Instruction Tuning (23/04)</h4>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2304.08485">论文地址</a><br>
+<a target="_blank" rel="noopener" href="https://github.com/haotian-liu/LLaVA">代码</a><br>
+核心思想：指令调优大型语言模型（LLMs）使用机器生成指令遵循数据，被证明在新任务上提升零样本能力，但这一想法在多模态领域的探索较少。提出第一个尝试，使用仅语言GPT-4来生成多模态语言图像指令遵循数据。通过在这种生成数据上指令调优，引入LLaVA:大型语言和视觉助手，一种端到端训练的大型多模态模型，连接视觉编码器和LLM，用于通用用途视觉和语言理解。为促进在视觉指令遵循上的进一步研究，构建两个具有多样性和挑战性的面向应用任务的评估基准。<br>
+<img src="LLaVA.png" alt=""></p>
+<h4 id="Qwen-VL-A-Versatile-Vision-Language-Model-for-Understanding-Localization-Text-Reading-and-Beyond-23-10">Qwen-VL: A Versatile Vision-Language Model for Understanding, Localization, Text Reading, and Beyond (23/10)</h4>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2308.12966">论文地址</a><br>
+<a target="_blank" rel="noopener" href="https://github.com/QwenLM/Qwen-VL">代码</a><br>
+核心思想：在这项工作中，介绍了Qwen-VL系列，这是一组旨在感知和理解文本和图像的大规模视觉语言模型（LVLMs）。以Qwen-LM为基础，通过精心设计的（i）视觉接收器，（ii）输入输出接口，（iii）三阶段训练管道和（iv）多语言多模态清理语料库，赋予它视觉能力。除了传统的图像描述和问答之外，我们还通过对齐图像字幕框元组（aligning image-caption-box tuples）来实现Qwen-VL的基础和文本阅读能力。由此产生的模型，包括QwenVL和Qwen-VL-Chat，在类似的模型尺度下，在广泛的以视觉为中心的基准（例如，图像字幕、问题回答、视觉基础）和不同的设置（例如，零样本、少样本）上为广义模型创下了新的记录。此外，在现实世界的对话基准测试中，我们的指令调优Qwen-VL-Chat也显示出了与现有视觉语言聊天机器人相比的优越性。<br>
+<img src="Qwen-VL-pipeline.png" alt=""></p>
+<h4 id="Qwen2-VL-Enhancing-Vision-Language-Model’s-Perception-of-the-World-at-Any-Resolution-24-10">Qwen2-VL: Enhancing Vision-Language Model’s Perception of the World at Any Resolution (24/10)</h4>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2409.12191">论文地址</a><br>
+<a target="_blank" rel="noopener" href="https://github.com/QwenLM/Qwen2-VL">代码</a><br>
+核心思想：我们推出了Qwen2-VL系列，这是对之前Qwen-VL型号的高级升级，重新定义了视觉处理中传统的预定分辨率方法。Qwen2-VL引入了朴素动态分辨率机制（Naive Dynamic Resolution mechanism），该机制使模型能够<strong>将不同分辨率的图像动态处理成不同数量的视觉标记</strong>。这种方法使模型能够生成更高效、更准确的视觉表示，与人类的感知过程紧密结合。该模型还集成了<strong>多模态旋转位置嵌入</strong>（M-RoPE），促进了文本、图像和视频之间位置信息的有效融合。我们采用统一的范式来处理图像和视频，增强了模型的视觉感知能力。为了探索大型多模态模型的潜力，Qwen2-VL研究了大型视觉语言模型（LVLMs）的缩放规律。通过在2B、8B和72B参数下扩展模型大小和训练数据量，Qwen2-VL系列实现了极具竞争力的性能。值得注意的是，Qwen2-VL-72B模型在各种多模态基准测试中取得了与GPT-4o和Claude3.5-Sonnet等领先模型相当的结果，优于其他通用模型。<br>
+<img src="Qwen2-VL-capabilities.png" alt=""><br>
+<img src="Qwen2-VL.png" alt=""></p>
+<h3 id="finetuning-free">finetuning-free</h3>
+<h4 id="Sparse-Attention-Vectors-Generative-Multimodal-Model-Features-Are-Discriminative-Vision-Language-Classifiers-24-12">Sparse Attention Vectors: Generative Multimodal Model Features Are Discriminative Vision-Language Classifiers (24/12)</h4>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2412.00142">论文地址</a><br>
+核心思想：生成式大型多模态模型（LMMs），如LLaVA和Qwen-VL，擅长广泛的视觉语言（VL）任务，如图像字幕或视觉问答。尽管性能强大，LMMs不能直接适用于基础判别视觉语言任务（如，需要离散标签预测的任务），诸如图像分类和多选择VQA。利用LLMs进行判断任务的关键挑战是来自生成式模型的有用特征提取。为解决这个问题，提出一种方法，用于找到模型潜在空间中的特征，来更有效地利用LMMs进行判别任务。为此，提出稀疏注意力向量（SAVs, Sparse Attention Vectors）——一种无需微调的方法，利用LMMs中的稀疏注意头激活（少于该头的1%）作为用于VL任务的强大特征。与一系列判别性任务上的各种少样本和微调基线相比，SAVs仅通过少数示例就展示了最先进的性能。我们的实验还表明，SAVs可以通过额外的示例来扩展性能，并推广到类似的任务，从而将SAVs确立为有效和鲁棒的多模态特征表示。</p>
+<p><img src="SAVs.png" alt=""><br>
+<img src="SVAs-detail.png" alt=""></p>
+<h2 id="组分">组分</h2>
+<h3 id="压缩量化">压缩量化</h3>
+<h4 id="A-Wander-Through-the-Multimodal-Landscape-Efficient-Transfer-Learning-via-Low-rank-Sequence-Multimodal-Adapter-24-12">A Wander Through the Multimodal Landscape: Efficient Transfer Learning via Low-rank Sequence Multimodal Adapter (24/12)</h4>
+<p><a target="_blank" rel="noopener" href="https://www.arxiv.org/abs/2412.08979">论文地址</a><br>
+核心思想：高效的迁移学习方法，如基于适配器的方法，已经证明在单模态模型和视觉语言模型中的极大成功。然而，现有方法在微调多模态模型中有两个主要挑战。首先，它们设计用于视觉语言任务，从而不能成功扩展到超过两种模态的情景。其次，它们展示了模态间的有限的交互利用，且缺乏效率。为了解决这些问题，本文，提出低秩序列多模态适配器（Wander, LoW-rank sequence multimodal adapter）。首先，使用外积来有效地融合来自不同模态间的信息，以一种逐元素的方式。对于效率，使用CP分解来因子化张量到一阶组分（rank-one components），并取得大量参数减少。此外， 实现标记级别低秩分解（token-level low-rank decomposition）来提取更加细粒度的特征和模态间的序列关系。通过这些设计，Wander以参数高效的方式实现了不同模态序列间的标记级交互。在具有不同模态数量的数据集上进行了广泛的实验，Wander始终优于最先进的高效迁移学习方法。结果充分证明了Wander的有效性、高效性和通用性。<br>
+<img src="wander-sequence-fusion.png" alt=""><br>
+<img src="low-rank-sequence-fusion.png" alt=""><br>
+<img src="Wander.png" alt=""></p>
+<h3 id="模态嵌入">模态嵌入</h3>
+<h4 id="Jina-Clip-v2-Multilingual-Multimodal-Embeddings-for-Text-and-Images-24-12">Jina-Clip-v2: Multilingual Multimodal Embeddings for Text and Images (24/12)</h4>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2412.08802">论文地址</a><br>
+<a target="_blank" rel="noopener" href="https://huggingface.co/jinaai/jina-clip-v2">代码</a><br>
+核心思想：对比语言图像预训练（CLIP）是一种<strong>在共享嵌入空间中对齐图像和文本</strong>的高效方法。这些模型被广泛用于<strong>跨模态信息检索</strong>和<strong>多模态理解</strong>等任务。然而，CLIP模型经常难以处理纯文本任务，与专门的文本模型相比表现不佳。这种性能差异迫使检索系统依赖于单独的模型来完成纯文本和多模式任务。在这项工作中，我们在之前的模型jina-clip-v1的基础上，引入了一个改进的框架，该框架利用跨多种语言的多任务、多阶段对比学习，并结合改进的训练方法来增强纯文本检索。由此产生的模型jina-clip-v2在纯文本和多模式任务上优于其前身，同时增加了多语言支持，更好地理解复杂的视觉文档，并通过<strong>Matryoshka表示学习</strong>和<strong>向量截断</strong>提高了效率。该模型在多语言多模态和多语言文本检索基准测试中的表现与最先进的水平相当，解决了统一纯文本和多模式检索系统的挑战。<br>
+<img src="jina-clip-v2.png" alt=""></p>
+<h3 id="指令模板">指令模板</h3>
+<h4 id="Template-Matters-Understanding-the-Role-of-Instruction-Templates-in-Multimodal-Lanuage-Model-Evaluation-and-Training-24-12">Template Matters: Understanding the Role of Instruction Templates in Multimodal Lanuage Model Evaluation and Training (24/12)</h4>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2412.08307">论文地址</a><br>
+<a target="_blank" rel="noopener" href="https://arxiv.org/abs/2412.08307">代码</a><br>
+核心思想：当前的多模态语言模型（MLMs）评估和训练方法忽视了指令格式的影响，呈现出“房间里的大象”问题。之前的研究通过手动编写指令来解决这个问题，由于多样性和可扩展性的限制，未能产生重要的见解。在这项工作中，我们提出了一种<strong>程序化指令模板生成器</strong>，通过<strong>将随机采样的位置同义词填充到加权采样的元模板中</strong>，能够生成超过39B的唯一模板组合，使我们能够全面检查MLM在不同指令模板中的性能。我们在五个基准数据集上对八种常见MLMs进行的实验表明，MLMs具有很高的模板敏感性，不同模板之间的性能差距最多为29%。我们进一步使用我们的模板生成器扩展了LLaVA-1.5的指令调优数据集，并对LLaVA-1.5-7B和LLaVA-1-5-13B进行指令调优。与在最多是我们增强数据集的 75 倍规模上进行调整的相同规模 MLM 相比，在我们的增强数据集上进行调整的模型实现了最佳整体性能，凸显了指令模板在 MLM 训练中的重要性。<br>
+<img src="instruction-template-example.png" alt=""></p>
+<p><img src="instruction-template.png" alt=""></p>
+<h2 id="基准">基准</h2>
+<h3 id="Do-Multimodal-Large-Language-Models-See-Like-Humans-24-12">Do Multimodal Large Language Models See Like Humans? (24/12)</h3>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2412.09603">论文地址</a><br>
+核心思想：多模态大型语言模型（MLLM）利用大型语言模型的最新进展，在各种视觉任务上取得了令人印象深刻的成果。然而，一个关键问题仍未得到解决：MLLM感知视觉信息的方式与人类相似吗？目前的基准缺乏从这个角度评估MLLM的能力。为了应对这一挑战，我们引入了HVSBench，这是一个大规模的基准测试，旨在评估MLLM和人类视觉系统（HVS）在反映人类视觉的基本视觉任务上的对齐情况。HVSBench策划了超过85K个多模态样本，涵盖HVS的13个类别和5个领域，包括突出度、子对象化、优先级、自由查看和搜索。广泛的实验证明了我们的基准在提供MLLM综合评估方面的有效性。具体来说，我们评估了13个MLLM，结果表明，即使是最好的模型也显示出巨大的改进空间，大多数模型只取得了适度的结果。我们的实验表明，HVSBench对尖端MLLM提出了新的重大挑战。我们相信，HVSBench将促进对人类对齐和可解释的MLLM的研究，标志着理解MLLM如何感知和处理视觉信息的关键一步。<br>
+<img src="HVS.png" alt=""></p>
+<h2 id="应用">应用</h2>
+<h3 id="分类">分类</h3>
+<h4 id="When-XGBoost-Outperforms-GPT-4-on-Text-Classification-A-Case-Study-24-06">When XGBoost Outperforms GPT-4 on Text Classification: A Case Study (24/06)</h4>
+<p><a target="_blank" rel="noopener" href="https://aclanthology.org/2024.trustnlp-1.5.pdf">论文地址</a><br>
+<a target="_blank" rel="noopener" href="https://github.com/matyasbohacek/xgboost-vs-gpt4">代码</a><br>
+核心思想：大型语言模型（LLMs）越来越多地用于文本生成之外的应用程序，从文本摘要到指令遵循。利用LLM的零和少样本能力的一个流行例子是文本分类任务。本文将两种流行的基于LLM的分类管道（GPT-4和LLAMA 2）与LLM时代之前（pre-LLM-era）流行的分类管道在新闻可信度分类任务上进行了比较，重点关注性能、训练和部署要求。发现，在这种情况下，LLM时代之前的集成管道优于两种流行的LLM管道，同时参数大小要小几个数量级</p>
+<p><img src="pipeline-data-flow.png" alt=""></p>
+<h4 id="Fine-tuned-‘Small’-LLMs-Still-Significantly-Outperform-Zero-Shot-Generative-AI-24-08">Fine-tuned ‘Small’ LLMs (Still) Significantly Outperform Zero-Shot Generative AI (24/08)</h4>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2406.08660">论文地址</a><br>
+核心思想：生成式人工智能为文本分类任务提供了一种简单的、基于提示的替代方案，以微调较小的BERT风格LLM。这有望消除对手动标记的训练数据和特定任务的模型训练的需求。然而，像ChatGPT这样的工具能否兑现这一承诺仍然是一个悬而未决的问题。在本文中，我们表明，在文本分类中，较小的、微调的LLM（仍然）始终显著优于较大的、零样本提示的模型。我们比较了三种主要的生成式人工智能模型（ChatGPT与GPT-3.5/GPT-4和Claude Opus），以及在不同分类任务（情绪、批准/不批准、情绪、政党立场）和文本类别（新闻、推特、演讲）中的几个微调的LLM。我们发现，使用特定于应用程序的训练数据进行微调在所有情况下都能实现卓越的性能。为了使这种方法更容易被更广泛的受众所接受，我们在本文旁边提供了一个易于使用的工具包。我们的工具包，伴随着非技术性的分步指导，使用户能够以最少的技术和计算工作量为任何分类任务选择和微调类似BERT的LLM。<br>
+<img src="toolkit-workflow.png" alt=""></p>
+<h4 id="Multimodal-Sentiment-Analysis-Based-on-Causal-Reasoning-24-12">Multimodal Sentiment Analysis Based on Causal Reasoning (24/12)</h4>
+<p><a target="_blank" rel="noopener" href="https://arxiv.org/abs/2412.07292">论文地址</a><br>
+核心思想：随着多媒体的快速发展，近年来从单模态文本情感分析向多模态图像文本情感分析的转变引起了学术界和业界的关注。然而，多模态情感分析受到单模态数据偏差的影响，例如，由于明确的情感语义，文本情感具有误导性，导致最终情感分类的准确性较低。本文提出了一种新的<strong>反事实多模态情感分析框架</strong>（CF-MSA），该框架使用<strong>因果反事实推理</strong>来构建多模态情感因果推理。CF-MSA减轻了单模态偏差的直接影响，并通过区分不同模式之间的治疗变量来确保不同模式的异质性。此外，考虑到模态之间的信息互补性和偏差差异，我们提出了一个新的优化目标，以有效整合不同的模态并减少每种模态的固有偏差。在两个公共数据集MVSA-Single和MVSA-Multiple上的实验结果表明，所提出的CF-MSA具有优异的去偏能力，并实现了最新的最先进性能。我们将发布代码和数据集，以促进未来的研究。</p>
+<p><img src="multimodal-sentiment-prediction.png" alt=""></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://SergeWang.github.io">Serge Wang</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://sergewang.github.io/2024/12/01/%E7%BB%BC%E8%BF%B0%E5%8D%81%EF%BC%9A%E5%A4%9A%E6%A8%A1%E6%80%81%E6%A8%A1%E5%9E%8B/">https://sergewang.github.io/2024/12/01/%E7%BB%BC%E8%BF%B0%E5%8D%81%EF%BC%9A%E5%A4%9A%E6%A8%A1%E6%80%81%E6%A8%A1%E5%9E%8B/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://SergeWang.github.io" target="_blank">Model The World</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%BB%BC%E8%BF%B0/">综述</a><a class="post-meta__tags" href="/tags/LMMs/">LMMs</a></div><div class="post-share"><div class="social-share" data-image="/images/mamba.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2024/12/07/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E5%9B%9B%E5%8D%81%E4%B8%83%EF%BC%9A3DGS-zip-3D%E9%AB%98%E6%96%AF%E6%B3%BC%E6%BA%85%E5%8E%8B%E7%BC%A9%E6%96%B9%E6%B3%95%E7%BB%BC%E8%BF%B0/" title="论文阅读四十七：3DGS.zip:3D高斯泼溅压缩方法综述"><img class="cover" src="/images/3dgszip.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">论文阅读四十七：3DGS.zip:3D高斯泼溅压缩方法综述</div></div><div class="info-2"><div class="info-item-1">摘要 3D 高斯泼溅（3DGS）已成为实时辐射场渲染的前沿技术，提供质量和速度的先进性能。3DGS将场景建模为三维高斯的集合，或“泼溅”，以及额外的属性优化以符合场景的集合和视觉特性。尽管它在渲染速度和图像保真度中的优势，3DGS受到其显著的存储和内存需要的限制。这些高需求使得3DGS对于移动设备或耳机不实际，减少它在计算机图形学重要领域中的应用。为解决这些挑战，并促进3DGS的实用，该先进报告（STAR）提供综合和细致的关于3DGS更加有效的压缩和压实技术的检测。我们分类当前方法为压缩技术，旨在以最小数据量获得的最高质量，和压实技术，旨在使用最少的高斯取得最优质量。我们介绍了所分析方法背后的基本数学概念，以及关键的实现细节和设计选择。我们的报告深入讨论了这些方法之间的异同，以及它们各自的优缺点。我们根据关键性能指标和数据集建立了比较这些方法的一致标准。具体而言，由于这些方法是在短时间内并行开发的，目前还没有全面的比较。这项调查首次提出了评估3DGS压缩技术的统一标准。为了促进对新兴方法的持续监测，我们维护了一个专门的网站，该网站将定期更新新技术和对现有发现的修订...</div></div></div></a><a class="pagination-related" href="/2024/12/01/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E5%9B%9B%E5%8D%81%E5%85%AD%EF%BC%9AStuffedMamba%EF%BC%9A%E5%9F%BA%E4%BA%8ERNN%E7%9A%84%E9%95%BF%E4%B8%8A%E4%B8%8B%E6%96%87%E5%BB%BA%E6%A8%A1%E7%9A%84%E7%8A%B6%E6%80%81%E5%B4%A9%E6%BA%83%E5%92%8C%E7%8A%B6%E6%80%81%E5%AE%B9%E9%87%8F/" title="论文阅读四十六：StuffedMamba：基于RNN的长上下文建模的状态崩溃和状态容量"><img class="cover" src="/images/QGS.png" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">论文阅读四十六：StuffedMamba：基于RNN的长上下文建模的状态崩溃和状态容量</div></div><div class="info-2"><div class="info-item-1">...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2024/11/24/%E7%BB%BC%E8%BF%B0%E4%B8%80%EF%BC%9ATransformer%E5%8F%8A%E5%85%B6%E5%8F%98%E4%BD%93/" title="综述一：Transformer及其变体"><img class="cover" src="/images/transformer.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-24</div><div class="info-item-2">综述一：Transformer及其变体</div></div><div class="info-2"><div class="info-item-1">Transformer架构，因其自注意力机制而闻名，能够让模型根据输入序列中不同的标记之间的关系进行加权。这种机制消除了循环神经网络的需求，使得训练变得更加高效。自从2017年原始Transformer的提出以来，已经出现了多个变种，旨在优化性能、扩展其适用范围或解决一些挑战。以下是一些著名的Transformer变种，特别是那些专注于自注意力机制的： 1. 原始Transformer (Vanilla Transformer)  关键特性：原始Transformer架构包括一个编码器-解码器结构，采用自注意力机制。 目的：消除了递归神经网络的需求，使得模型训练更加并行化和高效。 自注意力机制：多头自注意力，通过计算输入序列中所有标记之间的关系来决定重要性。  2. BERT（双向编码器表示）  关键特性：BERT只使用Transformer的编码器部分，采用双向自注意力机制来捕获标记的左右上下文。 目的：通过掩蔽语言模型（MLM）进行预训练，并可以通过微调来提升在下游NLP任务中的表现。  3....</div></div></div></a><a class="pagination-related" href="/2024/11/24/%E7%BB%BC%E8%BF%B0%E4%B8%89%EF%BC%9A%E6%8C%81%E7%BB%AD%E5%AD%A6%E4%B9%A0%E5%8F%8A%E5%85%B6%E6%96%B9%E6%B3%95/" title="综述三：持续学习及其方法"><img class="cover" src="/images/mamba.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-24</div><div class="info-item-2">综述三：持续学习及其方法</div></div><div class="info-2"><div class="info-item-1">持续学习（Continual Learning，CL），也称为终身学习（Lifelong Learning），指的是模型能够从持续不断的数据流中学习，并随着时间的推移不断适应和获得新知识，而不会遗忘先前学习的内容。持续学习面临的一个主要挑战是灾难性遗忘（Catastrophic Forgetting），即在学习新任务时，模型容易遗忘之前学习的任务。 为了应对这些挑战，提出了多种方法，这些方法可以根据它们如何处理遗忘、如何存储知识以及如何使用新数据进行分类。 下面是主要的持续学习方法，按它们所采用的主要策略进行组织： 1....</div></div></div></a><a class="pagination-related" href="/2024/11/24/%E7%BB%BC%E8%BF%B0%E4%B8%83%EF%BC%9ACNN%E6%A8%A1%E5%9E%8B/" title="综述七：CNN模型"><img class="cover" src="/images/mamba.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-24</div><div class="info-item-2">综述七：CNN模型</div></div><div class="info-2"><div class="info-item-1">Here’s a list of major CNN (Convolutional Neural Network) variants ordered by the time of their publication. CNNs have evolved over the years to improve accuracy, reduce computational costs, and adapt to different domains.  1. LeNet (1998)  Key Idea: One of the first CNN architectures, designed for handwritten digit recognition (MNIST). It used convolutional layers followed by pooling and fully connected layers. Application: Digit classification. Notable Paper: Yann LeCun et al.,...</div></div></div></a><a class="pagination-related" href="/2024/11/24/%E7%BB%BC%E8%BF%B0%E4%B9%9D%EF%BC%9ALLM/" title="综述九：LLM"><img class="cover" src="/images/mamba.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-24</div><div class="info-item-2">综述九：LLM</div></div><div class="info-2"><div class="info-item-1">提示（Prompts） Large Lanuage Models Can Self-Improve in Long-context Reasoning (24/10) 论文地址 核心思想：大型语言模型（LLM）在处理长上下文方面取得了实质性进展，但在长上下文推理方面仍存在困难。现有的方法通常涉及使用合成数据对LLM进行微调，这取决于人类专家的注释或GPT-4等高级模型，从而限制了进一步的进步。为了解决这个问题，研究了LLM在长上下文推理中自我改进的潜力，并提出了专门为此目的设计的SEALONG方法。这种方法很简单：对每个问题的多个输出进行采样，用最小贝叶斯风险对其进行评分，然后根据这些输出进行监督微调或偏好优化。在几个领先的LLM上进行的广泛实验证明了SEALONG的有效性，Llama-3.1-8B-Instruct的绝对提高了4.2分。此外，与依赖于人类专家或高级模型生成的数据的先前方法相比，SEALONG实现了更优的性能。我们预计，这项工作将为长期情景下的自我提升技术开辟新的途径，这对LLM的持续发展至关重要。 </div></div></div></a><a class="pagination-related" href="/2024/11/24/%E7%BB%BC%E8%BF%B0%E4%B9%9D%EF%BC%9AMamba%E5%8F%8A%E5%85%B6%E5%8F%98%E4%BD%93/" title="综述九：Mamba及其变体"><img class="cover" src="/images/mamba.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-24</div><div class="info-item-2">综述九：Mamba及其变体</div></div><div class="info-2"><div class="info-item-1">SSM模型 Transformers are RNNs: Fast Autoregressive Transformers with Linear Attention (20/06) 论文地址 核心思想：将自注意表示为核特征图的线性点积，并使用矩阵乘法的结合属性将复杂度从 O(N2)\mathcal{O}(N^2)O(N2) 减少到 O(N)\mathcal{O}(N)O(N) ，其中N是序列长度。我们证明，这个公式允许迭代实现，大大加速了自回归Transformers，并揭示了它们与循环神经网络的关系。(一种涉及循环的自我注意近似，可以看作是退化的线性SSM)  Hungry Hungry Hippos: Towards Language Modeling with State Space Models...</div></div></div></a><a class="pagination-related" href="/2024/11/24/%E7%BB%BC%E8%BF%B0%E4%BA%8C%EF%BC%9ADiTs%E5%8F%8A%E5%85%B6%E5%8F%98%E4%BD%93/" title="综述二：DiTs及其变体"><img class="cover" src="/images/SIT.png" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2024-11-24</div><div class="info-item-2">综述二：DiTs及其变体</div></div><div class="info-2"><div class="info-item-1">**DiT（去噪扩散Transformer模型）**是结合了Transformer架构和扩散模型的一类生成模型，特别专注于在扩散框架内的去噪过程。扩散模型通过逐步添加和去除噪声的过程来建模复杂的分布，近年来在生成任务中非常流行。 下面是一些著名的DiT变种，它们在不同方面扩展了原始的DiT模型： 1. DiT（原始版本）  关键特性：原始的DiT模型将Transformer架构与去噪扩散过程结合，利用Transformer的注意力机制改进生成质量和训练的可扩展性。 目的：生成高质量的图像，并与传统的卷积神经网络相比，提高训练效率。  2. DiT++（增强版DiT）  关键特性：DiT++是在原始DiT基础上进行增强的版本，可能包括模型架构的改进、训练方法的优化或额外的正则化技术。 目的：通过改进Transformer架构和扩散过程中的噪声调度，提升生成稳定性和性能。  3....</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/newlogo.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Serge Wang</div><div class="author-info-description">今日事，今日毕</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">74</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">43</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">20</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/SergeWang"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/SergeWang" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:sergew027@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">Welcome to my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.</span> <span class="toc-text">模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9F%BA%E7%A1%80%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.1.</span> <span class="toc-text">基础模型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#LLaVA-Visual-Instruction-Tuning-23-04"><span class="toc-number">1.1.1.</span> <span class="toc-text">LLaVA: Visual Instruction Tuning (23&#x2F;04)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Qwen-VL-A-Versatile-Vision-Language-Model-for-Understanding-Localization-Text-Reading-and-Beyond-23-10"><span class="toc-number">1.1.2.</span> <span class="toc-text">Qwen-VL: A Versatile Vision-Language Model for Understanding, Localization, Text Reading, and Beyond (23&#x2F;10)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Qwen2-VL-Enhancing-Vision-Language-Model%E2%80%99s-Perception-of-the-World-at-Any-Resolution-24-10"><span class="toc-number">1.1.3.</span> <span class="toc-text">Qwen2-VL: Enhancing Vision-Language Model’s Perception of the World at Any Resolution (24&#x2F;10)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#finetuning-free"><span class="toc-number">1.2.</span> <span class="toc-text">finetuning-free</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Sparse-Attention-Vectors-Generative-Multimodal-Model-Features-Are-Discriminative-Vision-Language-Classifiers-24-12"><span class="toc-number">1.2.1.</span> <span class="toc-text">Sparse Attention Vectors: Generative Multimodal Model Features Are Discriminative Vision-Language Classifiers (24&#x2F;12)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%84%E5%88%86"><span class="toc-number">2.</span> <span class="toc-text">组分</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8E%8B%E7%BC%A9%E9%87%8F%E5%8C%96"><span class="toc-number">2.1.</span> <span class="toc-text">压缩量化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#A-Wander-Through-the-Multimodal-Landscape-Efficient-Transfer-Learning-via-Low-rank-Sequence-Multimodal-Adapter-24-12"><span class="toc-number">2.1.1.</span> <span class="toc-text">A Wander Through the Multimodal Landscape: Efficient Transfer Learning via Low-rank Sequence Multimodal Adapter (24&#x2F;12)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E6%80%81%E5%B5%8C%E5%85%A5"><span class="toc-number">2.2.</span> <span class="toc-text">模态嵌入</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Jina-Clip-v2-Multilingual-Multimodal-Embeddings-for-Text-and-Images-24-12"><span class="toc-number">2.2.1.</span> <span class="toc-text">Jina-Clip-v2: Multilingual Multimodal Embeddings for Text and Images (24&#x2F;12)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E4%BB%A4%E6%A8%A1%E6%9D%BF"><span class="toc-number">2.3.</span> <span class="toc-text">指令模板</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Template-Matters-Understanding-the-Role-of-Instruction-Templates-in-Multimodal-Lanuage-Model-Evaluation-and-Training-24-12"><span class="toc-number">2.3.1.</span> <span class="toc-text">Template Matters: Understanding the Role of Instruction Templates in Multimodal Lanuage Model Evaluation and Training (24&#x2F;12)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E5%87%86"><span class="toc-number">3.</span> <span class="toc-text">基准</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Do-Multimodal-Large-Language-Models-See-Like-Humans-24-12"><span class="toc-number">3.1.</span> <span class="toc-text">Do Multimodal Large Language Models See Like Humans? (24&#x2F;12)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BA%94%E7%94%A8"><span class="toc-number">4.</span> <span class="toc-text">应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E7%B1%BB"><span class="toc-number">4.1.</span> <span class="toc-text">分类</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#When-XGBoost-Outperforms-GPT-4-on-Text-Classification-A-Case-Study-24-06"><span class="toc-number">4.1.1.</span> <span class="toc-text">When XGBoost Outperforms GPT-4 on Text Classification: A Case Study (24&#x2F;06)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Fine-tuned-%E2%80%98Small%E2%80%99-LLMs-Still-Significantly-Outperform-Zero-Shot-Generative-AI-24-08"><span class="toc-number">4.1.2.</span> <span class="toc-text">Fine-tuned ‘Small’ LLMs (Still) Significantly Outperform Zero-Shot Generative AI (24&#x2F;08)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Multimodal-Sentiment-Analysis-Based-on-Causal-Reasoning-24-12"><span class="toc-number">4.1.3.</span> <span class="toc-text">Multimodal Sentiment Analysis Based on Causal Reasoning (24&#x2F;12)</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2024/12/17/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E4%BA%94%E5%8D%81%EF%BC%9A%E5%AD%97%E8%8A%82%E6%BD%9C%E5%9C%A8Transformer%EF%BC%9APatches%E6%AF%94Tokens%E6%89%A9%E5%B1%95%E6%80%A7%E5%A5%BD/" title="论文阅读五十：字节潜在Transformer：Patches比Tokens扩展性好"><img src="/images/BLT.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="论文阅读五十：字节潜在Transformer：Patches比Tokens扩展性好"/></a><div class="content"><a class="title" href="/2024/12/17/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E4%BA%94%E5%8D%81%EF%BC%9A%E5%AD%97%E8%8A%82%E6%BD%9C%E5%9C%A8Transformer%EF%BC%9APatches%E6%AF%94Tokens%E6%89%A9%E5%B1%95%E6%80%A7%E5%A5%BD/" title="论文阅读五十：字节潜在Transformer：Patches比Tokens扩展性好">论文阅读五十：字节潜在Transformer：Patches比Tokens扩展性好</a><time datetime="2024-12-17T11:15:34.000Z" title="发表于 2024-12-17 19:15:34">2024-12-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/17/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E5%9B%9B%E5%8D%81%E4%B9%9D%EF%BC%9A%E5%A4%A7%E5%9E%8B%E6%A6%82%E5%BF%B5%E6%A8%A1%E5%9E%8B%EF%BC%9A%E5%8F%A5%E5%AD%90%E8%A1%A8%E7%A4%BA%E7%A9%BA%E9%97%B4%E4%B8%AD%E7%9A%84%E8%AF%AD%E8%A8%80%E5%BB%BA%E6%A8%A1/" title="论文阅读四十九：大型概念模型：句子表示空间中的语言建模"><img src="/images/LCM.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="论文阅读四十九：大型概念模型：句子表示空间中的语言建模"/></a><div class="content"><a class="title" href="/2024/12/17/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E5%9B%9B%E5%8D%81%E4%B9%9D%EF%BC%9A%E5%A4%A7%E5%9E%8B%E6%A6%82%E5%BF%B5%E6%A8%A1%E5%9E%8B%EF%BC%9A%E5%8F%A5%E5%AD%90%E8%A1%A8%E7%A4%BA%E7%A9%BA%E9%97%B4%E4%B8%AD%E7%9A%84%E8%AF%AD%E8%A8%80%E5%BB%BA%E6%A8%A1/" title="论文阅读四十九：大型概念模型：句子表示空间中的语言建模">论文阅读四十九：大型概念模型：句子表示空间中的语言建模</a><time datetime="2024-12-17T11:13:10.000Z" title="发表于 2024-12-17 19:13:10">2024-12-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/17/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E5%9B%9B%E5%8D%81%E5%85%AB%EF%BC%9A%E5%85%8D%E8%AE%AD%E7%BB%83%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%92%8C%E6%A0%87%E7%AD%BE%E4%BD%9C%E4%B8%BA%E7%89%B9%E5%BE%81%E7%9A%84%E5%8A%9B%E9%87%8F/" title="论文阅读四十八：免训练图神经网络和标签作为特征的力量"><img src="/images/tfgnn.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="论文阅读四十八：免训练图神经网络和标签作为特征的力量"/></a><div class="content"><a class="title" href="/2024/12/17/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E5%9B%9B%E5%8D%81%E5%85%AB%EF%BC%9A%E5%85%8D%E8%AE%AD%E7%BB%83%E5%9B%BE%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E5%92%8C%E6%A0%87%E7%AD%BE%E4%BD%9C%E4%B8%BA%E7%89%B9%E5%BE%81%E7%9A%84%E5%8A%9B%E9%87%8F/" title="论文阅读四十八：免训练图神经网络和标签作为特征的力量">论文阅读四十八：免训练图神经网络和标签作为特征的力量</a><time datetime="2024-12-17T11:09:52.000Z" title="发表于 2024-12-17 19:09:52">2024-12-17</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/07/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E5%9B%9B%E5%8D%81%E4%B8%83%EF%BC%9A3DGS-zip-3D%E9%AB%98%E6%96%AF%E6%B3%BC%E6%BA%85%E5%8E%8B%E7%BC%A9%E6%96%B9%E6%B3%95%E7%BB%BC%E8%BF%B0/" title="论文阅读四十七：3DGS.zip:3D高斯泼溅压缩方法综述"><img src="/images/3dgszip.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="论文阅读四十七：3DGS.zip:3D高斯泼溅压缩方法综述"/></a><div class="content"><a class="title" href="/2024/12/07/%E8%AE%BA%E6%96%87%E9%98%85%E8%AF%BB%E5%9B%9B%E5%8D%81%E4%B8%83%EF%BC%9A3DGS-zip-3D%E9%AB%98%E6%96%AF%E6%B3%BC%E6%BA%85%E5%8E%8B%E7%BC%A9%E6%96%B9%E6%B3%95%E7%BB%BC%E8%BF%B0/" title="论文阅读四十七：3DGS.zip:3D高斯泼溅压缩方法综述">论文阅读四十七：3DGS.zip:3D高斯泼溅压缩方法综述</a><time datetime="2024-12-07T03:44:18.000Z" title="发表于 2024-12-07 11:44:18">2024-12-07</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2024/12/01/%E7%BB%BC%E8%BF%B0%E5%8D%81%EF%BC%9A%E5%A4%9A%E6%A8%A1%E6%80%81%E6%A8%A1%E5%9E%8B/" title="综述十：多模态模型"><img src="/images/mamba.png" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="综述十：多模态模型"/></a><div class="content"><a class="title" href="/2024/12/01/%E7%BB%BC%E8%BF%B0%E5%8D%81%EF%BC%9A%E5%A4%9A%E6%A8%A1%E6%80%81%E6%A8%A1%E5%9E%8B/" title="综述十：多模态模型">综述十：多模态模型</a><time datetime="2024-12-01T11:04:52.000Z" title="发表于 2024-12-01 19:04:52">2024-12-01</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2019 - 2024 By Serge Wang</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">繁</button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><div class="js-pjax"><script>(async () => {
+  const showKatex = () => {
+    document.querySelectorAll('#article-container .katex').forEach(el => el.classList.add('katex-show'))
+  }
+
+  if (!window.katex_js_css) {
+    window.katex_js_css = true
+    await btf.getCSS('https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css')
+    if (false) {
+      await btf.getScript('https://cdn.jsdelivr.net/npm/katex/dist/contrib/copy-tex.min.js')
+    }
+  }
+
+  showKatex()
+})()</script></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
