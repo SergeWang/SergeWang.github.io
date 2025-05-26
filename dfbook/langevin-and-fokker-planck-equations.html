@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>引言 - 扩散模型原理</title>
+        <title>朗之万和福克-普朗克方程 - 扩散模型原理</title>
 
 
         <!-- Custom HTML head -->
@@ -168,39 +168,20 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="引言"><a class="header" href="#引言">引言</a></h1>
-<p>扩散模型用于学习从一个分布到另一个分布的转换。图像生成中，学习白噪声（高斯分布）到图像数据分布的转换。</p>
-<p>其原理可从不同视角进行分析：PPDM、SDLD以及SDE。</p>
-<ul>
-<li>
-<p><strong>PPDM</strong>：从变分自编码器VAE开始，将变分自编码器的encoder-decoder步骤，离散化为正向过程和逆向过程的多个时间步。</p>
-<ul>
-<li>正向方程</li>
-<li>逆向方程</li>
-</ul>
-</li>
-<li>
-<p><strong>SMLD</strong>：结合朗之万动力学，将PPDM的目标函数，转换为SDLD形式。</p>
-<ul>
-<li>正向方程</li>
-<li>逆向方程</li>
-</ul>
-</li>
-<li>
-<p><strong>SDE</strong>：将扩散模型转换为随机微分方程形式。</p>
-<ul>
-<li>正向方程</li>
-<li>逆向方程</li>
-</ul>
-</li>
-</ul>
+                        <h1 id="朗之万和福克-普朗克方程"><a class="header" href="#朗之万和福克-普朗克方程">朗之万和福克-普朗克方程</a></h1>
+<pre><code>与扩散模型相关的随机微分方程（SDE）的物理学
+</code></pre>
+<p>PPDM和SMLD的前向和逆向过程，都可以重写为朗之万方程的形式。通过求朗之万方程的解析解，可以得到。。。。</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="chapter_5.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
 
-                            <a rel="next prefetch" href="chapter_1.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="brownian-motion.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -210,8 +191,11 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="chapter_5.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
 
-                    <a rel="next prefetch" href="chapter_1.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="brownian-motion.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>

@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>引言 - 扩散模型原理</title>
+        <title>马斯特斯方程式 - 扩散模型原理</title>
 
 
         <!-- Custom HTML head -->
@@ -168,41 +168,30 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="引言"><a class="header" href="#引言">引言</a></h1>
-<p>扩散模型用于学习从一个分布到另一个分布的转换。图像生成中，学习白噪声（高斯分布）到图像数据分布的转换。</p>
-<p>其原理可从不同视角进行分析：PPDM、SDLD以及SDE。</p>
-<ul>
-<li>
-<p><strong>PPDM</strong>：从变分自编码器VAE开始，将变分自编码器的encoder-decoder步骤，离散化为正向过程和逆向过程的多个时间步。</p>
-<ul>
-<li>正向方程</li>
-<li>逆向方程</li>
-</ul>
-</li>
-<li>
-<p><strong>SMLD</strong>：结合朗之万动力学，将PPDM的目标函数，转换为SDLD形式。</p>
-<ul>
-<li>正向方程</li>
-<li>逆向方程</li>
-</ul>
-</li>
-<li>
-<p><strong>SDE</strong>：将扩散模型转换为随机微分方程形式。</p>
-<ul>
-<li>正向方程</li>
-<li>逆向方程</li>
-</ul>
-</li>
-</ul>
+                        <h1 id="马斯特斯方程式"><a class="header" href="#马斯特斯方程式">马斯特斯方程式</a></h1>
+<p>到目前为止，我们一直在研究线性朗之万方程\(\dot{\xi}(t) + \gamma\xi(t) = \Gamma(t)\)。该方程允许我们处理大多数正向扩散，其目标是向样本中添加噪声（即将输入分布转换为高斯分布）。对于反向扩散，如反向DDPM方程和反向SMLD方程，我们需要更通用的东西。我们现在考虑的方程是非线性朗之万方程，表示如下。</p>
+<p><strong>定义 5.2</strong> 非线性朗之万方程，形式如下
+\[\dot{\xi} = h(\xi, t) + g(\xi, t)\Gamma(t), \]
+其中， \(h(\xi,t)\)和\(g(\xi,t)\)是分别表示漂移和扩散的函数。如前所述，我们假设\(\Gamma(t)\)是高斯白噪声，因此，对于全部t，\(E[\Gamma(t)] = 0\)，以及 \(E[\Gamma(t)\Gamma(t')] = 2\delta(t-t')\)。</p>
+<p>读者可以参考示例5.2，了解反向DDPM将如何拟合此方程。</p>
+<p>分析非线性朗之万方程的难点在于<strong>没有简单的闭式解</strong>。因此，我们需要开发一些数学工具来帮助我们理解非线性朗之万方程。</p>
+<p><strong>马尔科夫性</strong> 我们首先定义一个马尔可夫过程。假设\(\xi(t)\)在时间\(t_n\)有一个值\(x_n = \xi(t_n)\)，且设\(t_1 \le t_2\dots\le t_n\)。我们将使用符号\(p(x_n,t_n)\)来描述\(\xi(t_n)=x_n\)的概率密度。我们还介绍以下简写符号</p>
+<p>\[x_n = [x_n,\dots,x_1], \quad\quad\text{and}\quad\quad t_n =[t_n,\dots,t_1].\]</p>
+<p>因此，\(p(x_n,t_n) = p(x_n, t_n, \dots, x_1, t_1)\)是 \((\xi(t_n),\dots,\xi(x_1))\)的联合分布。</p>
+<p>让我们定义一个马尔可夫过程。我们说，如果满足以下无记忆条件，则随机过程\(\xi(t)\)是马尔可夫的。</p>
+<p><strong>定义 5.3</strong> 一个随机过程\(\xi_(t)\)为马尔可夫过程，如果
+\[p(x_n,t_n|x_{n-1},t_{n-1}) = p(x_n,t_n| x_{n-1},t_{n-1}). \tag{5.21}\]</p>
+<p>也就是说，在给定所有先前状态的情况下，在\(t_n\)处获得状态\(x_n\)的概率与我们仅对前一个状态\(t_{n−1}\)处的\(x_{n-1}\)进行条件化时的概率相同。</p>
+<p>只要\(\Gamma(t)\)是\(\delta\)相关的，满足定义5.2中定义的非线性朗之万方程的随机过程\(\xi(t)\)就是马尔可夫过程。</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-
-                            <a rel="next prefetch" href="chapter_1.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                                <i class="fa fa-angle-right"></i>
+                            <a rel="prev" href="brownian-motion.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
                             </a>
+
 
                         <div style="clear: both"></div>
                     </nav>
@@ -210,10 +199,10 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-
-                    <a rel="next prefetch" href="chapter_1.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
-                        <i class="fa fa-angle-right"></i>
+                    <a rel="prev" href="brownian-motion.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
                     </a>
+
             </nav>
 
         </div>
