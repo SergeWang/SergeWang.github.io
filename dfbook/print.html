@@ -169,37 +169,29 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="引言"><a class="header" href="#引言">引言</a></h1>
-<p>扩散模型用于学习从一个分布到另一个分布的转换。图像生成中，学习白噪声（高斯分布）到图像数据分布的转换。</p>
-<p>其原理可从不同视角进行分析：PPDM、SDLD以及SDE。</p>
-<ul>
-<li>
-<p><strong>PPDM</strong>：从变分自编码器VAE开始，将变分自编码器的encoder-decoder步骤，离散化为正向过程和逆向过程的多个时间步。</p>
-<ul>
-<li>正向方程</li>
-<li>逆向方程</li>
-</ul>
-</li>
-<li>
-<p><strong>SMLD</strong>：结合朗之万动力学，将PPDM的目标函数，转换为SDLD形式。</p>
-<ul>
-<li>正向方程</li>
-<li>逆向方程</li>
-</ul>
-</li>
-<li>
-<p><strong>SDE</strong>：将扩散模型转换为随机微分方程形式。</p>
-<ul>
-<li>正向方程</li>
-<li>逆向方程</li>
-</ul>
-</li>
-</ul>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="chapter-1--vae"><a class="header" href="#chapter-1--vae">Chapter 1  VAE</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="chapter-2"><a class="header" href="#chapter-2">Chapter 2</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="chapter-3"><a class="header" href="#chapter-3">Chapter 3</a></h1>
-<div style="break-before: page; page-break-before: always;"></div><h1 id="ode"><a class="header" href="#ode">ODE</a></h1>
+                        <h1 id="vae"><a class="header" href="#vae">VAE</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="vae-1"><a class="header" href="#vae-1">VAE</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="置信下限elbo"><a class="header" href="#置信下限elbo">置信下限（ELBO）</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="vae优化"><a class="header" href="#vae优化">VAE优化</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="总结"><a class="header" href="#总结">总结</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ppdm"><a class="header" href="#ppdm">PPDM</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ppdm构建模块"><a class="header" href="#ppdm构建模块">PPDM构建模块</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="置信下限elbo-1"><a class="header" href="#置信下限elbo-1">置信下限（ELBO）</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="逆向过程的分布"><a class="header" href="#逆向过程的分布">逆向过程的分布</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="训练和推理"><a class="header" href="#训练和推理">训练和推理</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ddim"><a class="header" href="#ddim">DDIM</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="总结-1"><a class="header" href="#总结-1">总结</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="smld"><a class="header" href="#smld">SMLD</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="从分布中采样"><a class="header" href="#从分布中采样">从分布中采样</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="得分函数"><a class="header" href="#得分函数">得分函数</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="得分匹配技术"><a class="header" href="#得分匹配技术">得分匹配技术</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="总结-2"><a class="header" href="#总结-2">总结</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="sde"><a class="header" href="#sde">SDE</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="从迭代算法到ode"><a class="header" href="#从迭代算法到ode">从迭代算法到ODE</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="sde是什么"><a class="header" href="#sde是什么">SDE是什么</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ddpm和smld的sde"><a class="header" href="#ddpm和smld的sde">DDPM和SMLD的SDE</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="ode和sde的数值求解器"><a class="header" href="#ode和sde的数值求解器">ODE和SDE的数值求解器</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="总结-3"><a class="header" href="#总结-3">总结</a></h1>
 <div style="break-before: page; page-break-before: always;"></div><h1 id="朗之万和福克-普朗克方程"><a class="header" href="#朗之万和福克-普朗克方程">朗之万和福克-普朗克方程</a></h1>
 <pre><code>与扩散模型相关的随机微分方程（SDE）的物理学
 </code></pre>
@@ -401,6 +393,43 @@ C(u) &amp;= 1 + 0 + \frac{2!}{2}[\frac{q}{2\gamma}] + 0 + \frac{(2\cdot 2)!}{2^2
 \[p(x_n,t_n|x_{n-1},t_{n-1}) = p(x_n,t_n| x_{n-1},t_{n-1}). \tag{5.21}\]</p>
 <p>也就是说，在给定所有先前状态的情况下，在\(t_n\)处获得状态\(x_n\)的概率与我们仅对前一个状态\(t_{n−1}\)处的\(x_{n-1}\)进行条件化时的概率相同。</p>
 <p>只要\(\Gamma(t)\)是\(\delta\)相关的，满足定义5.2中定义的非线性朗之万方程的随机过程\(\xi(t)\)就是马尔可夫过程。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="克拉默斯-莫亚尔展开式"><a class="header" href="#克拉默斯-莫亚尔展开式">克拉默斯-莫亚尔展开式</a></h1>
+<p>随着Masters方程的发展，我们现在可以解决非线性Langevin方程。回想一下，非线性朗之万方程没有闭式解，因此我们无法解析地写出解的概率分布。Masters方程允许我们通过称为Fokker-Planck方程的偏微分方程来写下概率分布的条件。福克-普朗克方程的推导需要一个称为克莱默斯·莫亚尔展开的数学结果。</p>
+<p><strong>定理 5.7</strong> 设ξ（t）为马尔可夫过程，设p（x，t）为ξ（t）在时间t取值x的概率分布。Kramers-Moyal展开式指出
+\[\frac{\partial}{\partial t}p(x,t) = \sum_{m=1}^{\infty}[-\frac{\partial^m}{\partial x^m}D^{(m)}(x,t)p(x,t)],\]</p>
+<p>其中，Kramers-Moyal展开式系数定义为
+\[D^{(m)}(x,t) = \frac{1}{m!}{\text{lim}_{\Delta t\rightarrow 0}}[\frac{1}{\Delta t}E[(\xi(t + \Delta t) - x)^m]|\xi(t)=x].\]</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="福克-普朗克方程"><a class="header" href="#福克-普朗克方程">福克-普朗克方程</a></h1>
+<p>现在我们可以讨论福克-普朗克方程了。福克-普朗克方程是 Kramers-Moyal 展开式的截断，取 m = 2。</p>
+<p><strong>定义 5.4</strong> Fokker-Planck 方程是通过将 Kramers-Moyal 展开式截断至 m = 2 得到的。也就是说，对于任何马尔可夫过程 ξ(t)，ξ(t) = x 在时间 t 的概率分布 p(x, t) 将满足以下偏微分方程：</p>
+<p>\[\frac{\partial}{\partial t}p(x,t) = -\frac{\partial}{\partial x}D^{(1)}(x,t)p(x,t) + \frac{\partial^2}{\partial x^2}D^{(2)}(x,t)p(x,t).\tag{5.35}\]</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="总结-4"><a class="header" href="#总结-4">总结</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="总结-5"><a class="header" href="#总结-5">总结</a></h1>
+<p>扩散模型用于学习从一个分布到另一个分布的转换。图像生成中，学习白噪声（高斯分布）到图像数据分布的转换。</p>
+<p>其原理可从不同视角进行分析：PPDM、SDLD以及SDE。</p>
+<ul>
+<li>
+<p><strong>PPDM</strong>：从变分自编码器VAE开始，将变分自编码器的encoder-decoder步骤，离散化为正向过程和逆向过程的多个时间步。</p>
+<ul>
+<li>正向方程</li>
+<li>逆向方程</li>
+</ul>
+</li>
+<li>
+<p><strong>SMLD</strong>：结合朗之万动力学，将PPDM的目标函数，转换为SDLD形式。</p>
+<ul>
+<li>正向方程</li>
+<li>逆向方程</li>
+</ul>
+</li>
+<li>
+<p><strong>SDE</strong>：将扩散模型转换为随机微分方程形式。</p>
+<ul>
+<li>正向方程</li>
+<li>逆向方程</li>
+</ul>
+</li>
+</ul>
 
                     </main>
 
