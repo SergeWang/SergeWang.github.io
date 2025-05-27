@@ -169,6 +169,111 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="置信下限elbo"><a class="header" href="#置信下限elbo">置信下限（ELBO）</a></h1>
+<p>如何使用上述两个代理分布，来确定编码器和解码器？若将\(\phi\)和\(\theta\)当作优化变量，那么，需要目标函数（或损失函数），从而可以通过训练样本优化\(\phi\)和\(\theta\)。这里，使用的损失函数，称为置信下限(ELBO, Evidence Lower BOund):</p>
+<p><strong>定义 1.3 （置信下限）</strong> 置信下限定义为</p>
+<p>\[ELBO(x) \stackrel{def}{=}E_{q_{\phi}(z|x)}\bigg[log\frac{p(x,z)}{q_{\phi}(z|x)}\bigg]. \tag{1.4}\]</p>
+<p>你肯定很困惑，地球上的人怎么能想出这个损失函数！？让我们看看ELBO是什么意思以及它是如何推导出来的。</p>
+<p>简而言之，ELBO是先验分布\(log p(x)\)的下限，因为我们可以证明
+\begin{align}
+\text{log}\ p(x) &amp;= \text{some magical steps to be derived}\\
+&amp;= E_{q_{\phi}(z|x)}\bigg[\text{log}\frac{p(x,z)}{q_{\phi}(z|x)}\bigg] + D_{KL}(q_{\phi}(z|x)||p(z|x))\\
+&amp;\ge E_{q_{\phi}(z|x)}\bigg[\text{log}\frac{p(x,z)}{q_{\phi}(z|x)}\bigg]\\
+&amp;\stackrel{def}{=}\text{ELBO}(x), \tag{1.5}
+\end{align}</p>
+<p>其中，不等式是根据KL散度总是非负。因此，ELBO是\(log\ p(x)\)的一个有效下限。由于我们永远无法访问\(\text{log}\ p(x)\)，如果我们能够以某种方式访问ELBO，并且ELBO是一个很好的下限，那么我们可以有效地最大化ELBO，以实现最大化\(\text{log}\ p(x)\)的目标，这是黄金标准。现在，问题是下限有多好。正如你从方程和图1.4中看到的，当我们的代理\(q_{\phi}(z|x)\)能够与真实分布\(p(z|x)\)完全匹配时，不等式将变为等式。因此，游戏的一部分是确保\(q_{\phi}(z|x)\)接近\(p(z|x)\)。</p>
+<p><img src="logp-elbo.png" alt="" /></p>
+<p>方程（1.5）的推导如下。</p>
+<p><strong>定理 1.1 对数似然分解</strong>。 \(\text{log}\ p(x)\)的对数似然可以分解为</p>
+<p>$$\text{log}\ p(x) = \overbrace{E_{q_{\phi}(z|x)}\bigg[\text{log}\frac{p(x,z)}{q_{\phi}(z|x)}\bigg]}^{\stackrel{def}{=}ELBO(x)}  + {D_{KL}(q_{\phi}(z|x)||p(z||x))}. \tag{1.6}$$</p>
+<p><strong>证明</strong>  诀窍是使用我们的神奇代理\(q_{\phi}(z|x)\)来探究 p(x) 并推导出边界。</p>
+<p>\begin{align}
+log\ p(x) &amp;= log\ p(x) \times \overbrace{\int q_{\phi}(z|x)dz}^{=1} \quad\quad\quad &amp;(\text{乘 1})\\
+&amp;=\int \overbrace{lop\ p(x)}^{\text{some constant wrt z}} \times \overbrace{q_{\phi}(z|x)}^{\text{distribution in z}} \ dz \quad\quad\quad&amp;(log\ p(x)移到积分内)\\
+&amp;= E_{q_{\phi}(z|x)}[log\ p(x)], \tag{1.7}
+\end{align}</p>
+<p>其中最后一个等式是，对于任何随机变量z和标量a，\(\int a \times p_Z(z)dz = E[a] = a\)。</p>
+<p>看，我们已经得到了\(E_{q_{\phi}(z|x)}[\cdot]\)。只需再几步。根据贝叶斯定理， \(p(x,z) = p(z|x)p(x)\):</p>
+<p>\begin{align}
+E_{q_{\phi}(z|x)}[log\ p(x)] &amp;= E_{q_{\phi}(z|x)}\bigg[log\frac{p(x,z)}{p(z|x)}\bigg]  \quad\quad\quad &amp;(\text{贝叶斯定理})\\
+&amp;= E_{q_{\phi}(z|x)}\bigg[log\frac{p(x,z)}{p(z|x)} \times \color{red}{\frac{q_{\phi}(z|x)}{q_{\phi}(z|x)}} \bigg] &amp;(\text{乘}\ \frac{q_{\phi}(z|x)}{q_{\phi}(z|x)})\\
+&amp;= \overbrace{E_{q_{\phi}(z|x)}\bigg[log \frac{p(x,z)}{\color{red}{q_{\phi}(z|x)}}\bigg]}^{ELBO} + \overbrace{E_{q_{\phi}(z|x)}\bigg[log \frac{\color{red}{q_{\phi}(z|x)}}{p(z|x)}\bigg]}^{D_{KL}(q_{\phi}(z|x)||(p(z|x))},  \tag{1.8}
+\end{align}</p>
+<p>其中我们认识到第一项正是ELBO，而第二项正是KL散度。将方程（1.8）与方程（1.5）进行比较，我们完成了证明。</p>
+<hr />
+<p><strong>示例 1.4</strong> 使用先前示例，果我们知道\(p(z|x)\)，我们可以最小化\(log\ p(x)\)和 ELBO(x)之间的差距。为此，我们注意到
+\[log\ p(x) = ELBO(x) + D_{KL}(q_{\phi}(z|x)||p(z|x)) \ge ELBO(x). \]</p>
+<p>当且仅当KL散度为0，等号成立。若KL散度为0，则需要\(q_{\phi}(z|x) = p(z|x)\)。然而，由于\(p(z|x)\)是delta函数，唯一的可能是
+\begin{align}
+q_{\phi}(z|x) &amp;= N(z|\frac{x-\mu}{\sigma}, 0)\\
+&amp;= \delta(z - \frac{x-\mu}{\sigma}), \tag{1.9}
+\end{align}</p>
+<p>即我们将标准偏差设置为t=0。为了确定\(p_{\theta}(x|z)\)，我们需要一些额外的步骤来简化ELBO。</p>
+<hr />
+<p>我们现在有ELBO。但是这个ELBO仍然不太有用，因为它涉及p（x，z），这是我们无法访问的。所以，我们需要做更多的工作。</p>
+<p><strong>定理 1.2 ELBO解读</strong>。 ELBO可以分解为
+\[ELBO(x) = \overbrace{E_{q_{\phi}(z|x)}[log\ \overbrace{p_{\theta}(x|z)}^{\text{a Gaussian}}]}^{\color{red}{\text{how good your decoder is}}} - \overbrace{D_{KL}(\overbrace{q_{\phi}(z|x)}^{\text{a Gaussian}}\ ||\ \overbrace{p(z)}^{\text{a Gaussian}})}^{\text{how good your encoder is}}. \tag{1.10}\]</p>
+<p><strong>证明</strong> 让我们仔细看看ELBO</p>
+<p>\begin{align}
+ELBO(x) &amp;\stackrel{def}{=}E_{q_{\phi}(z|x)}\bigg[log\frac{p(x,z)}{q_{\phi}(z|x)}\bigg] \quad\quad\quad &amp;(定义) \\
+&amp;= E_{q_{\phi}(z|x)}\bigg[log\frac{\color{red}{p(x|z)p(z)}}{q_{\phi}(z|x)}\bigg]  &amp;(p(x,z) = p(x|z)p(z))\\
+&amp;= E_{q_{\phi}(z|x)}[log\ p(x|z)] + E_{q_{\phi}(z|x)}\bigg[log\frac{p(z)}{q_{\phi}(z|x)}\bigg] &amp;(期望分解)\\
+&amp;= E_{q_{\phi}(z|x)}[log\ \color{red}{p_{\theta}(x|z)}] - D_{KL}(q_{\phi}(z|x)||p(z)), &amp;(KL定义)
+\end{align}
+其中，我们替换不可访问的p(x|z)为其代理\(p_{\theta}(x|z)\)。</p>
+<p>这是一个美丽的结果。我们只是展示了一些很容易理解的东西。让我们看看方程式（1.10）中的两个项：</p>
+<ul>
+<li>重构。第一项与解码器有关。我们希望解码器在将潜在向量 z 输入解码器时能够生成良好的图像 x（当然！！）。因此，我们希望最大化\(log\ p_{\theta}(x|z)\)。这类似于最大似然法，我们想要找到一个模型参数来最大化观察到图像的似然值。这里的期望值是针对样本 z（以 x 为条件）取的。这并不奇怪，因为样本 z 是用来评估解码器质量的。它不能是任意的噪声向量，而是一个有意义的潜在向量。因此，z 需要从\(q_{\phi}(z|x)\)中采样。</li>
+<li>先验匹配。第二项是编码器的 KL 散度。我们希望编码器将 x 转换为潜在向量 z，使得潜在向量遵循我们选择的分布，例如，
+\(z\sim N(0,I)\)。为了更通用，我们将 p(z) 写为目标分布。由于 KL 散度是一个距离（当两个分布变得不相似时，该距离会增加），因此我们需要在前面加上一个负号，以便当两个分布变得相似时，该距离也会增加。</li>
+</ul>
+<hr />
+<p><strong>示例 1.5</strong>  在前面的例子的基础上，我们继续假设我们知道\(p(z|x)\)。那么ELBO中的重建项将为我们提供</p>
+<p>\begin{align}
+E_{q_{\phi}(z|x)}[log\ p_{\theta}(x|z)] &amp;= E_{q_{\phi}(z|x)}[log\ N(x| cz+ v, s^2 I)]\\
+&amp;= E_{q_{\phi}(z|x)}\bigg[-\frac{1}{2}log\ 2\pi - log\ s - \frac{||x - (cz+v)||^2}{2s^2}\bigg]\\
+&amp;= -\frac{1}{2}log\ 2\pi - log\ s - \frac{c^2}{2s^2}E_{q_{\phi}(z|x)}[||z - \frac{x-v}{c}||^2]\\
+&amp;= -\frac{1}{2}log\ 2\pi - log\ s - \frac{c^2}{2s^2}E_{\delta(z-\frac{x-\mu}{\sigma})}[||z-\frac{x-v}{c}||^2]\\
+&amp;= -\frac{1}{2}log\ 2\pi - log\ s - \frac{c^2}{2s^2}[||\frac{x-\mu}{\sigma} - \frac{x-v}{c}||^2]\\
+&amp;\le -\frac{1}{2}log\ 2\pi - log\ s,
+\end{align}</p>
+<p>其中，当且仅当范数平方项为零时，上界是紧的，此时v=µ和c=σ。对于其余项，很明显−log s是s中的单调递减函数，当 \(s\rightarrow 0\)， \(-log\ s \rightarrow \infty\)。 因此，当v=µ和c=σ时，方程\(E_{q_{\phi}(z|x)}[log\ p_{\theta}(x|z)]\)在s=0时最大。这意味着</p>
+<p>\begin{align}
+p_{\theta}(x|z) &amp;= N(x| \sigma z + \mu, 0) \\
+&amp;= \delta(x - (\sigma z + \mu)) \tag{1.11}
+\end{align}</p>
+<hr />
+<p><strong>ELBO 的局限性</strong>。ELBO 在实践中很有用，但它与真实似然函数 log p(x) 不同。正如我们提到的，当且仅当 DKL(qϕ(z|x)∥p(z|x)) = 0（即 qϕ(z|x) = p(z|x) 时）时，ELBO 才恰好等于 log p(x)。在下面的例子中，我们将展示通过最大化 ELBO 得到的 qϕ(z|x) 与 p(z|x) 不同的情况。</p>
+<hr />
+<p><strong>示例 1.6 （ELBO的局限性）</strong>。 在前面的例子中，如果我们不知道p（z|x），我们需要通过最大化ELBO来训练VAE。然而，由于ELBO只是真实分布log p（x）的下限，因此最大化ELBO不会像我们希望的那样返回delta函数。相反，我们将获得一些非常有意义的东西，但不完全是delta函数。</p>
+<p>为简单起见，让我们考虑将返回均值无偏估计但方差未知的分布：</p>
+<p>\[q_{\phi}(z|x) = N(z | \frac{x-\mu}{\sigma}, t^2 I),\]</p>
+<p>\[p_{\theta}(x|z) = N(x | \sigma z + \mu, s^2 I).\]</p>
+<p>这在一定程度上是“作弊”，因为理论上我们不应该对均值的估计做出任何假设。但从直观角度来看，由于 qϕ(z|x) 和 pθ(x|z) 是 p(z|x) 和 p(x|z) 的代理函数，它们必然具有 delta 函数的某些性质。最接近的选择是将 qϕ(z|x) 和 pθ(x|z) 定义为均值与两个 delta 函数均值一致的高斯函数。方差未知，而这正是本例中我们感兴趣的主题。</p>
+<p>我们在这里的重点是最大化ELBO，它由先验匹配项和重建项组成。对于先验匹配误差，我们希望最小化KL散度：
+\[D_{KL}(q_{\phi}(z|x)||p(z)) = D_{KL}(N(z|\frac{x-\mu}{\sigma}, t^2I) || N(z | 0, I)).\]</p>
+<p>两个多元高斯\(N(z|\mu_0, \Sigma_0)\)和\(N(z|\mu_1, \Sigma_1)\)的看L散度，可以在Wikipedia找到闭式表达式：
+\[D_{KL}(N(\mu_0, \Sigma_0)||N(\mu_1, \Sigma_1)) \\
+= \frac{1}{2}(Tr(\Sigma_1^{-1}\Sigma_0) - d + (\mu_1 - \mu_0)^T\Sigma_1^{-1}(\mu_1-\mu_0) + log\frac{det\Sigma_1}{det\Sigma_0}).\]</p>
+<p>据此结果（以及一些线代），我们可以证明
+\[D_{KL}(N(z|\frac{x-\mu}{\sigma}, t^2I)||N(z|0,I)) = \frac{1}{2}[t^2d - d + ||\frac{x-\mu}{\sigma}||^2 - 2dlog\ t],\]</p>
+<p>其中，d是x和z的维度。为了最小化KL散度，我们取t的导数，并证明
+\[\frac{\partial}{\partial t}\Bigg\{\frac{1}{2}[t^2d - d + ||\frac{x-\mu}{\sigma}||^2 - 2dlog\ t]\Bigg\} = t\cdot d - \frac{d}{t}.\]</p>
+<p>将其设为0，得到t=1。因此，我们可以证明
+\[q_{\phi}(z|x) = N(z| \frac{x-\mu}{\sigma}, I).\]</p>
+<p>对于重构项，我们可以证明
+\begin{align}
+E_{q_{\phi}(z|x)}[log\ p_{\theta}(x|z)] &amp;= E_{q_{\phi}(z|x)}\bigg[log\frac{1}{\sqrt{2\pi s^2}}exp\Bigg\{-\frac{||x-(\sigma z + \mu)||^2}{2s^2}\Bigg\}\bigg]\\
+&amp;= E_{q_{\phi}(z|x)}\Bigg[-\frac{d}{2}log\ 2\pi - dlog\ s - \frac{||x - (\sigma z + \mu)||^2}{2s^2}\Bigg]\\
+&amp;= -\frac{d}{2}log\ 2\pi - dlog\ s - \frac{\sigma^2}{2s^2}E_{q_{\phi}(z|x)}\big[||z - \frac{x-\mu}{\sigma}||^2\big]\\
+&amp;= -\frac{d}{2}log\ 2\pi - dlog\ s - \frac{\sigma^2}{2s^2}Trace\big\{E_{q_{\phi}(z|x)}\big[(z-\frac{x-\mu}{\sigma})(z - \frac{x-\mu}{\sigma})^T\big]\big\}\\<br />
+&amp;= -\frac{d}{2}log\ 2\pi - dlog\ s - \frac{\sigma^2}{2s^2}\cdot d,
+\end{align}</p>
+<p>因为\(z\sim q_{\phi}(z|x)\)的协方差是I，所以迹为d。对s求导，得到
+\[\frac{d}{ds}\Big\{-\frac{d}{2}log\ 2\pi - dlog\ s - \frac{d\sigma^2}{2s^2}\Big\} = -\frac{d}{s} + \frac{d\sigma^2}{s^3} = 0.\]</p>
+<p>将其等于0，得到\(s = \sigma\)。因此，
+\[p_{\theta}(x|z) = N(x|\sigma z + \mu, \sigma^2 I).\]</p>
+<p>正如我们在这个例子和前面的例子中看到的，虽然理想分布是δ函数，但我们得到的代理分布具有有限的方差。这种有限方差为VAE生成的样本增加了额外的随机性。这个VAE没有错——我们通过最大化ELBO来正确地做到这一点。只是最大化ELBO与最大化\(log\ p(x)\)不同。</p>
+<hr />
 
                     </main>
 

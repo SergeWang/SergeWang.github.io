@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>VAE优化 - 扩散模型原理</title>
+        <title>一致性模型 - 扩散模型原理</title>
 
 
         <!-- Custom HTML head -->
@@ -168,57 +168,17 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="vae优化"><a class="header" href="#vae优化">VAE优化</a></h1>
-<p>在前两小节中，我们介绍了VAE和ELBO的构建块。本小节的目的是讨论如何训练VAE以及如何进行推理。</p>
-<p>VAE 是一种旨在逼近真实分布 p(x) 以便我们抽取样本的模型。VAE由\((\phi,\theta)\) 参数化。因此，训练 VAE 等同于求解一个优化问题，该问题不仅包含了 p(x) 的本质，而且易于处理。然而，由于 p(x) 难以获取，因此自然而然的替代方案是优化 ELBO，即 log p(x) 的下界。这意味着，VAE 的学习目标是解决以下问题。</p>
-<p><strong>定义 1.4</strong> \(\color{blue}{\text{VAE的优化目标是最大化ELBO}}\)：
-\[(\phi,\theta) = \stackrel{\Large argmax}{\phi,\theta}\sum_{x\in \mathcal{X}}ELBO(x), \tag{1.12}\]</p>
-<p>其中，\(\mathcal{X} = \{l=1,\dots,L\}\)是训练数据集。</p>
-<p><strong>ELBO梯度的不稳定性</strong>。上述优化的挑战在于，ELBO 关于\((\phi,\theta)\) 的梯度难以求解。由于当今大多数神经网络优化器都使用一阶方法，并通过梯度反向传播来更新网络权重，因此难以求解的梯度会给 VAE 的训练带来困难。</p>
-<p>让我们详细说明一下梯度的难处理性。我们首先将定义1.3代入上述目标函数。ELBO的梯度为：</p>
-<p>\begin{align}
-\nabla_{\theta,\phi}ELBO(x) &amp;= \nabla_{\theta,\phi}\Big\{E_{q_{\phi}(z|x)}\Bigg[log\frac{p_{\theta}(x,z)}{q_{\phi}(z|x)}\Bigg]\Big\}\\
-&amp;= \nabla_{\theta,\phi}\Big\{E_{q_{\phi}(z|x)}\Bigg[log\ p_{\theta}(x,z) - log\ q_{\phi}(z|x)\Bigg]\Big\}. \tag{1.13}
-\end{align}</p>
-<p>梯度包含两个参数。先来看θ。可以证明
-\begin{align}
-\nabla_{\theta}\ ELBO(x) &amp;= \nabla_{\theta}\Big\{E_{q_{\phi}(z|x)}\Big[log\ p_{\theta}(x,z) - log\ q_{\phi}(z|x)\Big]\Big\}\\
-&amp;= \nabla_{\theta}\Big\{\int\Big[log\ p_{\theta}(x,z) - log\ q_{\phi}(z|x)\Big]\ \cdot\ q_{\phi}(z|x)dz\Big\} \quad\quad\quad&amp;(期望转积分) \\
-&amp;= \int\nabla_{\theta}\big\{log\ p_{\theta}(x,z) - log\ q_{\phi}(z|x)\big\}\ \cdot\ q_{\phi}(z|x)\ dz &amp;(莱布尼茨法则)\\
-&amp;= E_{q_{\phi}(z|x)}\Bigg[\nabla_{\theta}\Big\{log\ p_{\theta}(x,z) - log\ q_{\phi}(z|x)\Big\}\Bigg] &amp;(积分转期望)\\
-&amp;= E_{q_{\phi}(z|x)}\Bigg[\nabla_{\theta}\Big\{log\ p_{\theta}(x,z)\Big\}\Bigg] &amp;(消除梯度无关项)\\
-&amp;\approx \frac{1}{L}\sum_{l=1}^L\nabla_{\theta}\Big\{log\ p_{\theta}(x, z^{(l)})\Big\},  &amp;(蒙特卡洛近似，其中，z^{(l)}\sim q_{\phi}(z|x)) \tag{1.14}
-\end{align}</p>
-<p>其中最后一个等式是期望的蒙特卡罗近似。</p>
-<p>在上述方程中，如果\(p_{\theta}(x,z)\)由神经网络等可计算模型实现，则其梯度\(\nabla_{\theta}\{log\ p_{\theta}(x,z)\}\)可以通过自动微分计算出来。因此，可以通过反向传播梯度来实现最大化。</p>
-<p>关于\(\phi\)的梯度更加困难。我们可以证明</p>
-<p>\begin{align}
-\nabla_{\phi}\ ELBO(x) &amp;= \nabla_{\phi}\Big\{E_{q_{\phi}(z|x)}\Big[log\ p_{\theta}(x,z) - log\ q_{\phi}(z|x)\Big]\Big\}\\
-&amp;= \nabla_{\phi}\Big\{\int\Big[log\ p_{\theta}(x,z) - log\ q_{\phi}(z|x)\Big]\ \cdot\ q_{\phi}(z|x)dz\Big\} \quad\quad\quad &amp;(期望转积分)\\
-&amp;= \int \nabla_{\phi}\big\{\big[log\ p_{\theta}(x,z) - log\ q_{\phi}(z|x)\big]\ \cdot\ q_{\phi}(z|x)\big\}\ dz &amp;(莱布尼茨法则，梯度项与\theta求导不同)\\
-&amp;\ne  \int \nabla_{\phi}\big\{log\ p_{\theta}(x,z) - log\ q_{\phi}(z|x)\big\}\ \cdot\ q_{\phi}(z|x)\ dz \\
-&amp;= \int \big\{\nabla_{\phi}[log\ p_{\theta}(x,z) - log\ q_{\phi}(z|x)]\ \cdot\ q_{\phi}(z|x) + [log\ p_{\theta}(x,z) - log\ q_{\phi}(z|x)] \ \cdot\ \nabla_{\phi}q_{\phi}(z|x)  \big\} \ dz &amp;(乘法求导公式)\\
-&amp;= \int\big[-\nabla_{\theta}log\ q_{\phi}(z|x)\big]\ \cdot\ q_{\phi}(z|x)\ dz + \int\big[
-[log\ p_{\theta}(x,z) - log\ q_{\phi}(z|x)]\ \cdot\ q_{\phi}(z|x)\ \cdot\ \nabla_{\theta}log\ q_{\phi}(z|x)\ dz\big]\\
-&amp;&amp;(消除梯度无关项，利用对数求导公式，积分拆分)\\
-&amp;= E_{q_{\phi}(z|x)}\big[-\nabla_{\phi}log\ q_{\phi}(z|x)\big] + \overbrace{E_{q_{\phi}(z|x)}\big[(log\ p_{\theta}(x,z) - log\ q_{\phi}(z|x))\ \cdot\ \nabla_{\phi}log\ q_{\phi}(z|x)\big]}^{\text{得分函数估计器}}&amp;(积分转期望)\\
-&amp;= E_{q_{\phi}(z|x)}\big[\nabla_{\phi}\big\{ - log\ q_{\phi}(z|x)\big\}\big] &amp;(忽略得分函数估计器)\\
-&amp;= \frac{1}{L}\sum_{l=1}^L\nabla_{\phi}\big\{-log\ q_{\phi}(z^{(l)}|x)\big\}, &amp;(其中， z^{(l)}\sim q_{\phi}(z|x)). \tag{1.15}
-\end{align}</p>
-<p>正如我们所看到的，即使我们希望保持与θ类似的结构，上述推导中的期望和梯度算子也不能切换。这禁止我们对梯度进行任何反向传播以最大化ELBO。</p>
-<p><strong>再参数化技巧</strong>。 ELBO梯度的难解性源于这样一个事实，即我们需要从分布\(q_{\phi}(z|x)\)中提取样本z，而分布\(q_{\phi}(z|x)\)本身是\(\phi\)的函数。正如Kingma和Welling所指出的那样，对于连续潜变量，可以计算\(\nabla_{\theta,\phi}\ ELBO(x)\)的无偏估计，这样我们就可以近似计算梯度，从而最大化ELBO。这个想法是采用一种称为重新参数化技巧的技术。</p>
-<p>回想一下，潜在变量 z 是从分布\(q_{\phi}(z|x)\)中抽取的样本。重参数化技巧的思路是将 z 表示为另一个随机变量\(\epsilon\) 的可微可逆变换，其分布与 x 和 \(\phi\)无关。也就是说，我们定义一个可微可逆函数 g，使得
-\[z = g(\epsilon,\phi,x), \tag{1.16}\]</p>
+                        <h1 id="一致性模型"><a class="header" href="#一致性模型">一致性模型</a></h1>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
-                            <a rel="prev" href="vae-elbo.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="langevin-and-fokker-planck-equations-concluding.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
 
-                            <a rel="next prefetch" href="vae-concluding.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next prefetch" href="why-scm.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
 
@@ -228,11 +188,11 @@
             </div>
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
-                    <a rel="prev" href="vae-elbo.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="langevin-and-fokker-planck-equations-concluding.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
 
-                    <a rel="next prefetch" href="vae-concluding.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next prefetch" href="why-scm.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
             </nav>
