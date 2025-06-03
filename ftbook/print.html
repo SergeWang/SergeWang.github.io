@@ -1,0 +1,487 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>ftbook</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">ftbook</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="选择欢迎上船"><a class="header" href="#选择欢迎上船">选择:欢迎上船</a></h1>
+<p>第一个选择自然是从哪里开始，而我的选择是从简要介绍傅里叶级数开始。傅里叶提出的这种分析方法，最初关注的是利用后来被称为傅里叶级数的方法表示周期现象，后来又通过傅里叶变换（积分）将这些见解扩展到非周期现象。事实上，从傅里叶级数到傅里叶变换的一种方法是将非周期现象视为<strong>周期趋于无穷大的周期现象</strong>的极限情况。这就是我们在下一章中要做的事情。</p>
+<p>周期信号的傅里叶级数与一组离散的频率相关。对于非周期信号的傅里叶变换，这些频率就变成了一组连续的频率。无论哪种情况，这组频率都构成了频谱，而频谱则蕴含了本课题最重要的原理。在此重申一下前言：</p>
+<pre><code>每个信号都有一个频谱，频谱决定了信号。
+</code></pre>
+<p>很吸引人，但我应该说，人们需要知道的是频率以及每个频率对信号的贡献有多大。</p>
+<p>基于傅里叶级数和傅里叶变换的思想完全植根于物理应用。通常，要研究的现象是由物理学的基本微分方程（热方程、波动方程、拉普拉斯方程）建模的，解通常受到边界条件的约束。</p>
+<p>最初的想法是<strong>利用傅里叶级数来寻找显式解</strong>。这项工作提出了一些深远而艰巨的问题，并引出了不同的方向。例如，傅里叶级数（正弦和余弦）的建立后来被重新定义为正交性、线性算子和特征函数的更一般框架。这引出了利用微分方程解的特征函数展开的普遍思路，这在许多领域和应用中都是一个普遍存在的研究方向。在偏微分方程的现代表述中，傅里叶变换已成为定义研究对象的基础，同时仍然是求解特定方程的工具。这一发展在很大程度上取决于傅里叶变换和卷积之间的显著关系，这在傅里叶级数的早期使用中也有所体现。为了使这些方法的应用越来越具有普遍性，数学家们（在某种程度上是受到工程师和物理学家的推动）开始重新思考“函数”概念的普遍性，以及哪些类型的函数可以——并且应该——被纳入微积分的“手术室”。微分和积分都被推广用于傅里叶分析。</p>
+<p>其他方向则<strong>将傅里叶分析的工具与被分析对象的对称性相结合</strong>。这可能会让你联想到晶体和晶体学，没错，而数学家则会联想到数论和群的傅里叶分析。最后，我必须提到，在纯数学领域，无论你信不信，傅里叶级数的收敛性问题促使G. 康托尔在20世纪初研究并创立了无限集理论，并区分了无限集的不同基数。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="周期现象"><a class="header" href="#周期现象">周期现象</a></h1>
+<p>从傅里叶级数开始本课程就是从周期函数开始，这些函数表现出有规律的重复模式。没有必要把周期性作为一种重要的物理（和数学）现象来强调——你很可能在几乎每门课上都看到了周期性行为的例子和应用。我只想提醒你，周期性通常表现为两种形式，有时相关，有时不相关。一般来说，我们认为周期现象是根据它们在时间上是周期性的还是在空间上周期性的来考虑的。</p>
+<h2 id="时间和空间"><a class="header" href="#时间和空间">时间和空间</a></h2>
+<p>在时间周期性的情况下，这种现象就会出现。例如，你站在海面上的某个固定点（或交流电路的某个固定点），波浪（或电流）以规律的、重复出现的波峰和波谷模式冲击着你。波浪的高度是时间的周期函数。另一个例子是声音。声音以纵压波的形式到达你的耳朵，这是一种周期性的空气压缩和稀疏。</p>
+<p>就空间周期性而言，你会遇到这样的现象：比如，你拍了一张照片，然后观察到重复的图案。</p>
+<p>时间和空间周期性在波动中最自然地结合在一起。以一维空间为例，考虑沿弦传播的单个正弦波。对于该波，时间周期由频率v测量，维度为1/时间，单位为Hz（赫兹=周期/秒），空间周期由波长\(\lambda\)测量，维度为长度，单位为特定设置方便的数值。如果我们在空间中固定一个点，让时间变化（拍摄该点的波动视频），那么连续的波峰以每秒ν次的速度经过该点，连续的波谷也是如此。如果我们固定时间并检查波在空间中的传播方式（拍摄快照而不是视频），我们会看到连续波峰之间的距离是一个常数λ，连续波谷之间的距离也是如此。</p>
+<p>频率和波长通过方程v=λν相关，其中v是传播速度。这个基本方程只不过是另一个基本方程的波动版本：速度=距离/时间。如果速度是固定的，就像真空中电磁波的速度一样，那么频率决定了波长，反之亦然；如果你能测量一个，你就能找到另一个。对于声音，我们将频率的物理属性与音调的感知属性联系起来。对于可见光，频率被感知为颜色。频率越高，波长越短；频率越低，波长越长。通过这个简单的观察，我们已经触及了一个对我们而言将持续且统一的主题：定义量之间的相互关系。</p>
+<p><strong>更多关于空间周期性的内容</strong>。空间周期性出现的另一种方式是，当某个空间区域存在重复模式或某种对称性时，与该区域相关的物理可观测量也具有反映这种重复模式的重复模式。例如，晶体在空间中具有规则的、重复的原子图案；原子的排列称为晶格。描述晶体电子密度分布的函数是描述晶体的三维空间变量的周期函数。我提到这个例子，我们稍后会再讨论，因为与你可能想到的通常的一维例子不同，这里的函数有三个独立的周期，分别对应于描述晶格的三个方向。</p>
+<p>这是另一个例子，这次是二维的，这很适合傅里叶分析。请考虑以下这些明暗条纹：</p>
+<p><img src="fourier-series/strips.png" alt="" /></p>
+<p>毫无疑问，在相应的图像中存在某种空间周期性行为。即使没有精确的定义，也可以合理地说，有些图案的频率较低，而另一些图案的频率较高，这意味着有些图案单位长度上的条纹比其他图案少。对于二维及更高维度的周期性，还有一个更微妙之处：“空间频率”，无论我们最终如何定义它，都必须是一个矢量，而不是一个数字。我们必须说，条纹在特定的方向上以特定的间距出现。</p>
+<p>这种周期性条纹及其生成函数是一般二维图像的构建块。当没有颜色时，图像是一个由不同灰度组成的二维阵列，这可以通过这种交替条纹的合成——傅里叶合成来实现。以这种方式构建图像存在有趣的感知问题，颜色更为复杂。</p>
+<h2 id="定义示例"><a class="header" href="#定义示例">定义、示例</a></h2>
+<p>为确定我们都知道我们在说什么，一个函数\(f(t)\)，\(-\infty\lt t\lt \infty\)，是周期为T的周期函数，如果有一个数\(t\gt 0\)，使得
+\[f(t+T)= f(t)\]
+对所有t。如果存在这样一个T，那么使得等式成立的最小的T，称为函数\(f(t)\)的基本周期。基本周期的每个整数倍也是一个周期：
+\[f(t+nT) = f(t), \quad\quad n=0,\pm 1,\pm 2,\dots\]</p>
+<p>我在这里称变量t是因为我必须称之为某种东西，但这个定义是通用的，并不意味着意味着时间的周期性。</p>
+<p>f（t）在任何长度为t的区间上的图是一个周期(cycle)，也称为一个周期(period)。从几何上讲，周期性条件意味着一个周期（任何周期）的形状决定了图的所有位置：形状一遍又一遍地重复。一个问题要求你将这个想法转化为一个公式（对函数进行周期化）。如果你知道一个时期的函数，你就知道一切。</p>
+<p>这对每个人来说都是旧闻，但是，举个例子，我还想说几点。考虑函数</p>
+<p>\[f(t) = cos\ 2\pi t + \frac{1}{2}\ cos\ 4\pi t,\]</p>
+<p>其图如下所示。</p>
+<p><img src="fourier-series/two-cos-graph.png" alt="" /></p>
+<p>独立项的周期分别为1和1/2，但两项和的周期为1：
+\begin{align}
+f(t+1) &amp;= cos\ 2\pi(t+1) + \frac{1}{2}cos\ 4\pi(t+1)\\
+&amp;= cos(2\pi t + 2\pi) + \frac{1}{2}cos(4\pi t + 4\pi) = cos\ 2\pi t + \frac{1}{2}cos\ 4\pi t = f(t).
+\end{align}</p>
+<p>对于全部t，没有更小的T值，使得 \(f(t+T)=f(t)\)。整体模式每秒重复，但如果该方程表示某类波，可以说它的频率为1Hz吗？我不这么认为。它有周期1，但你最可能说它有，或包含，两个频率，一个余弦频率1Hz和一个频率2Hz。</p>
+<hr />
+<p>将周期函数相加的问题值得一提：</p>
+<ul>
+<li>两个周期函数的和是周期性的吗？</li>
+</ul>
+<p>答案为否，这是因为<strong>无理数</strong>。例如，\(cos\ t\)和 \(cos(\sqrt{2}t)\)各为周期性的，周期分别为\(2\pi\)和\(2\pi\sqrt{2}\)。但和\(cos\ t + cos(\sqrt{2}t)\)不是周期性的。</p>
+<p>下面是\(f_1(t) = cos\ t + cos\ 1.4 t\)（左，周期性）和 \(f_2(t) = cos\ t + cos(\sqrt{2}t)\)（右，非周期性）的图示。它们不相等。仔细看看。</p>
+<p><img src="fourier-series/irrational-cos.png" alt="" /></p>
+<p>\(f_1(t)\)的周期是多少？其中一个问题会让你找到它。</p>
+<p>我意识到，当计算机需要用有理数近似值来绘制图形时，用有理数来绘制计算机图形是一种讽刺。我是用Mathematica绘制这些函数，但我不知道它使用什么作为\(\sqrt{2}\)的近似值。这个例子有多人为？一点也不人为。我们下文会解释原因。</p>
+<h2 id="构建块更多示例"><a class="header" href="#构建块更多示例">构建块：更多示例</a></h2>
+<p>时间周期性的经典例子是谐振子，无论是弹簧上的质量块（无摩擦），还是LC电路中的电流（无电阻）。谐振子在几乎每一节物理课上都有详尽的介绍。之所以如此，是因为它是唯一一个可以详尽处理的问题。嗯，也不完全正确——正如有人向我指出的那样，二体问题也已经被彻底研究过了。</p>
+<p>系统的状态由一个正弦曲线描述，例如
+\[A\ sin(2\pi v t + \phi).\]</p>
+<p>该表达式中的参数是振幅A，频率v，和相位\(\phi\)。该函数的周期为1/v，因为
+\begin{align}
+A\ sin(2\pi v(t + \frac{1}{v}) + \phi) &amp;= A\ sin(2\pi v t + 2\pi v\frac{1}{v} + \phi)\\
+&amp;= A\ sin(2\pi vt + 2\pi + \phi) = A\ sin(2\pi vt + \phi)
+\end{align}</p>
+<p>空间周期性的经典例子，即整个主题的开始，是圆环中的热量分布。一个环以某种方式被加热，然后热量以某种方式在材料中分布。从长远来看，我们希望环上的所有点都具有相同的温度，但短期内不会如此。在每个固定时间，环周围的温度是如何变化的？</p>
+<p>在这个问题中，周期性来自环的坐标描述。把该环想象成一个圆。环上的一个点由角度θ决定，而与位置相关的量都是θ的函数。由于 \(theta\)和\(\theta + 2\pi\)是圆上同一个点，描述圆上物理量（如，温度）的任何连续函数，都是\(\theta\)的周期函数，周期为\(2\pi\)。</p>
+<p>该温度分布不是由简单正弦给定。它是傅里叶的热门想法，考虑一个正弦和作为温度分布的模型：
+\[\sum_{n=1}^N A_n sin(n\theta + \phi_n).\]</p>
+<p>对时间的依赖性在系数\(A_n\)中。我们稍后将更全面地研究这个问题。</p>
+<p>无论物理背景如何，三角和中的各个项（例如上面的项）都称为谐波，该术语来自音乐音高的数学表示。这些项以不同的振幅和相位对总和做出贡献，这些值可以是任何值。另一方面，这些项的频率是基频的整数倍。对于上面的总和，它是\(1/2\pi\)。因为频率是基频的整数倍，所以总和也是周期为2π的周期。项\(A_n sin(n\theta + \phi_n)\)周期为\(2\pi/n\)，但总和不能有一个比出现的最长周期更短的周期，即\(2\pi\)。</p>
+<p><strong>音高和调音</strong>。音高和音符的产生是一种与我们一直在考虑的一般类型相同的周期性现象。音符可以通过振动琴弦或其他有规律振动的物体（如嘴唇、簧片或木琴的琴弦）产生。工程问题是如何调音乐器。调音的主题有着引人入胜的历史，从希腊人基于整数比率的自然调音，到如今使用的等温音阶理论。该系统基于\(2^{1/12}\)，一个无理数。</p>
+<p>等温音阶有 12 个音符，从任何给定的音符到高八度的同一个音符，两个相邻的音符的频率比为\(2^{1/12}\)。音阶中的音符频率为\(cos(2\pi\cdot 440\cdot 2^{n/12}t)\)，n = 0 到 n = 12。若一个频率为440 Hz的A音（音乐会A音），其音高为
+\[A = cos(2\pi \cdot 440\ t),\]</p>
+<p>那么在等温音阶中，从A高6个音符的\(D\sharp\)表示为：</p>
+<p>\[D\sharp = cos(2\pi \cdot 440\sqrt{2}t).\]</p>
+<p>同时播放A和\(D\sharp\)基本上给出了我们之前的信号，\(cos\ t + cos\ 2^{1/2}t\)。我不会评判它听起来好不好听——它是三全音，增四度，“音乐中的魔鬼”。</p>
+<p>当然，当你给钢琴调音时，你不会非理性地收紧琴弦。艺术在于做出正确的近似。对此有很多讨论；例如，请参见
+<a href="http://www.precisionstrobe.com/">http://www.precisionstrobe.com/</a></p>
+<p>要了解有关一般调音的更多信息，请尝试
+<a href="http://www.wikipedia.org/wiki/Musicaltuning">http://www.wikipedia.org/wiki/Musicaltuning</a></p>
+<p>下面是第一份参考文献中的一段话，描述了对音调良好的需求：</p>
+<p>音乐技术的两项发展必然导致纯律的改变。随着带弦乐器的发展，在设置纯律音品时出现了一个问题：在琴颈上的两根弦上演奏八度音阶会产生不纯的八度音阶。同样，设置为纯律音阶的管风琴也会发出一些不悦耳的和弦。为了解决这个问题，一种妥协的方案是平均律音阶的出现。在这个系统中，一些音程进行了调整，以增加可用的调数。随着18世纪作曲技巧的演变，和声转调的应用日益增多，人们提倡使用平均律音阶。J. S. 巴赫就是其中一位倡导者，他出版了两部名为《平均律钢琴曲集》的完整作品。这两部作品分别包含24首赋格曲，分别用12个大调和12个小调创作，并证明了使用平均律音阶可以将音乐谱写成任何调，并转换到任何调上。</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="一切都加起来"><a class="header" href="#一切都加起来">一切都加起来</a></h1>
+<p>从简单、单一正弦，我们通过求余弦和，可以构建更复杂的周期函数，但目前为止，仅考虑了有限和。为了突出基本思想，可以稍微标准化一下，并考虑周期1的函数。这简化了一些写作，如果周期不是1，则很容易修改公式。周期为 1 的基本函数是\(sin\ 2\pi t\)，因此我们上面简要考虑的傅里叶型和（Fourier-type sum）现在看起来像</p>
+<p>\[\sum_{n=1}^N A_n\ sin(2\pi nt + \phi_n).\]</p>
+<p>无论显示每个谐波的幅度和相位有什么心理优势，它都是一种计算起来有些尴尬的表达方式。更常见的是将一般三角和写成</p>
+<p>\[\sum_{n=1}^N(a_n\ cos\ 2\pi nt + b_n\ sin\ 2\pi nt).\]</p>
+<p>利用正弦函数的加法公式，你可以在两个表达式之间传递——它们是等价的。（就当做练习吧。）</p>
+<p>如果我们包含一个常数项（n=0），可以写为
+\[\frac{a_0}{2} + \sum_{n=1}^N(a_n\ cos\ 2\pi nt + b_n\ sin\ 2\pi n t).\]</p>
+<p>将常数项写成分数 1/2 的原因是，正如您将在下面看到的，它与此类和的另一个表达式更匹配。在电气工程中，常数通常被称为直流分量，如 “直流电 ”中的直流分量。其他术语是周期性的，交替出现，如 “交流电 ”或交流电。除直流分量外，谐波的周期分别为 1、1/2、1/3、......、1/N。由于各个谐波的频率都是最低频率的整数倍，因此总和的周期为 1。</p>
+<hr />
+<p><strong>使用复指数</strong>。如果我们使用复指数来表示正弦和余弦，那么关于这种三角和的代数工作会变得无比容易。如果你对复数感到生疏，请参阅附录B，其中讨论了复指数，以及如何毫无畏惧地使用它们来表示真实信号，并回答了负频率的含义。后者即将出现。</p>
+<p>我提醒你</p>
+<p>\[cos\ t = \frac{e^{it} + e^{-it}}{2}, \quad\quad sin\ t = \frac{e^{it} - e^{-it}}{2i}.\]</p>
+<p>因此</p>
+<p>\[cos\ 2\pi nt = \frac{e^{2\pi int}+ e^{-2\pi int}}{2}, \quad\quad sin\ 2\pi nt = \frac{e^{2\pi int}- e^{-2\pi int}}{2i}.\]</p>
+<p>(顺便一提，这里和本书所有地方，\(i = \sqrt{-1}\)。不是j。见附录B中的原则声明。)使用这些重新写和</p>
+<p>\[\frac{a_0}{2} + \sum_{n=1}{N}(a_n\ cos\ 2\pi nt + b_n\ sin\ 2\pi nt).\]</p>
+<p>得到
+\begin{align}
+\frac{a_0}{2} + \sum_{n=1}{N}(a_n\ cos\ 2\pi nt + b_n\ sin\ 2\pi nt)
+&amp;= \frac{a_0}{2} + \sum_{n=1}^N(a_n\frac{e^{2\pi int} + e^{-2\pi int}}{2} - ib_n\frac{e^{2\pi int} - e^{-2\pi int}}{2}) \quad\quad&amp;(\text{在正弦项中使用 1/i = -i})\\
+&amp;= \frac{a_0}{2} + \sum_{n=1}^N(\frac{1}{2}(a_n - ib_n)e^{2\pi int} + \frac{1}{2}(a_n + ib_n)e^{-2\pi int})\\
+&amp;= \frac{a_0}{2} + \sum_{n=1}^N\frac{1}{2}(a_n - ib_n)e^{2\pi int} + \sum_{n=1}^N\frac{1}{2}(a_n + ib_n)e^{-2\pi int}.
+\end{align}</p>
+<p>我们希望将其写成一个对正 n 和负 n 求和的和。为此，设</p>
+<p>\[c_n = \frac{1}{2}(a_n - ib_n) \quad and\quad c_{-n} = \frac{1}{2}(a_n + ib_n),\quad n=1,\dots,N,\]</p>
+<p>以及</p>
+<p>\[c_0 = \frac{a_0}{2}.\]</p>
+<p>保留第一个和，并将第二个和写为n从-1到-N，那么表达式变为</p>
+<p>\[\frac{a_0}{2} + \sum_{n=1}^{N}c_n e^{2\pi int} + \sum_{n=-1}^{-N}c_n e^{2\pi int}.\]</p>
+<p>因此结合起来产生
+\[\frac{a_0}{2} + \sum_{n=1}^N(a_n\ cos\ 2\pi nt + b_n\ sin\ 2\pi nt) = \sum_{n=-N}{N}c_n e^{2\pi int}.\]</p>
+<p>负频率是n的负值。现在你可以明白为什么我们把DC项写成\(a_0/2\)。</p>
+<p>该和的最终形式中，系数\(c_n\)是复数。如果我们假设信号是实数——在先前的积分中不需要——那么它们关于 a 和 b 的定义就蕴含着以下关系
+\[c_{-n} =\overline{c_n}.\]</p>
+<p>特别是，对于n的任何值，\(c_n\)和\(c_{-n}\)的大小都是相等的
+\[|c_n| = |c_{-n}|.\]</p>
+<p>请注意，当n=0时，我们得到
+\[c_0 = \overline{c_0},\]</p>
+<p>这意味着\(c_0\)是实数；这与\(c_0\)等于实数 \(a_0\)/2 相一致。</p>
+<p>实值信号的共轭对称性\(c_{-n} = \overline{c_n}\)很重要。如果我们从以下表达式开始
+\[f(t) = \sum_{n=-N}^N c_ne^{2\pi int}\]</p>
+<p>其中，\(c_n\)是复数，那么\(f(t)\)是实值信号，当且仅当系数满足\(c_{-n} = \overline{c_n}\)。如果\(f(t)\)是实数，那么</p>
+<p>\[\sum_{n=-N}^N\ c_n e^{2\pi int} = \overline{\sum_{n=-N}^N\ c_n e^{2\pi int}} = \sum_{n=-N}^N\ \overline{c_n}{\overline{e^{2\pi int}}} = \sum_{n=-N}^N\ \overline{c_n}e^{-2\pi int},\]</p>
+<p>将相似项等价，得到关系式\(c_{-n} = \overline{c_n}\)。相反，假设关系得到满足。对于n = 0，有 \(c_0 = \overline{c_0}\)，所以 \(c_0\)是实数。对于每个\(n\ne 0\)，我们可以将\(c_ne^{2\pi int}\)和\(c_{-n}e^{-2\pi int}\)分组，那么</p>
+<p>\[c_n e^{2\pi int} + c_{-n}e^{-2\pi int} = c_n e^{2\pi int} + \overline{c_n}\overline{e^{2\pi int}} = 2\text{Re}(c_ne^{2\pi int}).\]</p>
+<p>那么
+\[\sum_{n=-N}^N\ c_n e^{2\pi int} = c_0 + \sum_{n=1}^N 2\ Re(c_n e^{2\pi int}) = c_0 + 2\ Re\Big\{\sum_{n=1}^N c_n e^{2\pi int}\Big\},\]</p>
+<p>所以，复指数的和产生一个实值信号。</p>
+<h2 id="在-c-处迷失"><a class="header" href="#在-c-处迷失">在 c 处迷失</a></h2>
+<p>假设你面对的是一个看起来很复杂的周期性信号。你可以把这个信号看成是随时间变化的，但同样，接下来的推理也适用于任何一种一维周期现象。无论如何，我们可以假设周期为 1。我们是否可以将该信号表示为周期为 1 的较简单周期信号之和？</p>
+<p>称信号为\(f(t)\)。假设我们可以将\(f(t)\)写为一个和</p>
+<p>\[f(t) = \sum_{n=-N}^N\ c_n e^{2\pi int}.\]</p>
+<p>表达是中未知的是系数\(c_n\)。我们可以求解它们吗？</p>
+<p>从什么角度解决？我们假设\(f(t)\)已知，所以想要关于\(f(t)\)系数表达式。让我们直接用代数来计算，尝试分离出固定k对应的系数 \(c_k\)。首先，从和式中取出第 k 项，得到
+\[c_k e^{2\pi ikt} = f(t) - \sum_{n=-N, n\ne k}^N\ c_n e^{2\pi int}.\]</p>
+<p>两边均乘以\(e^{-2\pi ikt}\)得到\(c_k\):
+\begin{align}
+c_k &amp;= e^{-2\pi ikt}f(t) - e^{-2\pi ikt}\sum_{n=-N,n\ne k}\ c_ne^{2\pi int}\\
+&amp;= e^{-2\pi ikt}f(t) - \sum_{n=-N,n\ne k}\ c_n e^{-2\pi ikt}e^{2\pi int}\\
+&amp;= e^{-2\pi ikt}f(t) - \sum_{n=-N,n\ne k}\ c_n e^{2\pi i(n-k)t}.
+\end{align}</p>
+<p>好吧，太棒了，我们已经设法根据所有其他未知系数来求解\(c_k\)。</p>
+<p>代数就到此为止了，代数用完了，绝望的数学家就会转向微积分，即微分或积分。这里有一个提示：微分不会让你得到任何东西。</p>
+<p>需要另一个主意，即两边从0到1积分；如果知道长度1的区间发生了什么，就知道了一切——这就是周期的作用。我们取间隔从0到1作为函数的基周期，但任意长度为1的间隔都可以，我们将会在下面解释（再次，周期如何工作）。得到</p>
+<p>\begin{align}
+c_k &amp;= \int_0^1\ c_k\ dt = \int_0^1\ e^{-2\pi ikt}f(t)\ dt - \int_0^1\Big(\sum_{n=-N,n\ne k}^N\ c_n e^{2\pi i(n-k)t}\Big)\ dt\\
+&amp;= \int_0^1\ e^{-2\pi ikt}f(t)\ dt - \sum_{n=-N,n\ne k}^N \ c_n \int_0^1\ e^{2\pi i (n-k)t}\ dt.
+\end{align}</p>
+<p>就像在微积分中一样，我们可以通过以下公式来计算复指数的积分</p>
+<p>\begin{align}
+\int_0^1\ e^{2\pi i (n-k)t}dt &amp;= \frac{1}{2\pi i(n-k)}e^{2\pi i (n-k)t}\Big]_{t=0}^{t=1} \quad\quad\quad &amp;(反导数，不定积分)\\
+&amp;= \frac{1}{2\pi i(n-k)}(e^{2\pi i (n-k)} - e^0)\\
+&amp;= \frac{1}{2\pi i(n-k)}(1-1) &amp;(记住e^{2\pi i\cdot \text{整数}} = 1)\\
+&amp;= 0.
+\end{align}</p>
+<p>关于\(e^{2\pi i\cdot \text{整数}} = 1\), 注：</p>
+<pre><code>等式：是欧拉公式和三角函数周期性的直接结果。
+含义：复平面上旋转整数个完整圈后回到实轴起点。
+</code></pre>
+<p>求和中所有项均积分为0！我们已经找到关于第k个系数的公式：
+\[c_k = \int_0^1\ e^{-2\pi ikt}f(t)\ dt.\]</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="两个示例和一个警告"><a class="header" href="#两个示例和一个警告">两个示例和一个警告</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="数学i收敛结果"><a class="header" href="#数学i收敛结果">数学I：收敛结果</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="傅里叶级数的应用"><a class="header" href="#傅里叶级数的应用">傅里叶级数的应用</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="数学ii正交性与平方可积函数"><a class="header" href="#数学ii正交性与平方可积函数">数学II:正交性与平方可积函数</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="附录傅里叶级数收敛性注记"><a class="header" href="#附录傅里叶级数收敛性注记">附录：傅里叶级数收敛性注记</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="附录柯西-施瓦茨不等式"><a class="header" href="#附录柯西-施瓦茨不等式">附录：柯西-施瓦茨不等式</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="傅里叶变换"><a class="header" href="#傅里叶变换">傅里叶变换</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="傅里叶变换初探"><a class="header" href="#傅里叶变换初探">傅里叶变换初探</a></h1>
+<p>我们即将从傅里叶级数过渡到傅里叶变换。“过渡”这个词很贴切，因为我们选择了一条傅里叶变换从周期函数过渡到非周期函数的路径。为了完成这一过程，我们将非周期函数（几乎可以是任何函数）视为周期函数随着周期越来越长的极限情况。实际上，这个过程并不会立即产生预期的结果。需要一些额外的调整才能将傅里叶变换从傅里叶系数中导出，但我们会轻松着陆，这将是一次有趣的探索。</p>
+<h2 id="一个例子矩形函数及其傅里叶变换"><a class="header" href="#一个例子矩形函数及其傅里叶变换">一个例子：矩形函数及其傅里叶变换</a></h2>
+<p>让我们举一个具体、简单、重要的例子。考虑矩形函数，或简称“rect”，定义如下</p>
+<p>\[\Pi(t) = \begin{cases}
+&amp;1, \quad &amp;|t| \lt 1/2,\\
+&amp;0, \quad &amp;|t| \gt 1/2.
+\end{cases}
+\]</p>
+<p>图示如下，不太复杂。</p>
+<p><img src="fourier-transform/rect.png" alt="" /></p>
+<p>\(\Pi(t)\)为偶函数——以原点为中心——宽度为 1。稍后我们将讨论其平移和缩放版本。你可以将\(\Pi(t)\)想象成一个开关，它打开一秒，其余时间关闭。\(\Pi\)也被称为顶帽函数（因其图像而得名）、指示函数或区间 (-1/2, 1/2) 的特征函数。</p>
+<p>虽然我们已经定义了\(\Pi(\pm 1/2) = 0\)，但其他常见的约定是\(\Pi(\pm 1/2) = 1\)或 \(\Pi(\pm 1/2) = 1/2\)。有些人根本不在±1/2定义\(\Pi\)，从而在定义域中留下了两个空洞。我不想卷入这场争论。这几乎无关紧要，尽管在某些情况下，\(\Pi(\pm 1/2) = 1/2\)的选择最合理。到时候，我们会在特殊情况下处理这个问题。</p>
+<hr />
+<p>\(\Pi(t)\)不是周期性的。它没有傅里叶级数。在问题中，你尝试了一些周期化，我再次想用\(\Pi\)来做。作为\(\Pi(t)\)的周期性版本，我们以规则的间隔重复函数的非零部分，用函数为零的（长）间隔隔开。我们可以想象这样一个函数：我们一次打开一个开关一秒钟，反复这样做，并在两次打开之间长时间保持关闭状态。（我们经常听到与这类现象相关的术语“占空比”。）这是周期为 16 的\(\Pi(t)\)的图。</p>
+<p><img src="fourier-transform/pi-cycle.png" alt="" /></p>
+<p>以下是周期为 4、16 和 32 的周期矩形函数的傅里叶系数图；分别为第 0 个系数，以及每个函数的第 10 个系数、第 60 个系数和第 200 个系数。频谱对称，并显示了正负频率。由于周期函数为实数且为偶数，因此每种情况下的傅里叶系数均为实数。这些图显示的是实际系数，而非其幅值。</p>
+<p>其实不完全是。我稍后会解释横轴上的缩放比例，也就是为什么傅里叶系数\(c_n\)不直接绘制在整数 n 处。还有一个重要的问题是垂直缩放。但请记住整体形状——这才是重点。</p>
+<p><img src="fourier-transform/rect-period-4-coefficents.png" alt="" /></p>
+<p><img src="fourier-transform/rect-coefficents.png" alt="" /></p>
+<p>如图所示，随着周期的增加，频率越来越接近，系数看起来确实在遵循某条确定的曲线。我们可以分析一下这个特定例子中发生的事情，并结合一些一般性陈述来引导我们继续前进。</p>
+<p>回想一下，对于周期为t的函数\(f(t)\)，傅里叶级数具有以下形式</p>
+<p>\[f(t) = \sum_{n=-\infty}^{\infty}\ c_n e^{e\pi i n t/T}\]</p>
+<p>频率为 0, \(\pm 1/T\), \(\pm 2/T, dots\)。频谱中的点之间的间隔为 1/T，实际上，在上面的图片中，<strong>随着周期 T 的增加，频谱变得越来越密集</strong>。第n个傅里叶系数由下式给出</p>
+<p>\begin{align}
+c_n &amp;= \frac{1}{T}\ \int_0^T\ e^{-2\pi i nt/T}f(t)\ dt\\
+&amp;= \frac{1}{T}\int_{-T/2}^{T/2}\ e^{-2\pi int/T}f(t)\ dt.
+\end{align}</p>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="了解傅里叶变换"><a class="header" href="#了解傅里叶变换">了解傅里叶变换</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="更好地了解傅里叶变换"><a class="header" href="#更好地了解傅里叶变换">更好地了解傅里叶变换</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="傅里叶变换的不同定义及其公式的变化"><a class="header" href="#傅里叶变换的不同定义及其公式的变化">傅里叶变换的不同定义及其公式的变化</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="卷积"><a class="header" href="#卷积">卷积</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="a诞生"><a class="header" href="#a诞生">A*诞生</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="卷积到底是什么"><a class="header" href="#卷积到底是什么">卷积到底是什么？</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="卷积的性质它很像乘法"><a class="header" href="#卷积的性质它很像乘法">卷积的性质：它很像乘法</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="卷积应用i滤波"><a class="header" href="#卷积应用i滤波">卷积应用I：滤波</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="卷积应用ii微分方程"><a class="header" href="#卷积应用ii微分方程">卷积应用II：微分方程</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="卷积应用iii中心极限定理"><a class="header" href="#卷积应用iii中心极限定理">卷积应用III：中心极限定理</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="海森堡不等式"><a class="header" href="#海森堡不等式">海森堡不等式</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="分布及其傅里叶变换"><a class="header" href="#分布及其傅里叶变换">分布及其傅里叶变换</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="清算日"><a class="header" href="#清算日">清算日</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="傅里叶变换的最佳函数快速递减函数"><a class="header" href="#傅里叶变换的最佳函数快速递减函数">傅里叶变换的最佳函数：快速递减函数</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="浅谈积分"><a class="header" href="#浅谈积分">浅谈积分</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="分布"><a class="header" href="#分布">分布</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="定义分布"><a class="header" href="#定义分布">定义分布</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="流数终结微积分的终结"><a class="header" href="#流数终结微积分的终结">流数终结：微积分的终结</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="卷积与卷积定理"><a class="header" href="#卷积与卷积定理">卷积与卷积定理</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="附录窗口化卷积和平滑"><a class="header" href="#附录窗口化卷积和平滑">附录：窗口化、卷积和平滑</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="结语和参考文献"><a class="header" href="#结语和参考文献">结语和参考文献</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="δ"><a class="header" href="#δ">δ</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="滤波器再现"><a class="header" href="#滤波器再现">滤波器再现</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="衍射"><a class="header" href="#衍射">衍射</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="x-ray-diffraction"><a class="header" href="#x-ray-diffraction">X-Ray Diffraction</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="iii-函数本身"><a class="header" href="#iii-函数本身">III 函数本身</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="周期分布与傅里叶级数"><a class="header" href="#周期分布与傅里叶级数">周期分布与傅里叶级数</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="应用于函数的δ公式及回撤"><a class="header" href="#应用于函数的δ公式及回撤">应用于函数的δ公式及回撤</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="截断δ"><a class="header" href="#截断δ">截断δ</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="附录iii有多特别"><a class="header" href="#附录iii有多特别">附录：III有多特别？</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="采样和插值"><a class="header" href="#采样和插值">采样和插值</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="采样正弦和带限信号的概念"><a class="header" href="#采样正弦和带限信号的概念">采样正弦和带限信号的概念</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="带限信号的采样和插值"><a class="header" href="#带限信号的采样和插值">带限信号的采样和插值</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="欠采样和混叠"><a class="header" href="#欠采样和混叠">欠采样和混叠</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="带限周期信号的有限采样"><a class="header" href="#带限周期信号的有限采样">带限周期信号的有限采样</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="附录时间限制信号与带宽限制信号"><a class="header" href="#附录时间限制信号与带宽限制信号">附录：时间限制信号与带宽限制信号</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="附录卷积线性插值"><a class="header" href="#附录卷积线性插值">附录：卷积线性插值</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="附录拉格朗日插值"><a class="header" href="#附录拉格朗日插值">附录：拉格朗日插值</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="离散傅立叶变换"><a class="header" href="#离散傅立叶变换">离散傅立叶变换</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="现代世界"><a class="header" href="#现代世界">现代世界</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="从连续到离散"><a class="header" href="#从连续到离散">从连续到离散</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="符号和惯例1"><a class="header" href="#符号和惯例1">符号和惯例1</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="两个相互关联的网格"><a class="header" href="#两个相互关联的网格">两个相互关联的网格</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="了解离散傅里叶变换"><a class="header" href="#了解离散傅里叶变换">了解离散傅里叶变换</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="符号和惯例2"><a class="header" href="#符号和惯例2">符号和惯例2</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="更好地了解dft"><a class="header" href="#更好地了解dft">更好地了解DFT</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="离散矩形及其dft"><a class="header" href="#离散矩形及其dft">离散矩形及其DFT</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="离散采样和插值"><a class="header" href="#离散采样和插值">离散采样和插值</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="fft算法"><a class="header" href="#fft算法">FFT算法</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="线性时不变系统"><a class="header" href="#线性时不变系统">线性时不变系统</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="我们现在都是系统化者"><a class="header" href="#我们现在都是系统化者">我们现在都是系统化者</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="线性系统"><a class="header" href="#线性系统">线性系统</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="示例"><a class="header" href="#示例">示例</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="级联线性系统"><a class="header" href="#级联线性系统">级联线性系统</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="脉冲响应或者说分布理论中最深奥的事实所有电气工程师都熟知"><a class="header" href="#脉冲响应或者说分布理论中最深奥的事实所有电气工程师都熟知">脉冲响应，或者说分布理论中最深奥的事实，所有电气工程师都熟知</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="线性时不变lti系统"><a class="header" href="#线性时不变lti系统">线性时不变(LTI)系统</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="傅里叶变换与lti系统"><a class="header" href="#傅里叶变换与lti系统">傅里叶变换与LTI系统</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="因果关系"><a class="header" href="#因果关系">因果关系</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="希尔伯特变换"><a class="header" href="#希尔伯特变换">希尔伯特变换</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="滤波器终结"><a class="header" href="#滤波器终结">滤波器终结</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="致敬线性千年"><a class="header" href="#致敬线性千年">致敬：线性千年</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="n维傅里叶变换"><a class="header" href="#n维傅里叶变换">n维傅里叶变换</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="太空最后的边疆"><a class="header" href="#太空最后的边疆">太空:最后的边疆</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="了解高维傅里叶变换"><a class="header" href="#了解高维傅里叶变换">了解高维傅里叶变换</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="δ-1"><a class="header" href="#δ-1">δ</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="高维傅里叶级数"><a class="header" href="#高维傅里叶级数">高维傅里叶级数</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="iii晶格晶体和采样"><a class="header" href="#iii晶格晶体和采样">III、晶格、晶体和采样</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="高维dft"><a class="header" href="#高维dft">高维DFT</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="赤裸裸"><a class="header" href="#赤裸裸">赤裸裸</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="附录线路脉冲"><a class="header" href="#附录线路脉冲">附录：线路脉冲</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="附录分布的回撤"><a class="header" href="#附录分布的回撤">附录：分布的回撤</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="附录a适合学习的数学主题列表"><a class="header" href="#附录a适合学习的数学主题列表">附录A:适合学习的数学主题列表</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="附录b复数与复指数"><a class="header" href="#附录b复数与复指数">附录B:复数与复指数</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="b1复数"><a class="header" href="#b1复数">B.1:复数</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="b2复指数和欧拉方程"><a class="header" href="#b2复指数和欧拉方程">B.2:复指数和欧拉方程</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="b3欧拉方程的未来应用"><a class="header" href="#b3欧拉方程的未来应用">B.3:欧拉方程的未来应用</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="附录c几何和"><a class="header" href="#附录c几何和">附录C:几何和</a></h1>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            MathJax.Hub.Register.StartupHook('End', function() {
+                window.setTimeout(window.print, 100);
+            });
+        });
+        </script>
+
+    </div>
+    </body>
+</html>
