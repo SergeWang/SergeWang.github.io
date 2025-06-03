@@ -1,0 +1,243 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>介绍 - hmmbook</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">hmmbook</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="介绍"><a class="header" href="#介绍">介绍</a></h1>
+<p>机器学习技术已成功应用于多个行业，包括自动驾驶汽车、健康和天气预报等。深度学习是一类机器学习模型，它促进了人工智能在工业中的发展，是第四次工业革命的关键推动因素。这些机器学习模型通常在<strong>频率主义范式中使用梯度和基于进化的优化技术进行训练</strong>，其关键是<strong>梯度下降</strong>及其扩展。</p>
+<p>训练机器学习模型的频率主义方法的缺点是，训练后的模型无法<strong>自然地在模型的参数及其结果预测中产生不确定性</strong>。最近在解决这一局限性方面取得了进展，大多数方法通常是特定于模型的或已经具有贝叶斯等效方法。围绕模型预测形成不确定性对于复杂和关键任务系统尤其重要，例如自动驾驶汽车、患者的医疗诊断以及银行决定是否向客户提供信贷。在所有这些情况下，各利益相关者都有兴趣<strong>确定模型对其预测的确定程度</strong>。</p>
+<p>贝叶斯框架提供了一种概率稳健的方法来训练机器学习模型。这种方法提供了模型参数和最终模型预测的<strong>置信水平</strong>。它还允许使用<strong>贝叶斯证据度量</strong>（Bayesian evidence metric）在不同模型之间进行比较。贝叶斯方法通过<strong>先验分布</strong>，将数据观测之前已有的知识融入其中。然后，这些观测结果通过<strong>似然函数</strong>进行整合，并与我们的先验信念相结合，生成<strong>后验分布</strong>。因此，<strong>后验分布是根据新观测到的数据，对我们先前信念的细化</strong>。在贝叶斯范式中训练机器学习模型的一个根本限制是，贝叶斯方法往往计算成本高昂，因此难以扩展到更大、更复杂的模型。</p>
+<p>贝叶斯推理框架建立在<strong>贝叶斯定理</strong>的基础上，该定理指出，对于给定的模型 M（具有参数 w 和数据 D），我们有：</p>
+<p>\[P(w|D,M) = \frac{P(D|w,M)P(w|M)}{P(D|M)} \tag{1.1}\]</p>
+<p>其中，<br />
+\(P(w|D,M)\)是给定模型M和数据D的参数的后验值，<br />
+\(P(D|w,M)\)是数据的似然，<br />
+\(P(w|M)\)是参数的先验分布，以及<br />
+\(P(D|M)\)是模型M的贝叶斯证据，可用于模型选择。</p>
+<p>本书旨在<strong>推断给定模型参数 P(w|M) 的后验分布，以便使用该模型进行预测</strong>。后验分布通常没有闭式形式，因此通常需要<strong>数值方法</strong>来确定后验分布。在贝叶斯框架下，训练模型（即确定后验分布）的常用方法是<strong>变分推断</strong>技术和<strong>马尔可夫链蒙特卡洛</strong> (MCMC) 算法。</p>
+<p>变分推断及其扩展是一种近似推断技术，其原理是假设后验分布来自一类较简单的分布，其中常用的分布族是高斯分布。这使得<strong>采样问题可以转化为一个优化问题</strong>，其中最小化目标后验分布与近似分布之间的 Kullback-Leibler 散度。这一特性使得变分方法通常比 MCMC 方法快得多。</p>
+<p>蒙特卡罗 (MCMC) 算法优于变分技术，因为如果样本量足够大，它们可以保证收敛到正确的目标分布。这些方法的前提是构建一个样本马尔可夫链，随着样本数量\(n\rightarrow \infty\)的增加，该链渐近收敛到所需的平衡分布。根据定义，MCMC 算法生成的样本是自相关的，这意味着它们的方差将高于经典的蒙特卡洛技术。这类推理技术最初是由物理学家开发的，其中著名的例子包括 Metropolis 和 Hastings 的 Metropolis-Hastings (MH)算法以及 Duane 等人的 Hamiltonian Monte Carlo (HMC)。这些 MCMC 方法后来进入了计算统计学领域，如今它们被用于<strong>从各种复杂的概率模型中进行抽样</strong>。本书主要关注 HMC 及其变体，旨在开发 HMC 及其后代的改进版本。</p>
+<p>随机游走 MH 算法构成了更复杂算法的基础，例如 HMC 和 Metropolis 调整的朗之万算法 (MALA)。该算法的简单性和鲁棒性使其至今仍在各种应用中得到广泛应用。该方法从高斯分布中生成建议样本，其均值为最后接受的状态。该建议表现出随机游走行为，通常导致较低的样本接受率并生成强相关的样本。在实践中，高斯建议分布的尺度矩阵通常被视为对角矩阵，所有维度具有相同的标准差 \(\sigma \ge 0\) 。通过将尺度矩阵视为随机矩阵并允许其依赖于目标的局部几何形状来扩展随机游走 MH 仍然是一个开放的研究领域。</p>
+<p>HMC 是机器学习文献中最流行的 MCMC 算法，广泛应用于医疗健康、金融和宇宙学等领域。它的流行很大程度上源于它能够利用后验分布的一阶梯度信息来指导探索，从而抑制随机游走 MH 算法中观察到的随机游走行为。这种方法可以轻松应用于从欧几里得空间中任何可微目标进行采样。Betancourt 提供了 HMC 的几何基础，以及 HMC 几何遍历的条件——即该算法最终将访问参数空间的所有部分。</p>
+<p>尽管 HMC 是对 MH 算法的改进，但它仍然会导致生成的样本之间存在相对较高的自相关性。这促使 MCMC 算法的进一步发展，这些算法扩展了 HMC，以纳入后验的二阶梯度信息；利用随机质量矩阵作为辅助动量变量的技术；自动调整 HMC 参数的方法；利用非正则哈密顿动力学的算法；耦合 HMC 链以降低基于 HMC 的估计器方差的方法；以及使用修正或影子哈密顿量从高维目标中采样的方法。</p>
+<p>Girolami 和 Caldehad 的开创性工作引入了黎曼流形哈密顿蒙特卡罗 (RMHMC)，它通过利用二阶梯度信息考虑目标的局部几何形状，从而改进了 HMC。利用二阶梯度信息对于病态目标分布（例如 Neal 漏斗）尤为重要。与 HMC 相比，局部曲率信息的加入可以更有效地探索目标。RMHMC 的一个主要缺点是哈密顿量不可分离，这​​需要使用计算成本高昂的隐式积分方案。Cobb 等人为 RMHMC 引入了一种显式方案，该方案减轻了使用隐式广义蛙跳积分方案的计算负担，同时又不降低采样性能。</p>
+<p>量子启发式哈密顿蒙特卡罗 (QIHMC) 使用随机质量矩阵来模拟量子粒子的行为，而非经典粒子的固定质量。这使得它在尖峰和多模态分布上比 HMC 和 RMHMC 具有更好的采样效果。QIHMC 在执行时间没有明显增加的情况下实现了优于 HMC 的性能。QIHMC 的主要缺点是需要用户指定质量矩阵的分布，并且可能需要调整所选分布的参数。确定用于质量矩阵的最优分布仍然是一个开放的研究领域。</p>
+<p>Hoffman 和 Gelman 提出的No-U-Turn采样器 (NUTS) 可自动调整 HMC 的步长和轨迹长度参数。步长参数在老化阶段使用原始对偶平均法进行调整，目标是在生成的样本中达到用户指定的接受率水平。轨迹长度的设置方法是通过迭代加倍轨迹长度，直到满足特定条件。实证结果表明，NUTS 的效率至少与经过良好调整的标准 HMC 方法相当，有时甚至更高，而且无需用户干预或昂贵的调整运行。NUTS 也已推广到黎曼流形，从而允许自动调整 RMHMC 的参数。Wang 等人提出了一个贝叶斯优化框架，用于调整 HMC 和 RMHMC 采样器的参数。作者表明，他们的方法是遍历的，并且在某些情况下无需使用更复杂的采样器。实证结果表明，该方法每单位计算的有效样本数高于 NUTS。Hoffman 等人 《一种用于在哈密顿蒙特卡罗中设置轨迹长度的自适应蒙特卡罗蒙特卡罗 (MCMC) 方案》提出了一种自适应 MCMC 方案，用于调整 HMC 中的轨迹长度参数，并表明与 NUTS 相比，这种新技术通常能产生更高的有效样本量（以梯度评估次数归一化）。与 NUTS 不同，该方法还可以轻松并行运行并使用 GPU。</p>
+<p>磁哈密顿蒙特卡罗 (MHMC) 利用非正则动力学来更好地探索后验概率。MHMC 在 HMC 中引入磁场，除了 HMC 本身存在的力场之外。该磁场可加快收敛速度​​，并降低生成样本的自相关性。去除磁性成分后，MHMC 的性能与 HMC 相同。这意味着磁性成分增加了自由度，从而提升了 HMC 的性能。Brofos 和 Lederman 将 MHMC 扩展到流形，并比 MHMC 表现出色。然而，MHMC 的缺点是磁性成分必须由用户指定。在现有的 MHMC 文献中，尚无自动调整磁性成分的方法。此外，文献中尚未探讨在 MHMC 中使用随机质量矩阵作为动量变量，以及如何自动调整步长和轨迹长度参数。</p>
+<p>自从 Izaguirre 和 Hampton 在积分器依赖的影子哈密顿量方面取得开创性进展以来，文献中出现了大量的影子 HMC 方法。影子哈密顿量方法的前提是，与真正的哈密顿量相比，影子哈密顿量具有更好的守恒性。这使得人们可以使用更大的步长或对更大维度的问题进行采样，而与 HMC 方法相比，接受率不会显著下降。为了控制动量生成，作者引入了一个参数 c，它决定了真正的哈密顿量和影子哈密顿量的接近程度。动量生成会增加该方法的总计算时间。此外，该算法要求用户调整参数 c 以获得最佳结果。</p>
+<p>Sweet 等人通过对参数和动量进行正则变换，改进了 Izaguirre 和 Hampton 的工作。该正则变换被代入 Izaguirre 和 Hampton 中引入的不可分离哈密顿量，使其变为可分离的。正则变换产生了一种经过处理的蛙跳积分方案，与 Izaguirre 和 Hampton 最初的影子哈密顿混合蒙特卡洛 (HMC) 方法相比，其计算效率更高。这是因为不再需要为不可分离哈密顿量生成计算成本高昂的动量。此外，该方法没有引入新的超参数，其参数与传统 HMC 相同。作者将这种新方法称为可分离影子哈密顿混合蒙特卡洛 (S2HMC) 算法。S2HMC 参数的调整以及影子哈密顿量方法的一般性问题尚待文献探讨。</p>
+<p>Radivojevic 和 Akhmatskay 以及 Akhmatskaya 和 Reich 成功地利用部分动量更新在不可分离哈密顿量的背景下生成动量。Radivojevic 和 Akhmatskay 还考虑了高阶积分器及其相应的影子哈密顿量，并提出了混合匹配哈密顿量蒙特卡洛算法，该算法为 HMC 提供了更好的采样特性。Heide 等人为 RMHMC 中使用的广义蛙跳积分器推导出一个不可分离的影子哈密顿量，与从真实哈密顿量采样相比，其性能有所提升。作者采用了部分动量更新来生成动量，但没有提供调整他们引入的部分动量更新参数的方法。</p>
+<p>在 MHMC 和 S2HMC 中使用部分动量更新尚未被文献所探讨。Horowitz 对 HMC 进行了部分动量更新，发现它显著提升了 HMC 的性能。也就是说，在不损害蒙特卡洛方法合理性的情况下，保留部分动量链的动态特性可以提高性能。鉴于 MHMC 与 HMC 密切相关，可以预期对 MHMC 进行部分动量更新将获得与 Horowitz 在 HMC 上观察到的相同或更好的采样特性。同样，可以预期在 S2HMC 的处理式蛙跳积分器中加入部分动量更新可能会提升 S2HMC 的性能。</p>
+<p>尽管上文讨论的 HMC 及其变体是对其他 MCMC 方法的改进，但与其他 MCMC 方法一样，其生成的样本中仍然存在自相关的问题 [79,126]。这导致基于 HMC 的估计量方差较大。解决 MCMC 估计量方差较大的方法之一是利用 MCMC 耦合理论的结果 [99,111]。MCMC 方法的耦合已被用作证明马尔可夫链收敛行为的理论工具。最近，MCMC 耦合在 HMC 中的研究取得了良好的结果。马尔可夫链耦合也已用于提供无偏 HMC 估计量。Piponi 等人利用近似耦合理论构建了反哈密顿蒙特卡洛 (A-HMC) 算法。这些反相关链是通过运行第二个链并使用与第一个链动量符号相反的辅助动量变量来创建的。他们的结果表明，在HMC中加入对偶抽样可以提高有效样本量。在MHMC和S2HMC中加入对偶抽样以降低其方差方面，目前尚无文献探讨。</p>
+<p>在下一节中，我们将简要介绍MCMC的背景。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+                            <a rel="next prefetch" href="hmm/mcmc-background.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+                    <a rel="next prefetch" href="hmm/mcmc-background.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

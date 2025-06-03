@@ -1,0 +1,305 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>Jensen不等式及其结果 - itbook</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">itbook</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="jensen不等式及其影响"><a class="header" href="#jensen不等式及其影响">Jensen不等式及其影响</a></h1>
+<p>在本节中，我们将证明前面定义的一些简单性质。我们从凸函数的性质开始。</p>
+<p><strong>定义</strong>  函数\(f(x)\)在区间 \((a,b)\) 上是凸函数，如果对于每个 \(x_1, x_2 \in (a, b)\) 且 \(0 \le \lambda \le 1\)，</p>
+<p>\[f(\lambda x_1 + (1-\lambda)x_2) \le \lambda f(x_1) + (1-\lambda)f(x_2).\tag{2.72}\]</p>
+<p>如果仅当λ= 0 或λ= 1 时等式成立，则函数 f 被称为<strong>严格凸函数</strong>。</p>
+<p><strong>定义</strong> 如果 −f 是凸函数，则函数 f 是凹函数。如果函数始终位于任意弦的下方，则函数是凸函数。如果函数始终位于任意弦的上方，则函数是凹函数。</p>
+<p>凸函数的例子包括\(x^2\)、\(|x|\)，\(e^x\)，\(x\ \text{log}\ x\)(对于\(x \ge 0)\)等等。凹函数的例子包括\(\text{log}\ x)\)和\(\sqrt{x}\)，对于\(x \ge 0\)。图2.3展示了一些凸函数和凹函数的例子。请注意，线性函数\(ax +b\)既是凸也是凹的。凸性是信息论量（如熵和互信息）的许多基本性质的基础。在证明这些性质之前，我们先推导凸函数的一些简单结果。</p>
+<p><img src="convex-concave-functions.png" alt="" /></p>
+<p><strong>定理 2.6.1</strong> 如果函数 f 的二阶导数在某个区间上为非负（正），则该函数在该区间上是凸的（严格凸的）。</p>
+<p><strong>证明</strong>： 我们使用函数在\(x_0\)附近的泰勒级数展开
+\[f(x) = f(x_0) + f'(x_0)(x-x_0) + \frac{f''(x^{\star})}{2}(x-x_0)^2, \tag{2.73}\]</p>
+<p>其中，\(x^{\star}\)在 \(x_0\)和x之间。通过假设，\(f''(x^{\star}) \ge 0\)，所以，对于全部x，最后一项是非负的。</p>
+<p>我们设\(x_0 = \lambda x_1 + (1-\lambda)x_2\)并取 \(x = x_1\)，得到
+\[f(x_1) \ge f(x_0) + f'(x_0)((1-\lambda)(x_1-x_2)).\tag{2.74}\]</p>
+<p>类似的，取\(x=x_2\)，得到
+\[f(x_2) \ge f(x_0) + f'(x_0)(\lambda(x_2 - x_1)).\tag{2.75}\]</p>
+<p>(2.74)乘以\(\lambda\)，(2.75)乘以\(1- \lambda\)，并相加，我的得到(2.72)。严格凸性的证明过程与此相同。</p>
+<p>定理 2.6.1 可以让我们立即验证当 x ≥ 0 时 x²、ex 和 x log x 的严格凸性，以及当 x ≥ 0 时 log x 和 \(\sqrt{x}\) 的严格凹性。</p>
+<p>令 E 表示期望。因此，在离散情况下，\(EX = \sum_{x\in\mathcal{X}}p(x)x\)；在连续情况下，\(EX = \int\ xf(x)dx\)。</p>
+<p>下一个不等式是数学中最广泛使用的不等式之一，也是信息论中许多基本结果的基础。</p>
+<p><strong>定理 2.6.2</strong> （Jensen不等式）如果f是凸函数，且X是随机变量，
+\[Ef(X) \ge f(EX). \tag{2.76}\]</p>
+<p>此外，如果 f 是严格凸的，则 (2.76) 中的等式意味着 X = EX 的概率为 1（即 X 为常数）。</p>
+<p><strong>证明</strong>：我们通过对质点数量的归纳，证明了离散分布的这一结论。当 f 为严格凸函数时，等式成立的条件留给读者自行证明。</p>
+<p>对于双质点分布，不等式变为</p>
+<p>\[p_1f(x_1) + p_2f(x_2) \ge f(p_1x_1 + p_2x_2), \tag{2.77}\]</p>
+<p>这直接来自凸函数的定义。假设该定理对于具有 k − 1 个质点的分布成立。则对于\(i = 1,2,\dots, k-1\)，记 \({p_i}′ = p_i/(1 − p_k)\)，得到</p>
+<p>\begin{align}
+\sum_{i=1}^k p_if(x_i) &amp;= p_k f(x_k) + (1-p_k)\sum_{i=1}^{k-1}p_i'f(x_i)\tag{2.78}\\
+&amp;\ge p_kf(x_k) + (1-p_k)f(\sum_{i=1}^{k-1}p_i'x_i)\tag{2.79}\\
+&amp;\ge f(p_kx_k + (1-p_k)\sum_{i=1}^{k-1}p_i'x_i)\tag{2.80}\\
+&amp;=f(\sum_{i=1}^k p_ix_i),\tag{2.81}
+\end{align}</p>
+<p>其中第一个不等式来自归纳假设，第二个不等式来自凸性的定义。</p>
+<p>该证明可以通过连续性参数扩展到连续分布。</p>
+<p>我们现在用这些结果来证明熵和相对熵的一些性质。以下定理具有根本重要性。</p>
+<p><strong>定理 2.6.3</strong> （信息不等式）设\(p(x), q(x), x\in\mathcal{X}\)为两个概率质量函数。那么
+\[D(p||q) \ge 0\tag{2.81}\]</p>
+<p>当且仅当\(p(x)=q(x)\)时，对于所有x，等号成立。</p>
+<p><strong>证明</strong>：设 \(A = \{x: p(x)\gt 0\}\)为p(x)的支持集。那么</p>
+<p>\begin{align}
+-D(p||q) &amp;= -\sum_{x\in A}p(x)\ \text{log}\frac{p(x)}{q(x)}\tag{2.83}\\
+&amp;= \sum_{x\in A}p(x)\ \text{log}\frac{q(x)}{p(x)}\tag{2.84}\\
+&amp;\le \text{log}\sum_{x\in A}p(x)\frac{q(x)}{p(x)}\tag{2.85}\\
+&amp;= \text{log}\sum_{x\in A}q(x) \tag{2.86}\\
+&amp;\le \text{log}\sum_{x\in \mathcal{X}}q(x) \tag{2.87}\\
+&amp;= \text{log}\ 1\tag{2.88}\\
+&amp;= 0, \tag{2.89}
+\end{align}</p>
+<p>其中，（2.85）来自Jensen不等式。由于\(\text{log}\ t\)是t的严格凹函数，当且仅当\(q(x)/p(x)\)处处常量时【即，对于所有x，\(q(x) = cp(x)\)】，（2.85）中等号成立。因此，\(sum_{x\in A}q(x) = c\sum_{x\in A}p(x) = c\)。当且仅当\(\sum_{x\in A}q(x) = \sum_{x\in \mathcal{X}}q(x)= 1\)时，（2.87）中等号成立，意味着c=1。因此，当且仅当\(p(x) = q(x)\)时，对于全部x，得到\(D(p||q) = 0\)。</p>
+<p><strong>引理</strong> （互信息的非负性）对于任意两个随机变量X，Y，</p>
+<p>\[I(X;Y) \ge 0, \tag{2.90}\]</p>
+<p>当且仅当X和Y独立时，等号成立。</p>
+<p><strong>证明</strong>：\(I(X;Y) = D(p(x,y)||p(x)p(y)) \ge 0\)，当且仅当\(p(x,y) = p(x)p(y)\)（即X、Y独立）时，等号成立。</p>
+<p><strong>引理</strong><br />
+\[D(p(y|x)||q(y|x))\ge 0, \tag{2.91}\]</p>
+<p>当且仅当对于所有 y 和 x，p(y|x) = q(y|x) 且满足 p(x) &gt; 0 时，等号成立。</p>
+<p><strong>引理</strong>
+\[I(X;Y|Z) \ge 0, \tag{2.92}\]</p>
+<p>当且仅当，给定Z，X和Y条件独立时，等号成立。</p>
+<p>我们现在证明，在范围 X 上的均匀分布是该范围的最大熵分布。由此可见，任何在该范围内的随机变量的熵都不大于 log |X|。</p>
+<p><strong>定理 2.6.4</strong> \(H(X) \le \text{log}\ |\mathcal{X}|\)，其中\(|\mathcal{X}|\)表示范围X内的元素数量，当且仅当X是\(\mathcal{X}\)上的均匀分布时，等号成立。</p>
+<p><strong>证明</strong>：设\(u(x) = \frac{1}{\mathcal{X}}\)为\(\mathcal{X}\)上的均匀概率质量函数，且p(x)为x的概率质量函数。那么</p>
+<p>\[D(p || u) = \sum\ p(x)\text{log}\frac{p(x)}{u(x)} = \text{log}|\mathcal{X}| - H(X).\tag{2.93}\]</p>
+<p>因此，由于相对熵的非负性，</p>
+<p>\[0 \le D(p||u) = \text{log} |\mathcal{X}| - H(X). \tag{2.94}\]</p>
+<p><strong>定理 2.6.5</strong> （条件作用会降低熵）（信息不会造成伤害）</p>
+<p>\[H(X|Y) \le H(X)\tag{2.95}\]</p>
+<p>当且仅当X和Y独立时，等号成立。</p>
+<p><strong>证明</strong>： \(0\le I(X;Y) = H(X) - H(X|Y).\)</p>
+<p>直观地说，该定理表明，知道另一个随机变量 Y 只能减少 X 的不确定性。请注意，这仅在平均水平上成立。具体来说，\(H(X|Y\ =\ y)\)可能大于或小于或等于 H(X)，但平均而言，\(H(X|Y) = \sum_y p(y)H(X|Y=y) \le H(X)\)。例如，在法庭案件中，具体的新证据可能会增加不确定性，但平均而言，证据会减少不确定性。</p>
+<p><strong>示例 2.6.1</strong> 设(X,Y)有以下联合分布：</p>
+<p><img src="example-2-6-1.png" alt="" /></p>
+<p>那么 \(H(X) = H(\frac{1}{8}, \frac{7}{8}) = 0.544\ bit\)， \(H(X|Y=1) = \ 0\ bits\)，以及 \(H(X|Y=2)=1\ bit\)。我们计算 \(H(X|Y) = \frac{3}{4}H(X|Y = 1) + \frac{1}{4}H(X|Y=2)= 0.25\ bit\)。因此，当Y=2被观测到时，X的不确定性增加，Y=1被观测到时，X的不确定性减少，但平均不确定性减少。</p>
+<p><strong>定理 2.6.6</strong> （熵的独立性界限）设\(X_1,X_2,\dots,X_n\)根据\p((x_1,x_2,\dots,x_n)\)抽取。那么</p>
+<p>\[H(X_1,X_2,\dots,X_n) \le \sum_{i=1}^n H(X_i) \tag{2.96}\]</p>
+<p>当且就能当\(X_i\)独立时，等号成立。</p>
+<p><strong>证明</strong>： 通过熵的链式法则，</p>
+<p>\begin{align}
+H(X_1,X_2,\dots,X_n) &amp;= \sum_{i=1}^n H(X_i|X_{i-1},\dots,X_1) \tag{2.97}\\
+&amp;\le \sum_{i=1}^n H(X_i), \tag{2.98}
+\end{align}</p>
+<p>其中不等式直接来自定理2.6.5.当且仅当对于所有i，\(X_i\)独立于\(X_{i-1},\dots,X_1\)时（即，当且仅当\(X_i\)独立），等号成立。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../entropy/chain-rules.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../entropy/log-sum-inequality.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../entropy/chain-rules.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../entropy/log-sum-inequality.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>

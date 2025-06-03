@@ -169,6 +169,9 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="ppdm构建模块"><a class="header" href="#ppdm构建模块">PPDM构建模块</a></h1>
+<p>让我们来谈谈变分扩散模型的构建块。构建块有三类：过渡块(Transition Block)、初始块(initial block)和最终块(final block)。</p>
+<p><strong>过度块</strong> 第t个过渡块包含\(x_{t-1}\)， \(x_t\)和 \(x_{t+1}\)三个状态。有两种可能的路径可以到达状态\(x_t\)，如图2.2所示。</p>
+<p><img src="ddpm-transition-block.png" alt="" /></p>
 
                     </main>
 
@@ -199,6 +202,22 @@
 
         </div>
 
+        <!-- Livereload script (if served using the cli tool) -->
+        <script>
+            const wsProtocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+            const wsAddress = wsProtocol + "//" + location.host + "/" + "__livereload";
+            const socket = new WebSocket(wsAddress);
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload();
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
 
 
 

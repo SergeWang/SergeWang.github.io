@@ -1,0 +1,362 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>rlbook</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon.svg">
+        <link rel="shortcut icon" href="favicon.png">
+        <link rel="stylesheet" href="css/variables.css">
+        <link rel="stylesheet" href="css/general.css">
+        <link rel="stylesheet" href="css/chrome.css">
+        <link rel="stylesheet" href="css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">rlbook</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="介绍"><a class="header" href="#介绍">介绍</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="多臂老虎机"><a class="header" href="#多臂老虎机">多臂老虎机</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="多臂老虎机-1"><a class="header" href="#多臂老虎机-1">多臂老虎机</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="10臂测试平台"><a class="header" href="#10臂测试平台">10臂测试平台</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="增量实施"><a class="header" href="#增量实施">增量实施</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="追踪非平稳问题"><a class="header" href="#追踪非平稳问题">追踪非平稳问题</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="乐观的初始值"><a class="header" href="#乐观的初始值">乐观的初始值</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="置信上限动作选择"><a class="header" href="#置信上限动作选择">置信上限动作选择</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="梯度老虎机算法"><a class="header" href="#梯度老虎机算法">梯度老虎机算法</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="关联搜索上下文老虎机"><a class="header" href="#关联搜索上下文老虎机">关联搜索（上下文老虎机）</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="代理环境接口"><a class="header" href="#代理环境接口">代理环境接口</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="目标和奖励"><a class="header" href="#目标和奖励">目标和奖励</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="回报和回合"><a class="header" href="#回报和回合">回报和回合</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="回合和连续任务的统一符号"><a class="header" href="#回合和连续任务的统一符号">回合和连续任务的统一符号</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="策略和值函数"><a class="header" href="#策略和值函数">策略和值函数</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="最优策略和最优值函数"><a class="header" href="#最优策略和最优值函数">最优策略和最优值函数</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="最优和近似"><a class="header" href="#最优和近似">最优和近似</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="总结"><a class="header" href="#总结">总结</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="策略评估预测"><a class="header" href="#策略评估预测">策略评估（预测）</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="策略改进"><a class="header" href="#策略改进">策略改进</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="策略迭代"><a class="header" href="#策略迭代">策略迭代</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="值迭代"><a class="header" href="#值迭代">值迭代</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="异步动态规划"><a class="header" href="#异步动态规划">异步动态规划</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="广义策略迭代"><a class="header" href="#广义策略迭代">广义策略迭代</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="动态规划的效率"><a class="header" href="#动态规划的效率">动态规划的效率</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="总结-1"><a class="header" href="#总结-1">总结</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="蒙特卡洛预测"><a class="header" href="#蒙特卡洛预测">蒙特卡洛预测</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="动作值的蒙特卡洛估计"><a class="header" href="#动作值的蒙特卡洛估计">动作值的蒙特卡洛估计</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="蒙特卡洛控制"><a class="header" href="#蒙特卡洛控制">蒙特卡洛控制</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="无需探索起点的蒙特卡洛控制"><a class="header" href="#无需探索起点的蒙特卡洛控制">无需探索起点的蒙特卡洛控制</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="通过重要性采样进行离线策略预测"><a class="header" href="#通过重要性采样进行离线策略预测">通过重要性采样进行离线策略预测</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="折扣感知重要性采样"><a class="header" href="#折扣感知重要性采样">折扣感知重要性采样</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="按决策重要性采样"><a class="header" href="#按决策重要性采样">按决策重要性采样</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="总结-2"><a class="header" href="#总结-2">总结</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="td预测"><a class="header" href="#td预测">TD预测</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="td预测方法的优势"><a class="header" href="#td预测方法的优势">TD预测方法的优势</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="td0的最优性"><a class="header" href="#td0的最优性">TD（0）的最优性</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="sarsa在线td控制"><a class="header" href="#sarsa在线td控制">Sarsa：在线TD控制</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="q学习离线策略td控制"><a class="header" href="#q学习离线策略td控制">Q学习：离线策略TD控制</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="预期sarsa"><a class="header" href="#预期sarsa">预期Sarsa</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="最大化偏差和双重学习"><a class="header" href="#最大化偏差和双重学习">最大化偏差和双重学习</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="游戏后续状态和其他特殊情况"><a class="header" href="#游戏后续状态和其他特殊情况">游戏、后续状态和其他特殊情况</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="总结-3"><a class="header" href="#总结-3">总结</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="n步td预测"><a class="header" href="#n步td预测">n步TD预测</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="n步sarsa"><a class="header" href="#n步sarsa">n步Sarsa</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="n步非策略学习"><a class="header" href="#n步非策略学习">n步非策略学习</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="具有控制变量的决策方法"><a class="header" href="#具有控制变量的决策方法">具有控制变量的决策方法</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="无重要性采样的策略学习n步树备份算法"><a class="header" href="#无重要性采样的策略学习n步树备份算法">无重要性采样的策略学习：n步树备份算法</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="统一算法n步q0"><a class="header" href="#统一算法n步q0">统一算法：n步Q0</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="总结-4"><a class="header" href="#总结-4">总结</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="模型和规划"><a class="header" href="#模型和规划">模型和规划</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="dyna综合规划行动和学习"><a class="header" href="#dyna综合规划行动和学习">Dyna：综合规划、行动和学习</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="模型何时错误"><a class="header" href="#模型何时错误">模型何时错误</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="优先清扫"><a class="header" href="#优先清扫">优先清扫</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="预期vs样本更新"><a class="header" href="#预期vs样本更新">预期vs.样本更新</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="迹采样"><a class="header" href="#迹采样">迹采样</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="实时动态规划"><a class="header" href="#实时动态规划">实时动态规划</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="决策时规划"><a class="header" href="#决策时规划">决策时规划</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="启发式搜索"><a class="header" href="#启发式搜索">启发式搜索</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="滚动算法"><a class="header" href="#滚动算法">滚动算法</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="蒙特卡洛树搜索"><a class="header" href="#蒙特卡洛树搜索">蒙特卡洛树搜索</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="本章总结"><a class="header" href="#本章总结">本章总结</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="第i部分总结"><a class="header" href="#第i部分总结">第I部分总结</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="值函数近似"><a class="header" href="#值函数近似">值函数近似</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="预测目标ve"><a class="header" href="#预测目标ve">预测目标（VE）</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="随机梯度和半梯度方法"><a class="header" href="#随机梯度和半梯度方法">随机梯度和半梯度方法</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="线性方法"><a class="header" href="#线性方法">线性方法</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="线性方法特征构建"><a class="header" href="#线性方法特征构建">线性方法特征构建</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="手动选择步长参数"><a class="header" href="#手动选择步长参数">手动选择步长参数</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="非线性函数近似人工神经网络"><a class="header" href="#非线性函数近似人工神经网络">非线性函数近似：人工神经网络</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="最小二乘法td"><a class="header" href="#最小二乘法td">最小二乘法TD</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="基于记忆的函数近似"><a class="header" href="#基于记忆的函数近似">基于记忆的函数近似</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="基于核函数的近似"><a class="header" href="#基于核函数的近似">基于核函数的近似</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="深入策略学习兴趣与重点"><a class="header" href="#深入策略学习兴趣与重点">深入策略学习：兴趣与重点</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="总结-5"><a class="header" href="#总结-5">总结</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="回合半梯度控制"><a class="header" href="#回合半梯度控制">回合半梯度控制</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="半梯度n步sarsa"><a class="header" href="#半梯度n步sarsa">半梯度n步Sarsa</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="平均奖励持续任务的新问题设置"><a class="header" href="#平均奖励持续任务的新问题设置">平均奖励：持续任务的新问题设置</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="弃用折扣设置"><a class="header" href="#弃用折扣设置">弃用折扣设置</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="可微半梯度n步sarsa"><a class="header" href="#可微半梯度n步sarsa">可微半梯度n步Sarsa</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="总结-6"><a class="header" href="#总结-6">总结</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="半梯度方法"><a class="header" href="#半梯度方法">半梯度方法</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="非策略发散示例"><a class="header" href="#非策略发散示例">非策略发散示例</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="致命三合会"><a class="header" href="#致命三合会">致命三合会</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="线性值函数几何"><a class="header" href="#线性值函数几何">线性值函数几何</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="贝尔曼误差中的梯度下降"><a class="header" href="#贝尔曼误差中的梯度下降">贝尔曼误差中的梯度下降</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="贝尔曼误差不可学习"><a class="header" href="#贝尔曼误差不可学习">贝尔曼误差不可学习</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="梯度td方法"><a class="header" href="#梯度td方法">梯度TD方法</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="强调td方法"><a class="header" href="#强调td方法">强调TD方法</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="减少方差"><a class="header" href="#减少方差">减少方差</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="总结-7"><a class="header" href="#总结-7">总结</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="λ回报"><a class="header" href="#λ回报">λ回报</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="td0"><a class="header" href="#td0">TD0</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="n步截断回报方法"><a class="header" href="#n步截断回报方法">n步截断回报方法</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="重新更新在线λ回报算法"><a class="header" href="#重新更新在线λ回报算法">重新更新：在线λ回报算法</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="真正的在线td0"><a class="header" href="#真正的在线td0">真正的在线TD0</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="蒙特卡罗学习中的荷兰迹"><a class="header" href="#蒙特卡罗学习中的荷兰迹">蒙特卡罗学习中的荷兰迹</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="sarsa0"><a class="header" href="#sarsa0">Sarsa0</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="具有控制变量的非策略迹"><a class="header" href="#具有控制变量的非策略迹">具有控制变量的非策略迹</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="watkins-的-qλ-到-tree-backupλ"><a class="header" href="#watkins-的-qλ-到-tree-backupλ">Watkins 的 Q(λ) 到 Tree-Backup(λ)</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="稳定的非策略迹方法"><a class="header" href="#稳定的非策略迹方法">稳定的非策略迹方法</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="实施问题"><a class="header" href="#实施问题">实施问题</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="总结-8"><a class="header" href="#总结-8">总结</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="策略近似及其优势"><a class="header" href="#策略近似及其优势">策略近似及其优势</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="策略梯度定理"><a class="header" href="#策略梯度定理">策略梯度定理</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="强化蒙特卡洛策略梯度"><a class="header" href="#强化蒙特卡洛策略梯度">强化：蒙特卡洛策略梯度</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="带有基准的强化"><a class="header" href="#带有基准的强化">带有基准的强化</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="动作评判ac方法"><a class="header" href="#动作评判ac方法">动作评判（AC)方法</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="连续问题的策略梯度"><a class="header" href="#连续问题的策略梯度">连续问题的策略梯度</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="连续动作的策略参数化"><a class="header" href="#连续动作的策略参数化">连续动作的策略参数化</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="总结-9"><a class="header" href="#总结-9">总结</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="预测和控制"><a class="header" href="#预测和控制">预测和控制</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="经典条件反射"><a class="header" href="#经典条件反射">经典条件反射</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="工具性条件反射"><a class="header" href="#工具性条件反射">工具性条件反射</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="延迟强化"><a class="header" href="#延迟强化">延迟强化</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="认知地图"><a class="header" href="#认知地图">认知地图</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="习惯性和目标导向行为"><a class="header" href="#习惯性和目标导向行为">习惯性和目标导向行为</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="总结-10"><a class="header" href="#总结-10">总结</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="神经科学基础"><a class="header" href="#神经科学基础">神经科学基础</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="奖励信号强化信号值和预测误差"><a class="header" href="#奖励信号强化信号值和预测误差">奖励信号，强化信号、值和预测误差</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="奖励预测误差假说"><a class="header" href="#奖励预测误差假说">奖励预测误差假说</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="多巴胺"><a class="header" href="#多巴胺">多巴胺</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="奖励预测误差假说的实验支持"><a class="header" href="#奖励预测误差假说的实验支持">奖励预测误差假说的实验支持</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="td-误差多巴胺对应关系"><a class="header" href="#td-误差多巴胺对应关系">TD 误差/多巴胺对应关系</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="神经行动判别"><a class="header" href="#神经行动判别">神经行动判别</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="行动和判别学习法则"><a class="header" href="#行动和判别学习法则">行动和判别学习法则</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="享乐主义神经元"><a class="header" href="#享乐主义神经元">享乐主义神经元</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="集体强化学习"><a class="header" href="#集体强化学习">集体强化学习</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="大脑中基于模型的方法"><a class="header" href="#大脑中基于模型的方法">大脑中基于模型的方法</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="上瘾"><a class="header" href="#上瘾">上瘾</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="总结-11"><a class="header" href="#总结-11">总结</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="td-gammon"><a class="header" href="#td-gammon">TD-Gammon</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="塞缪尔的跳棋玩家"><a class="header" href="#塞缪尔的跳棋玩家">塞缪尔的跳棋玩家</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="沃森每日双倍投注"><a class="header" href="#沃森每日双倍投注">沃森每日双倍投注</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="优化内存控制"><a class="header" href="#优化内存控制">优化内存控制</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="人类水平的视频游戏"><a class="header" href="#人类水平的视频游戏">人类水平的视频游戏</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="掌握围棋"><a class="header" href="#掌握围棋">掌握围棋</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="热气流翱翔"><a class="header" href="#热气流翱翔">热气流翱翔</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="通用价值函数和辅助任务"><a class="header" href="#通用价值函数和辅助任务">通用价值函数和辅助任务</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="通过选项进行时间抽象"><a class="header" href="#通过选项进行时间抽象">通过选项进行时间抽象</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="观测和状态"><a class="header" href="#观测和状态">观测和状态</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="设计奖励信号"><a class="header" href="#设计奖励信号">设计奖励信号</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="遗留问题"><a class="header" href="#遗留问题">遗留问题</a></h1>
+<div style="break-before: page; page-break-before: always;"></div><h1 id="强化学习和人工智能的未来"><a class="header" href="#强化学习和人工智能的未来">强化学习和人工智能的未来</a></h1>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr.min.js"></script>
+        <script src="mark.min.js"></script>
+        <script src="searcher.js"></script>
+
+        <script src="clipboard.min.js"></script>
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            MathJax.Hub.Register.StartupHook('End', function() {
+                window.setTimeout(window.print, 100);
+            });
+        });
+        </script>
+
+    </div>
+    </body>
+</html>

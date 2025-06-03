@@ -1,0 +1,293 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>法诺不等式 - itbook</title>
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="../favicon.svg">
+        <link rel="shortcut icon" href="../favicon.png">
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        <link rel="stylesheet" href="../css/print.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        <link rel="stylesheet" href="../fonts/fonts.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="highlight-css" href="../highlight.css">
+        <link rel="stylesheet" id="tomorrow-night-css" href="../tomorrow-night.css">
+        <link rel="stylesheet" id="ayu-highlight-css" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+
+        <!-- MathJax -->
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "../";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="../toc.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+            }
+            sidebar_toggle.checked = sidebar === 'visible';
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="../toc.html"></iframe>
+            </noscript>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="sidebar-toggle" class="icon-button" for="sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </label>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        <button id="search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">itbook</h1>
+
+                    <div class="right-buttons">
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h1 id="法诺不等式"><a class="header" href="#法诺不等式">法诺不等式</a></h1>
+<p>假设我们知道随机变量Y，并且希望猜测一个相关随机变量X的值。法诺不等式将猜测随机变量 X 的<strong>误差概率</strong>与其<strong>条件熵 H(X|Y)</strong> 联系起来。这对于证明第7章中香农信道容量定理的逆定理至关重要。从问题 2.5 我们知道，给定一个随机变量 Y，随机变量 X 的条件熵为零，当且仅当 X 是 Y 的函数。因此，当且仅当 H(X|Y) = 0，我们才可以根据 Y 估计 X，且误差概率为零。</p>
+<p>扩展此论点，仅当条件熵 H(X|Y ) 很小时，我们才期望能够以较低的误差概率估计 X。法诺不等式量化了这个想法。假设我们希望估计一个服从分布 p(x) 的随机变量 X。我们观察到一个随机变量 Y，它与 X 的关系服从条件分布 p(y|x)。从 Y ，我们计算出一个函数 \(g(Y) = \hat{X}\) ，其中 \(\hat{X}\) 是 X 的估计值，取 \(\hat{\mathcal{X}}\) 中的值。我们不会限制字母表 \(\hat{\mathcal{X}}\)等于 \(\mathcal{X}\)，并且我们还允许函数 g(Y ) 是随机的。我们希望界定\(\hat{X}\ne X\) 的概率。我们观察到\(X \rightarrow Y \rightarrow \hat{X}\) 形成一个马尔可夫链。定义误差概率</p>
+<p>\[P_e = PR\{\hat{X} \ne X\}.\tag{2.129}\]</p>
+<p><strong>定理 2.10.1</strong> （法诺不等式）  对于任意估计器\(\hat{X}\)，使得\(X \rightarrow Y \rightarrow \hat{X}\)，其中\(P_e = PR\{\hat{X} \ne X\}\)，得到</p>
+<p>\[H(P_e) + P_e\ \text{log}\ |\mathcal{X}| \ge H(X|\hat{X})\ge H(X|Y).\tag{2.130}\]</p>
+<p>该不等式可以弱化为</p>
+<p>\[1 + P_e\ \text{log}|\mathcal{X}| \ge H(X|Y)\tag{2.131}\]</p>
+<p>或</p>
+<p>\[P_e \ge \frac{H(X|Y) - 1}{\text{log}\ |\mathcal{X}|}.\tag{2.132}\]</p>
+<p><strong>注</strong>（2.13 0）中的\(P_e=0\)意味着\(H（X|Y）=0\)，正如直觉所暗示的那样。</p>
+<p><strong>证明</strong>：我们首先忽视Y的作用，并证明（2.130）中的第一个不等式。然后，使用数据处理不等式来证明法诺不等式更传统的形式，由（2.130）中的第二个不等式给出。定义误差随机变量，</p>
+<p>\[
+E = \begin{cases}
+&amp;1\quad \text{if}\hat{X}\ne X,\\
+&amp;0\quad \text{if}\hat{X} = X.
+\end{cases}\tag{2.133}
+\]</p>
+<p>然后，对熵使用链式法则以两种不同方式展开\(H(E,X|\hat{X})\)，得到</p>
+<p>\begin{align}
+H(E,X|\hat{X}) &amp;= H(X|\hat{X}) + \overbrace{H(E|X, \hat{X})}^{=0}\tag{2.134}\\
+&amp;= \overbrace{H(E|\hat{X})}^{\le H(P_e)} + \overbrace{H(X|E,\hat{X})}^{\le P_e\ \text{log}|\mathcal{X}|}.\tag{2.135}
+\end{align}</p>
+<p>由于条件作用减少熵，\H(E|\hat{X} \le H(E) = H(P_e)\)。现在，由于E是X和\(\hat{X}\)的函数，条件熵\(H(E|X,\hat{X})\)等于0。而且，由于E是二值随机变量，\(H(E) = H(P_e)\)。余下的项，\(H(X|E, \hat{X})\)可以界定如下：</p>
+<p>\begin{align}
+H(X|E, \hat{X}) &amp;= Pr(E = 0)H(X|\hat{X}, E = 0) + Pr(E = 1)H(X|\hat{X}, E=1)\\
+&amp;\le (1- P_e)0 + P_e\ \text{log}|\mathcal{X}|,\tag{2.136}
+\end{align}</p>
+<p>由于给定 \(E = 0, X=\hat{X})，以及 \(E= 1\)，我们可以通过可能结果数量的对数来确定条件熵的上限。结合这些结果，我们得到</p>
+<p>\[H(P_e) + P_e\ \text{log}|\mathcal{X}| \ge H(X|\hat{X}).\tag{2.137}\]</p>
+<p>通过数据处理不等式，有\(I(X;\hat{X}) \le I(X;Y)\)，因为\(X\rightarrow Y\rightarrow \hat{X}\)是马尔科夫链，因此\(H(X|\hat{X}) \ge H(X|Y)\)。因此，得到</p>
+<p>\[H(P_e) + P_e\ \text{log}|\mathcal{X}| \ge H(X|\hat{X})\ge H(X|Y).\tag{2.1398}\]</p>
+<p><strong>引理</strong> 对于任意两个随机变量X和Y，设\(p = Pr(X\ne Y)\)。
+\[H(p) + p\ \text{log}|\mathcal{X}| \ge H(X|Y).\tag{2.139}\]</p>
+<p><strong>证明</strong>： 在法诺不等式中，设\(\hat{X} = Y\)。</p>
+<p>对于任意两个随机变量X和Y，若估计器\(g(Y)\)取集合\(\mathcal{X}\)中的值，我们可以通过替换\(\text{log}|\mathcal{X}|\)为\(\text{log}(|\mathcal{X}|-1)\)来强化不等式。</p>
+<p><strong>引理</strong> 设\(P_e = Pr(X\ne \hat{X})\)，且\(\hat{X}: \mathcal{Y}\rightarrow \mathcal{X}\)；那么</p>
+<p>\[H(P_e) + P_e\ \text{log}(|\mathcal{X}| -1) \ge H(X|Y).\tag{2.140}\]</p>
+<p><strong>证明</strong>：定理的证明没有改变，除了</p>
+<p>\begin{align}
+H(X|E,\hat{X}) &amp;= Pr(E=0)H(X|\hat{X},E=0) + Pr(E=1)H(X|\hat{X}, E=1)\tag{2.141}\\
+&amp;\le (1- P_e)0 + P_e\ \text{log}(|\mathcal{X}|-1),\tag{2.142}
+\end{align}</p>
+<p>给定 E = 0，\(X=\hat{X}\)，且给定 E = 1，X 的可能结果范围为 \(|\mathcal{X}|-1\)，我们可以通过 \(\text{log}(|\mathcal{X}|-1)\)（可能结果数量的对数）来确定条件熵的上限。代入该公式，我们得到了更强的不等式。</p>
+<p><strong>注</strong> 假设Y没有知识。从而，X必须无信息猜测。设\(X\in \{1,2,\dots,m\})和 \(p_1\ge p_2\ge \dots \ge p_m\)。那么X最好的猜测是\(\hat{X}=1\)，以及结果误差概率是\(P_e = 1 - p_1\)。法诺不等式变为</p>
+<p>\[H(P_e) + P_e\ \text{log}(m-1) \ge H(X).\text{2.143}\]</p>
+<p>概率质量函数</p>
+<p>\[(p_1,p_2,\dots,p_m) = (1- P_e, \frac{P_e}{m-1}, \dots,\frac{P_e}{m-1})\tag{2.144}\]</p>
+<p>用等式达到了这个界限。因此，法诺不等式是尖锐的。</p>
+<p>顺便引入一个新的不等式，将误差概率与熵联系起来。设 X 和 X′ 为两个独立同分布的随机变量，熵为 H(X)。X = X′ 处的概率为</p>
+<p>\[Pr(X=X') = \sum_x p^2(x).\tag{2.145}\]</p>
+<p>我们有以下不等式：</p>
+<p><strong>引理 2.10。1</strong> 若X和X'独立同分布（iid），熵为H(X)，
+\[Pr(X= X') \ge 2^{-H(X)},\tag{2.146}\]</p>
+<p>当且仅当X具有均匀分布时，等式成立。</p>
+<p><strong>证明</strong>：假设\(X \sim p(x)\)。通过Jensen不等式，有</p>
+<p>\[2^{E\ \text{log}\ p(X)}\le E\ 2^{\text{log}\ p(X)},\tag{2.147}\]</p>
+<p>意味着</p>
+<p>\[2^{-H(X)} = 2^{\sum p(x)\text{log}\ p(x)}\le \sum p(x)2^{\text{log}\ p(x)} = sum p^2(x). \tag{2.148}\]</p>
+<p><strong>推论</strong> 设 X, X'独立，\(X\sim p(x)\)，\(X'\sim r(x)\)， \(x,x' \in \mathcal{X}\)。那么</p>
+<p>\[Pr(X = X') \ge 2^{-H(p) - D(p||r)}, \tag{2.149}\]</p>
+<p>\[Pr(X = X') \ge 2^{-H(r) - D(r||p)}, \tag{2.150}\]</p>
+<p><strong>证明</strong>： 我们有</p>
+<p>\begin{align}
+2^{-H(p) - D(p||r)} &amp;= 2^{\sum p(x)\ \text{log}\ p(x) + \sum p(x)\ \text{log}\frac{r(x)}{p(x)}}\tag{2.151}\\
+&amp;= 2^{\sum p(x)\ \text{log}\ r(x)} \tag{2.152}\\
+&amp;\le \sum p(x)2^{\text{log}\ r(x)}\tag{2.153}\\
+&amp;= \sum p(x)r(x)\tag{2.154}\\
+&amp;= Pr(X = X'), \tag{2.155}
+\end{align}</p>
+<p>其中不等式来自Jensen不等式，和函数\(f(y)=2^y\)的凸性。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                            <a rel="prev" href="../entropy/sufficient-statistics.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+
+                            <a rel="next prefetch" href="../entropy/summary.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                    <a rel="prev" href="../entropy/sufficient-statistics.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+
+                    <a rel="next prefetch" href="../entropy/summary.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+            </nav>
+
+        </div>
+
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="../elasticlunr.min.js"></script>
+        <script src="../mark.min.js"></script>
+        <script src="../searcher.js"></script>
+
+        <script src="../clipboard.min.js"></script>
+        <script src="../highlight.js"></script>
+        <script src="../book.js"></script>
+
+        <!-- Custom JS scripts -->
+
+
+    </div>
+    </body>
+</html>
