@@ -142,6 +142,9 @@
                         <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
+                        <a href="https://sergewang.github.io/" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-home"></i>
+                        </a>
 
                     </div>
                 </div>
@@ -169,6 +172,20 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="高概率集合和典型集合"><a class="header" href="#高概率集合和典型集合">高概率集合和典型集合</a></h1>
+<p>根据\(A_{\epsilon}^{(n)}\)的定义，清楚地看出\(A_{\epsilon}^{(n)}\)是一个包含大多数概率的相当小的集合。但根据定义，不知道它是否是最小的这种集合。我们将证明典型集合本质上具有与最小集合相同数量的元素，并且指数为一阶。</p>
+<p><strong>定义</strong> 对于每个\(n = 1,2,\dots\)，设\(B_{\delta}^{(n)} \subset \mathcal{X}^n\)为最小集合，有</p>
+<p>\[Pr\{B_{\delta}^{(n)}\}\ge 1 - \delta. \tag{3.24}\]</p>
+<p>我们认为\(B_{\delta}^{(n)}\)必须与\(A_{\epsilon}^{(n)}\)有显著交集，因此必须有大约一样多的元素。在问题3.3.11中，我们概述了以下定理的证明。</p>
+<p><strong>定理 3.3.1</strong> 设\(X_1,X_2,\dots,X_n\)为服从p(x)的i.i.d。对于\(\delta \lt \frac{1}{2}\)和任意\(\delta’\gt 0\)，若\(Pr\{B_{\delta}^{(n)}\} \gt 1 - \delta\)，那么</p>
+<p>\[\frac{1}{n}\ \text{log}\ |B_{\delta}^{(n)}| \gt H - \delta’ \quad\text{for n sufficiently large.}\tag{3.25}\]</p>
+<p>因此，\(B_{\delta}^{(n)}\)必须有至少\(2^{nH}\)个元素，并且指数为一阶。但\(A_{\epsilon}^{(n)}\)有\(2^{n(H\pm\epsilon)}\)个元素。因此，\(A_{\epsilon}^{(n)}\)大小，与最小高概率集大致相同。</p>
+<p>我们现在将定义一些新的符号来表示指数中一阶的等式。</p>
+<p><strong>定义</strong> 符号\(a_n \dot{=}b_n\)表示</p>
+<p>\[\text{lim}_{n\rightarrow \infty}\frac{1}{n}\ \text{log}\frac{a_n}{b_n} = 0.\tag{3.26}\]</p>
+<p>因此，\(a_n \dot{=}b_n\)意味着\(a_n\)和\(b_n\)在指数一阶相等。</p>
+<p>我们现在可以重新陈述上面的结果：若\(\delta_n\rightarrow 0\)且\(\epsilon_n\rightarrow 0\)，那么</p>
+<p>\[|B_{\delta_n}^{(n)}| \dot{=} |A_{\epsilon_n}^{(n)}| \dot{=}2^{nH}.\tag{3.27}\]</p>
+<p>为说明\(A_{\epsilon_n}^{(n)}\)和\(B_{\delta_n}^{(n)}\)之间的区别，考虑一个参数p = 0.9 的伯努利序列\(X_1,X_2,\dots,X_n\)。【一个\(Bernoulli(\theta)\)随机变量是以概率\(\theta\)取值为1的二元随机变量。】典型序列在这种情况下，是1的比例接近0.9的序列。然而，这不包含最可能的单一序列，其为全1序列。集合\(B_{\delta_n}^{(n)}\)包括所有最可能序列，且因此也包括全1序列。定理3.3.1意味着\(A_{\epsilon_n}^{(n)}\)和\(B_{\delta_n}^{(n)}\)必须都包含大约90%为1的序列，且两个集合几乎大小相等。</p>
 
                     </main>
 

@@ -142,6 +142,9 @@
                         <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
+                        <a href="https://sergewang.github.io/" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-home"></i>
+                        </a>
 
                     </div>
                 </div>
@@ -169,6 +172,49 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="渐近均分性定理"><a class="header" href="#渐近均分性定理">渐近均分性定理</a></h1>
+<p>渐进均分性在如下定理中形式化。</p>
+<p><strong>定理 3.1.1</strong> （AEP） 若\(X_1,X_2,\dots\)是服从p(x)的独立同分布，那么</p>
+<p>\[-\frac{1}{n}\text{log}\ p(X_1,X_2,\dots,X_n) \rightarrow H(X)\quad \text{in probability.} \tag{3.2}\]</p>
+<p><strong>证明</strong>：独立随机变量的函数也是独立随机变量。因此，由于\(X_i\)是i.i.d，所以\(\text{log}\ p(X_i)\)也是。因此，通过弱大数定律，</p>
+<p>\begin{align}
+-\frac{1}{n}\ \text{log}\ p(X_1,X_2,\dots,X_n) &amp;= -\frac{1}{n}\sum_i \text{log}\ p(X_i)\tag{3.3}\\
+&amp;\rightarrow -E\ \text{log}\ p(X)\quad\text{in probability}\tag{3.4}\\
+&amp; = H(X), \tag{3.5}
+\end{align}</p>
+<p>定理得到证明。</p>
+<p><strong>定义</strong> 服从于\(p(x)\)的典型集\(A_{\epsilon}^{(n)}\)是序列\(x_1,x_2,\dots,x_n)\in \mathcal{X}^n\)的集合，性质为</p>
+<p>\[2^{-n(H(X) + \epsilon)} \le p(x_1,x_2,\dots,x_n)\le 2^{-n(H(X) - \epsilon)}.\tag{3.6}\]</p>
+<p>作为AEP的结果，我们可以证明集合\(A_{\epsilon}^{(n)}\)具有如下性质：</p>
+<p><strong>定理 3.1.2</strong></p>
+<ol>
+<li>若\(x_1,x_2,\dots,x_n)\in A_{\epsilon}^{(n)}\)，那么\(H(X) - \epsilon \le -\frac{1}{n}\ \text{log}\ p(x_1,x_2,\dots,x_n) \le H(X) + \epsilon\)。</li>
+<li>\(Pr\{A_{\epsilon}^{(n)}\} \gt 1-\epsilon\)，对于n足够大时。</li>
+<li>\(|A_{\epsilon}^{(n)}| \le 2^{n(H(X) + \epsilon)}\)，其中|A|表示集合A中元素数量。</li>
+<li>\(|A_{\epsilon}^{(n)}| \ge (1-\epsilon)2^{n(H(X) - \epsilon)}\)，对于足够大的n。</li>
+</ol>
+<p>因此，典型集概率近乎1，典型集的全部元素几乎等可能，且典型集中元素数量接近\(2^{nH}\)。</p>
+<p><strong>证明</strong>：性质(1)的证明直接来自\(A_{\epsilon}^{(n)}\)的定义。
+第二个性质直接遵从定理3.1.1，由于事件\((X_1,X_2,\dots,X_n) \in A_{\epsilon}^{(n)}\)的概率趋近1，随着\(n\rightarrow \infty\)。因此，对于任意\(\delta \gt 0\)，存在\(n_0\)使得，对于所有\(n\ge n_0\)，有</p>
+<p>\[Pr\Big\{\big|-\frac{1}{n}\ \text{log}\ p(X_1,X_2,\dots,X_n) - H(X)\big| \lt \epsilon\Big\} \gt 1 - \delta.\tag{3.7}\]</p>
+<p>设置\(\delta = \epsilon\)，我们得到定理的第二部分。\(\delta = \epsilon\)的相等将方便简化稍后的符号。</p>
+<p>为证明性质（3），我们记</p>
+<p>\begin{align}
+1 &amp;= \sum_{x\in\mathcal{X}^n}p(\textbf{x}) \tag{3.8}\\
+&amp;\ge \sum_{x\in A_{\epsilon}^{(n)}}p(\textbf{x})\tag{3.9}\\
+&amp;\ge \sum_{x\in A_{\epsilon}^{(n)}} 2^{-n(H(X)} + \epsilon)\tag{3.10}\\
+= 2^{-n(H(X) + \epsilon)}|A_{\epsilon}^{(n)}|, \tag{3.11}
+\end{align}</p>
+<p>其中，第二个不等式来自（3.6）。因此
+\[A_{\epsilon}^{(n)} \le 2^{n(H(X) + \epsilon)}. \tag{3.12}\]</p>
+<p>最后，对于足够大的n，\(Pr\{A_{\epsilon}^{(n)}\} \ge 1 -\epsilon\)，那么
+\begin{align}
+1 - \epsilon &amp;\le Pr\{A_{\epsilon}^{(n)}\} \tag{3.13}\\
+&amp;\le \sum_{x\in A_{\epsilon}^{(n)}} 2^{-n(H(X) -\epsilon)}\tag{3.14}\\
+&amp;= 2^{-n(H(X) - \epsilon)}|A_{\epsilon}^{(n)}|, \tag{3.15}
+\end{align}</p>
+<p>其中，第二个不等式来自（3.6）。因此</p>
+<p>\[|A_{\epsilon}^{(n)}| \ge (1-\epsilon)2^{n(H(X) - \epsilon)}, \tag{3.16}\]</p>
+<p>完成\(A_{\epsilon}^{(n)}\)性质的证明。</p>
 
                     </main>
 

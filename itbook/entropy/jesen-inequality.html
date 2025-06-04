@@ -142,6 +142,9 @@
                         <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
+                        <a href="https://sergewang.github.io/" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-home"></i>
+                        </a>
 
                     </div>
                 </div>
@@ -178,12 +181,12 @@
 <p><img src="convex-concave-functions.png" alt="" /></p>
 <p><strong>定理 2.6.1</strong> 如果函数 f 的二阶导数在某个区间上为非负（正），则该函数在该区间上是凸的（严格凸的）。</p>
 <p><strong>证明</strong>： 我们使用函数在\(x_0\)附近的泰勒级数展开
-\[f(x) = f(x_0) + f'(x_0)(x-x_0) + \frac{f''(x^{\star})}{2}(x-x_0)^2, \tag{2.73}\]</p>
-<p>其中，\(x^{\star}\)在 \(x_0\)和x之间。通过假设，\(f''(x^{\star}) \ge 0\)，所以，对于全部x，最后一项是非负的。</p>
+\[f(x) = f(x_0) + f’(x_0)(x-x_0) + \frac{f’’(x^{\star})}{2}(x-x_0)^2, \tag{2.73}\]</p>
+<p>其中，\(x^{\star}\)在 \(x_0\)和x之间。通过假设，\(f’’(x^{\star}) \ge 0\)，所以，对于全部x，最后一项是非负的。</p>
 <p>我们设\(x_0 = \lambda x_1 + (1-\lambda)x_2\)并取 \(x = x_1\)，得到
-\[f(x_1) \ge f(x_0) + f'(x_0)((1-\lambda)(x_1-x_2)).\tag{2.74}\]</p>
+\[f(x_1) \ge f(x_0) + f’(x_0)((1-\lambda)(x_1-x_2)).\tag{2.74}\]</p>
 <p>类似的，取\(x=x_2\)，得到
-\[f(x_2) \ge f(x_0) + f'(x_0)(\lambda(x_2 - x_1)).\tag{2.75}\]</p>
+\[f(x_2) \ge f(x_0) + f’(x_0)(\lambda(x_2 - x_1)).\tag{2.75}\]</p>
 <p>(2.74)乘以\(\lambda\)，(2.75)乘以\(1- \lambda\)，并相加，我的得到(2.72)。严格凸性的证明过程与此相同。</p>
 <p>定理 2.6.1 可以让我们立即验证当 x ≥ 0 时 x²、ex 和 x log x 的严格凸性，以及当 x ≥ 0 时 log x 和 \(\sqrt{x}\) 的严格凹性。</p>
 <p>令 E 表示期望。因此，在离散情况下，\(EX = \sum_{x\in\mathcal{X}}p(x)x\)；在连续情况下，\(EX = \int\ xf(x)dx\)。</p>
@@ -196,9 +199,9 @@
 <p>\[p_1f(x_1) + p_2f(x_2) \ge f(p_1x_1 + p_2x_2), \tag{2.77}\]</p>
 <p>这直接来自凸函数的定义。假设该定理对于具有 k − 1 个质点的分布成立。则对于\(i = 1,2,\dots, k-1\)，记 \({p_i}′ = p_i/(1 − p_k)\)，得到</p>
 <p>\begin{align}
-\sum_{i=1}^k p_if(x_i) &amp;= p_k f(x_k) + (1-p_k)\sum_{i=1}^{k-1}p_i'f(x_i)\tag{2.78}\\
-&amp;\ge p_kf(x_k) + (1-p_k)f(\sum_{i=1}^{k-1}p_i'x_i)\tag{2.79}\\
-&amp;\ge f(p_kx_k + (1-p_k)\sum_{i=1}^{k-1}p_i'x_i)\tag{2.80}\\
+\sum_{i=1}^k p_if(x_i) &amp;= p_k f(x_k) + (1-p_k)\sum_{i=1}^{k-1}p_i’f(x_i)\tag{2.78}\\
+&amp;\ge p_kf(x_k) + (1-p_k)f(\sum_{i=1}^{k-1}p_i’x_i)\tag{2.79}\\
+&amp;\ge f(p_kx_k + (1-p_k)\sum_{i=1}^{k-1}p_i’x_i)\tag{2.80}\\
 &amp;=f(\sum_{i=1}^k p_ix_i),\tag{2.81}
 \end{align}</p>
 <p>其中第一个不等式来自归纳假设，第二个不等式来自凸性的定义。</p>

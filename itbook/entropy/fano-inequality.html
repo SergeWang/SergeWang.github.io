@@ -142,6 +142,9 @@
                         <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
+                        <a href="https://sergewang.github.io/" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-home"></i>
+                        </a>
 
                     </div>
                 </div>
@@ -191,12 +194,12 @@ E = \begin{cases}
 H(E,X|\hat{X}) &amp;= H(X|\hat{X}) + \overbrace{H(E|X, \hat{X})}^{=0}\tag{2.134}\\
 &amp;= \overbrace{H(E|\hat{X})}^{\le H(P_e)} + \overbrace{H(X|E,\hat{X})}^{\le P_e\ \text{log}|\mathcal{X}|}.\tag{2.135}
 \end{align}</p>
-<p>由于条件作用减少熵，\H(E|\hat{X} \le H(E) = H(P_e)\)。现在，由于E是X和\(\hat{X}\)的函数，条件熵\(H(E|X,\hat{X})\)等于0。而且，由于E是二值随机变量，\(H(E) = H(P_e)\)。余下的项，\(H(X|E, \hat{X})\)可以界定如下：</p>
+<p>由于条件作用减少熵，\(H(E|\hat{X}) \le H(E) = H(P_e)\)。现在，由于E是X和\(\hat{X}\)的函数，条件熵\(H(E|X,\hat{X})\)等于0。而且，由于E是二值随机变量，\(H(E) = H(P_e)\)。余下的项，\(H(X|E, \hat{X})\)可以界定如下：</p>
 <p>\begin{align}
 H(X|E, \hat{X}) &amp;= Pr(E = 0)H(X|\hat{X}, E = 0) + Pr(E = 1)H(X|\hat{X}, E=1)\\
 &amp;\le (1- P_e)0 + P_e\ \text{log}|\mathcal{X}|,\tag{2.136}
 \end{align}</p>
-<p>由于给定 \(E = 0, X=\hat{X})，以及 \(E= 1\)，我们可以通过可能结果数量的对数来确定条件熵的上限。结合这些结果，我们得到</p>
+<p>由于给定 \(E = 0, X=\hat{X}\)，以及 \(E= 1\)，我们可以通过可能结果数量的对数来确定条件熵的上限。结合这些结果，我们得到</p>
 <p>\[H(P_e) + P_e\ \text{log}|\mathcal{X}| \ge H(X|\hat{X}).\tag{2.137}\]</p>
 <p>通过数据处理不等式，有\(I(X;\hat{X}) \le I(X;Y)\)，因为\(X\rightarrow Y\rightarrow \hat{X}\)是马尔科夫链，因此\(H(X|\hat{X}) \ge H(X|Y)\)。因此，得到</p>
 <p>\[H(P_e) + P_e\ \text{log}|\mathcal{X}| \ge H(X|\hat{X})\ge H(X|Y).\tag{2.1398}\]</p>
@@ -218,25 +221,25 @@ H(X|E,\hat{X}) &amp;= Pr(E=0)H(X|\hat{X},E=0) + Pr(E=1)H(X|\hat{X}, E=1)\tag{2.1
 <p>\[(p_1,p_2,\dots,p_m) = (1- P_e, \frac{P_e}{m-1}, \dots,\frac{P_e}{m-1})\tag{2.144}\]</p>
 <p>用等式达到了这个界限。因此，法诺不等式是尖锐的。</p>
 <p>顺便引入一个新的不等式，将误差概率与熵联系起来。设 X 和 X′ 为两个独立同分布的随机变量，熵为 H(X)。X = X′ 处的概率为</p>
-<p>\[Pr(X=X') = \sum_x p^2(x).\tag{2.145}\]</p>
+<p>\[Pr(X=X’) = \sum_x p^2(x).\tag{2.145}\]</p>
 <p>我们有以下不等式：</p>
-<p><strong>引理 2.10。1</strong> 若X和X'独立同分布（iid），熵为H(X)，
-\[Pr(X= X') \ge 2^{-H(X)},\tag{2.146}\]</p>
+<p><strong>引理 2.10。1</strong> 若X和X’独立同分布（iid），熵为H(X)，
+\[Pr(X= X’) \ge 2^{-H(X)},\tag{2.146}\]</p>
 <p>当且仅当X具有均匀分布时，等式成立。</p>
 <p><strong>证明</strong>：假设\(X \sim p(x)\)。通过Jensen不等式，有</p>
 <p>\[2^{E\ \text{log}\ p(X)}\le E\ 2^{\text{log}\ p(X)},\tag{2.147}\]</p>
 <p>意味着</p>
 <p>\[2^{-H(X)} = 2^{\sum p(x)\text{log}\ p(x)}\le \sum p(x)2^{\text{log}\ p(x)} = sum p^2(x). \tag{2.148}\]</p>
-<p><strong>推论</strong> 设 X, X'独立，\(X\sim p(x)\)，\(X'\sim r(x)\)， \(x,x' \in \mathcal{X}\)。那么</p>
-<p>\[Pr(X = X') \ge 2^{-H(p) - D(p||r)}, \tag{2.149}\]</p>
-<p>\[Pr(X = X') \ge 2^{-H(r) - D(r||p)}, \tag{2.150}\]</p>
+<p><strong>推论</strong> 设 X, X’独立，\(X\sim p(x)\)，\(X’\sim r(x)\)， \(x,x’ \in \mathcal{X}\)。那么</p>
+<p>\[Pr(X = X’) \ge 2^{-H(p) - D(p||r)}, \tag{2.149}\]</p>
+<p>\[Pr(X = X’) \ge 2^{-H(r) - D(r||p)}, \tag{2.150}\]</p>
 <p><strong>证明</strong>： 我们有</p>
 <p>\begin{align}
 2^{-H(p) - D(p||r)} &amp;= 2^{\sum p(x)\ \text{log}\ p(x) + \sum p(x)\ \text{log}\frac{r(x)}{p(x)}}\tag{2.151}\\
 &amp;= 2^{\sum p(x)\ \text{log}\ r(x)} \tag{2.152}\\
 &amp;\le \sum p(x)2^{\text{log}\ r(x)}\tag{2.153}\\
 &amp;= \sum p(x)r(x)\tag{2.154}\\
-&amp;= Pr(X = X'), \tag{2.155}
+&amp;= Pr(X = X’), \tag{2.155}
 \end{align}</p>
 <p>其中不等式来自Jensen不等式，和函数\(f(y)=2^y\)的凸性。</p>
 

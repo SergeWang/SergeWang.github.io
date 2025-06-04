@@ -142,6 +142,9 @@
                         <a href="../print.html" title="Print this book" aria-label="Print this book">
                             <i id="print-button" class="fa fa-print"></i>
                         </a>
+                        <a href="https://sergewang.github.io/" title="Git repository" aria-label="Git repository">
+                            <i id="git-repository-button" class="fa fa-home"></i>
+                        </a>
 
                     </div>
                 </div>
@@ -174,7 +177,7 @@
 <p>\[\sum_{i=1}^n a_i\ \text{log}\ \frac{a_i}{b_i} \ge \big(\sum_{i=1}^n a_i\big)\text{log}\frac{\sum_{i=1}^n a_i}{\sum_{i=1}^n b_i}\tag{2.99}\]</p>
 <p>当且仅当\(\frac{a_i}{b_i} = \text{const}\)时，等号成立。</p>
 <p>我们再次使用以下约定：\(0\ \text{log}\ 0 = 0\),如果 a &gt; 0，则 \(a\ \text{log}\frac{a}{0} = \infty\)，并且\(0\ \text{log}\ \frac{0}{0} = 0\)。这些很容易从连续性中得出。</p>
-<p><strong>证明</strong>：在不失一般性的前提下，假设\(a_i \gt 0\)和\(b_i\gt 0\)。函数\(f(t) =t \ \text{log}\ t\)是严格凸的，因为\(f''(t) =\frac{1}{t}\ \text{log}\ e\gt 0\)对于所有正t。因此，根据Jensen不等式，我们有</p>
+<p><strong>证明</strong>：在不失一般性的前提下，假设\(a_i \gt 0\)和\(b_i\gt 0\)。函数\(f(t) =t \ \text{log}\ t\)是严格凸的，因为\(f’’(t) =\frac{1}{t}\ \text{log}\ e\gt 0\)对于所有正t。因此，根据Jensen不等式，我们有</p>
 <p>\[\sum\alpha_if(t_i) \ge f(\sum\alpha_it_i)\tag{2.100}\]</p>
 <p>对于\(\alpha_i \ge 0, \sum_i\alpha_i = 1\)。设\(\alpha_i = \frac{b_i}{\sum_{j=1}^n b_j}\)且\(t_i = \frac{a_i}{b_i}\)，得到</p>
 <p>\[\sum\frac{a_i}{\sum b_j}\text{log}\frac{a_i}{b_i} \ge \sum\frac{a_i}{\sum b_j}\text{log}\sum\frac{a_i}{\sum b_j}, \tag{2.101}\]</p>
