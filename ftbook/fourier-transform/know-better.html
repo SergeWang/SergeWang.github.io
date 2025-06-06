@@ -172,6 +172,282 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="更好地了解傅里叶变换"><a class="header" href="#更好地了解傅里叶变换">更好地了解傅里叶变换</a></h1>
+<p>我们已经开始构建一个特定变换的宝库。现在让我们沿着另一条路继续走一会儿，并发展一些普遍的性质。在本次讨论中，以及在接下来的许多页中，我们将抛开所有关于变换是否存在、积分是否收敛以及你可能有的其他任何担忧。放松并享受旅程吧。严谨的警察已经下班了。</p>
+<h2 id="傅里叶变换对及其对偶性"><a class="header" href="#傅里叶变换对及其对偶性">傅里叶变换对及其对偶性</a></h2>
+<p>傅里叶变换和逆傅里叶变换的一个显著特征是这两个公式之间的对称性，这是傅里叶级数所没有的。对于傅里叶级数，系数由积分给出（将 f(t) 变换为 \(\hat{f}(n)\)），但逆变换就是级数本身。对于傅里叶变换，除了复指数中的负号外，\(\mathcal{F}\) 和 \(\mathcal{F}^{-1}\)  看起来相同。换句话说，如果在傅里叶变换公式中将 s 替换为 −s，则进行的就是逆傅里叶变换。同样，如果在逆傅里叶变换公式中将 t 替换为 −t，则进行的就是傅里叶变换。也就是说，</p>
+<p>\[\mathcal{F}f(-s) = \int_{-\infty}^{\infty}e^{-2\pi i(-s)t}f(t)\ dt = \int_{-\infty}^{\infty}e^{2\pi ist}f(t)\ dt = \mathcal{F}^{-1}f(s), \]</p>
+<p>\[\mathcal{F}^{-1}f(-t) = \int_{-\infty}^{\infty}e^{2\pi is(-t)}f(s)\ ds = \int_{-\infty}^{\infty}e^{-2\pi ist}f(s)\ ds = \mathcal{F}f(t). \]</p>
+<p>这可能会引起一些困惑，因为你通常会认为s和t这两个变量以某种方式与不同的域相关联：一个域表示正向变换，一个域表示逆向变换；一个域表示时间，一个域表示频率；然而，在这些公式中，同一个变量同时用于两个域。你必须克服这种困惑，因为它还会再次出现。纯粹从数学角度思考：变换是对一个函数进行运算，它会生成一个新的函数。为了写出这个公式，我必须在一个变量上求变换的值，但这个变量只是一个占位符，只要我在公式中能正确理解它的作用，它叫什么都无所谓。</p>
+<p>还要注意公式中符号的含义，以及同样重要的，它没有说明的内容。例如，第一个公式描述的是先对 f 进行傅里叶变换，然后在 −s 处求值时会发生什么；它不是\(\mathcal{F}(f(-s))\) 的公式，就像“先将 f 公式中的 s 变为 −s，然后进行变换”那样。我本可以把第一个显示的方程写成\((\mathcal{F}f)(-s) = \mathcal{F}^{-1}f(s)\)，并在 \(\mathcal{F}f\)周围加上一对括号来强调这一点，但我觉得这样看起来太笨拙了。这句话再怎么强调也不为过：请谨慎行事。</p>
+<hr />
+<p>方程式</p>
+<p>\[\mathcal{F}f(-s) = \mathcal{F}^{-1}f(s),\]</p>
+<p>\[\mathcal{F}^{-1}f(-t) = \mathcal{F}f(t)\]</p>
+<p>有时被称为变换的对偶性质。它们看起来像不同的陈述，但你可以从一个到另一个。在下一节中，我们将对此进行稍微不同的设置。</p>
+<p>这是一个如何使用对偶性的例子。我们知道</p>
+<p>\[\mathcal{F}\Pi = \text{sinc}\]</p>
+<p>因此</p>
+<p>\[\mathcal{F}^{-1} \text{sinc} = \Pi.\]</p>
+<p>通过“对偶”我们可以找到\(\mathcal{F}\ \text{sinc}\):</p>
+<p>\[\mathcal{F}\text{sinc}(t) = \mathcal{F}^{-1}\text{sinc}(-t) = \Pi(-t).\]</p>
+<p>被变量困扰？记住，左边是\((\mathcal{F}\text{sinc})(t)\)。现在，有了\(\Pi\)是偶数函数（\(\Pi(−t)=\Pi(t)\)）的额外知识，我们可以得出结论</p>
+<p>\[\mathcal{F}\text{sinc} = \Pi\ .\]</p>
+<p>让我们应用同样的论点来找到\(\mathcal{F}\text{sinc}^2\)。记住三角函数\(\Lambda\)及其结果</p>
+<p>\[\mathcal{F}\Lambda = \text{sinc}^2, \]</p>
+<p>因此</p>
+<p>\[\mathcal{F}^{-1} \text{sinc}^2 = \Lambda.\]</p>
+<p>那么</p>
+<p>\[\mathcal{F}\text{sinc}^2(t) = (\mathcal{F}^{-1}\text{sinc}^2)(-t) = \Lambda(-t)\]</p>
+<p>由于\(\Lambda\)是偶函数，</p>
+<p>\[\mathcal{F}\text{sinc}^2 = \Lambda\ .\]</p>
+<p><strong>对偶性和反向信号。</strong> 我更喜欢对偶性略有不同的理解，因为它抑制了变量。我觉得这样更容易记住。从信号 f(t) 开始，定义反转信号 \(f^{-}\)为</p>
+<p>\[f^{-}(t) = f(-t).\]</p>
+<p>请注意，双重反转会返回原始信号，</p>
+<p>\[(f^{-})^{-} = f\ .\]</p>
+<p>还要注意，定义函数是偶数还是奇数的条件很容易用反向信号来写：</p>
+<p>\[f \text{ is even if }f^{-} = f, \]</p>
+<p>\[f \text{ is odd if }f^{-} = -f. \]</p>
+<p>换言之，如果反转信号不会改变信号，则信号是偶数；如果反转信号会改变其符号，则信号就是奇数。我们将在下一节中对此进行讨论。</p>
+<p>很简单——反转信号就是反转时间。这是一个通用的操作，无论信号的性质如何，也无论变量是否是时间。使用这个符号，我们可以将第一个对偶方程\(\mathcal{F}f(-s) = \mathcal{F}^{-1}f(s)\)重写为</p>
+<p>\[(\mathcal{F}f)^{-} = \mathcal{F}^{-1}f \]</p>
+<p>且，我们可以重写第二个对偶方程，\(\mathcal{F}^{-1}f(-t) = \mathcal{F}f(t)\)为</p>
+<p>\[(\mathcal{F}^{-1}f)^{-} = \mathcal{F}f\ .\]</p>
+<p>这很清楚地表明，这两个方程说的是同一件事。一个只是另一个的反面。</p>
+<p>此外，使用该符号，结果\(\mathcal{F}\text{sinc} = \Pi\)，例如，会更快一点：</p>
+<p>\[\mathcal{F}\text{sinc} = (\mathcal{F}^{-1}\text{sinc})^{-} = \Pi^{-} = \Pi.\]</p>
+<p>同样地</p>
+<p>\[\mathcal{F}\text{sinc}^2 = (\mathcal{F}^{-1}\text{sinc}^2)^{-} = \Lambda^{-} = \Lambda \ .\]</p>
+<hr />
+<p>上述对偶性结果的一个自然变体是，问\(\mathcal{F}f^{-}\)（反转信号的傅里叶变换）会发生什么。让我们来解决这个问题。根据定义，</p>
+<p>\[\mathcal{F}f^{-}(s) = \int_{-\infty}^{\infty} e^{2\pi ist}f^{-}\ dt = \int_{-\infty}^{\infty}e^{-2\pi ist}f(-t)\ dt \ .\]</p>
+<p>此时只需做一件事，而且我们会经常做：在积分中改变变量。设 u = −t，使得 du = −dt，或 dt = −du。然后，当 t 从 \(-\infty\)到\(\infty\) 时，变量 u = −t 从 \(\infty\) 到 \(-\infty\)，从而得到</p>
+<p>\begin{align}
+\int_{-\infty}^{\infty}e^{-2\pi ist}f(-t)\ dt &amp;= \int_{\infty}^{-\infty}e^{-2\pi is(-u)}f(u)(-du)\\
+&amp;= \int_{-\infty}^{\infty}e^{2\pi isu}f(u)\ du\\
+&amp;\quad(\text{the minus sign, on the du, flips the limits back})\\
+&amp;= \mathcal{F}^{-1}f(s).
+\end{align}</p>
+<p>因此，</p>
+<p>\[\mathcal{F}f^{-} = \mathcal{F}^{-1}f.\]</p>
+<p>更巧妙的是，如果我们现在用前面的\(\mathcal{F}^{-1}f = (\mathcal{F}f)^{-}\)替换，我们有
+\[\mathcal{F}f^{-} = (\mathcal{F}f)^{-}.\]</p>
+<p>请仔细注意括号的位置。换言之：
+- 反转信号的傅里叶变换是信号傅里叶变换的反转</p>
+<p>我记得住那一个。</p>
+<p>为了完成这些问题，我们必须知道\(\mathcal{F}^{-1}f^{-}\)会发生什么。但我们不必在这里单独计算。使用我们之前的对偶结果，</p>
+<p>\[\mathcal{F}^{-1}f^{-} = (\mathcal{F}f^{-})^{-} = (\mathcal{F}^{-1}f)^{-}.\]</p>
+<p>换句话说，反转信号的傅里叶逆变换是信号傅里叶逆变换的反转。我们还可以更进一步，回到\(\mathcal{F}^{-1}f^{-} = \mathcal{F}f\)。</p>
+<hr />
+<p>因此，到目前为止，对偶关系的列表可以归结为
+\[\mathcal{F}f = (\mathcal{F}^{-1}f)^{-},\]</p>
+<p>\[\mathcal{F}f^{-} =\mathcal{F}^{-1}f. \]</p>
+<p>学习这些。还有一个：</p>
+<p>\[\mathcal{F}(\mathcal{F}f)(s) = f(-s) \quad\text{or}\quad \mathcal{F}(\mathcal{F}f) =f^{-}\quad\text{without the variable}.\]</p>
+<p>这是傅里叶逆变换的结果：</p>
+<p>\[\mathcal{F}(\mathcal{F}f)(s) = \int_{-\infty}^{\infty}e^{-2\pi ist}\mathcal{F}f(t)\ dt = \mathcal{F}^{-1}(\mathcal{F}f)(-s) = f(-s) = f^{-}(s).\]</p>
+<p>通常会去掉一组括号，并将结果写为</p>
+<p>\[\mathcal{F}\mathcal{F}f = f^{-}.\]</p>
+<p>当然还有</p>
+<p>\[\mathcal{F}\mathcal{F}f^{-} = f\ .\]</p>
+<p>基于此和之前的对偶结果，你可以验证</p>
+<p>\[\mathcal{F}\mathcal{F}\mathcal{F}\mathcal{F}f = f, \]</p>
+<p>写作\(\mathcal{F}^4 f = f\)，不是\(\mathcal{F}\)的四次方，而是\(\mathcal{F}\)应用了四次。因此，\(\mathcal{F}^4\)是<strong>恒等变换</strong>。有些人赋予这一事实神秘的意义。</p>
+<hr />
+<p>\(\mathcal{F}\mathcal{F}f = f^{-}\)的一个例子是\(\mathcal{F}\ \text{sinc}=\Pi\)的又一个推导，因为</p>
+<p>\[\mathcal{F}\text{sinc} = \mathcal{F}\mathcal{F}\Pi = \Pi^{-} = \Pi\ .\]</p>
+<p><strong>奇偶对称和傅里叶变换。</strong> 我们已经多次使用函数的奇偶对称性。对于实值函数，这些条件可以用图像的对称性来解释；偶函数的图像关于 y 轴对称，奇函数的图像通过原点对称。然而，奇函数和偶函数的代数定义既适用于复值函数，也适用于实值函数，尽管复值函数的几何图像缺失，因为我们无法绘制图像。一个函数可以是偶函数、奇函数或两者都不是，但除非它恒为零，否则它不可能同时是奇函数和偶函数。</p>
+<p>函数的对称性如何反映在其傅里叶变换的性质中？我不会给出完整的解释，但这里列举一些重要的例子。</p>
+<ul>
+<li>如果 f(x) 为偶函数或奇函数，则其傅里叶变换也为偶函数或奇函数。</li>
+</ul>
+<p>对于反转信号，我们必须证明，如果 f 为偶数，则 \((\mathcal{F}f)^{-} = \mathcal{F}f\)；如果 f 为奇数，则  \((\mathcal{F}f)^{-} = -\mathcal{F}f\)。利用我们上面推导的方程，计算速度非常快：</p>
+<p>\[(\mathcal{F}f)^{-} = \mathcal{F}f^{-} = \begin{cases}
+&amp;\mathcal{F}f\quad\quad&amp; \text{if f is even,}f^{-} = f, \\
+&amp;\mathcal{F}(-f) = -\mathcal{F}f&amp;\text{if if is odd,}f^{-} = -f.
+\end{cases}\]</p>
+<p>因为函数的傅里叶变换是复数，所以我们可以考虑 \(\mathcal{F}f(s)\)的其他对称性，即在复共轭下会发生的情况。例如：</p>
+<ul>
+<li>若 f(t)是实值函数，那么\((\mathcal{F}f)^{-} = \overline{\mathcal{F}f}\)，且 \(\mathcal{F}(f^{-}) = \overline{\mathcal{F}f}\)。</li>
+</ul>
+<p>在这里，值得重新引入变量，</p>
+<p>\[\mathcal{F}f(-s) = \overline{\mathcal{F}f(s)}.\]</p>
+<p>特别地，</p>
+<p>\[|\mathcal{F}f(-s)| = |\mathcal{F}f(s)|.\]</p>
+<p>对于实值信号，傅里叶变换的幅度在相应的正负频率上是相同的。这种情况始终存在，类似于实值周期函数的傅里叶系数所具有的共轭对称性。</p>
+<p>推导过程本质上与傅里叶系数相同，但重复练习并了解相似之处可能会有所帮助：</p>
+<p>\begin{align}
+\mathcal{F}f(-s) &amp;= \int_{-\infty}^{\infty}e^{2\pi ist}f(t)\ dt\\
+&amp;= \overline{\Big\{\int_{-\infty}^{\infty}e^{-2\pi ist}f(t)\ dt\Big\}}\\
+&amp;\quad (\overline{e^{-2\pi ist}} = e^{2\pi ist}, \text{ and } \overline{f(t)} = f(t) \text{ since } f(t)\ is \ real)\\
+&amp;= \overline{\mathcal{F}f(s)}.
+\end{align}</p>
+<p>如果函数 f(t) 本身具有对称性，我们可以进一步细化这一点。例如，结合前面的结果，记住，如果一个复数等于它的共轭，则它是实数；如果一个复数等于它的负共轭，则它是纯虚数。这样，​​我们有：</p>
+<ul>
+<li>
+<p>如果f是实值偶数函数，那么它的傅里叶变换是实值偶数。</p>
+</li>
+<li>
+<p>如果f是一个实值奇函数，那么它的傅里叶变换是纯虚数奇函数。</p>
+</li>
+</ul>
+<p>我们在矩形函数\(\Pi(t)\)和三角函数 \(\Lambda(t)\)的傅里叶变换中看到了这一点。这两个函数都是偶函数，它们的傅里叶变换 \(\text{sinc}\) 和 \(\text{sinc}^2\) 分别是偶函数和实函数。结果如此，真是太好了。</p>
+<h2 id="线性"><a class="header" href="#线性">线性</a></h2>
+<p>傅里叶变换最简单、最常被调用的属性之一是它是线性的（对函数进行操作）。这意味着</p>
+<p>\[\mathcal{F}(f + g)(s) = \mathcal{F}f(s) + \mathcal{F}g(s),\]</p>
+<p>\[\mathcal{F}(\alpha f)(s) = \alpha\mathcal{F}f(s)\quad \text{for any number }\alpha (\text{ real or complex}) .\]</p>
+<p>线性性质很容易通过积分的相应性质来检验。例如，</p>
+<p>\begin{align}
+\mathcal{F}(f+g)(s) &amp;= \int_{-\infty}^{\infty}(f(x) + g(x))e^{-2\pi isx}\ dx\\
+&amp;= \int_{-\infty}^{\infty}f(x)e^{-2\pi isx}\ dx + \int_{-\infty}^{\infty}g(x)e^{-2\pi isx}\ dx = \mathcal{F}f(s) + \mathcal{F}g(s).
+\end{align}</p>
+<p>线性也适用于\(\mathcal{F}^{-1}\)。</p>
+<p>在讨论奇函数及其变换时，我们在写\(\mathcal{F}(-f) = -\mathcal{F}f\)时使用了关于倍数的性质（未作注释）。我敢打赌，你并没有因为我们还没有正式说明这个性质而感到困扰。</p>
+<h2 id="移位定理"><a class="header" href="#移位定理">移位定理</a></h2>
+<p>变量 t（时间上的延迟）的移位对傅里叶变换的影响很简单。我们预期傅里叶变换 \(|\mathcal{F}f(s)|\) 的幅度保持不变，因为原始信号随时间移位不会改变频谱中任何一点的能量。因此，唯一的变化应该是 \(\mathcal{F}f(s)\) 的相移，而事实也确实如此。</p>
+<p>为了计算f（t-b）的傅里叶变换，对于常数b，我们有</p>
+<p>\begin{align}
+\int_{-\infty}^{\infty}f(t-b)e^{-2\pi ist}\ dt &amp;= \int_{-\infty}^{\infty}f(u)e^{-2\pi is(u+b)}\ du\\
+&amp;\quad (\text{substituting u = t - b; the limits still go from }-\infty \text{ to }\infty)\\
+&amp;= \int_{-\infty}^{\infty}f(u)e^{-2\pi isu}e^{-2\pi isb}\ du\\
+&amp;= e^{-2\pi isb}\int_{-\infty}^{\infty}f(u)e^{-2\pi isu}\ du\\
+&amp;(e^{-2\pi isb}\text{comes out of the integral because it doesn\t depend on u})\\
+&amp;= e^{-2\pi isb}\hat{f}(s).
+\end{align}</p>
+<p>捕捉这一特性的最佳符号可能是成对符号，即 \(f \rightleftharpoons F\)。因此：</p>
+<ul>
+<li>若  \(f \rightleftharpoons F\)，那么 \(f(t-b) \rightleftharpoons e^{-2\pi isb}F(s)\)。</li>
+</ul>
+<p>请注意，正如所承诺的那样，傅里叶变换的幅度在时间偏移下没有变化，因为前面的因子的幅度为1：</p>
+<p>\[|e^{-2\pi isb}F(s)| = |e^{-2\pi isb}|\ |F(s)| = |F(s)|\ .\]</p>
+<p>傅里叶逆变换的移位定理如下：</p>
+<ul>
+<li>若\(F(s) \rightleftharpoons f(t)\)，那么\(F(s-b) \rightleftharpoons e^{2\pi itb}f(t)\)。</li>
+</ul>
+<p>您可以从定义 \(mathcal{F}^{-1}\) 的积分或利用对偶性推导出这一点。</p>
+<h2 id="调制定理"><a class="header" href="#调制定理">调制定理</a></h2>
+<p>移位定理的第一个表亲是调制定理，该定理指出：</p>
+<ul>
+<li>若\(f(t) \rightleftharpoons F(s)\)，那么 \(e^{2\pi is_0t}f(t)\rightleftharpoons F(s-s_0)\)。</li>
+</ul>
+<p>即，时间上的相位变化对应于频率的偏移。这是频谱的调制。</p>
+<p>随时间改变相位的实值版本是：</p>
+<ul>
+<li>若 \(f(t) \rightleftharpoons F(s)\)， 那么 \(f(t)\text{cos}(2\pi s_0 t) \rightleftharpoons \frac{1}{2}(F(s-s_0) + F(s+s_0))\)。</li>
+</ul>
+<p>我打算把这些当作练习。</p>
+<p>对于傅里叶逆变换：</p>
+<ul>
+<li>若 \(F(s) \rightleftharpoons f(t)\)，那么 \(e^{2\pi it_0 s}F(s)\rightleftharpoons f(t+ t_0)\)。</li>
+<li>若 \(F(s)\rightleftharpoons f(t)\)，那么 \(F(s)\text{cos}(2\pi t_0 s)\rightleftharpoons \frac{1}{2}(f(t-t_0) + f(t+ t_0))\)。</li>
+</ul>
+<h2 id="拉伸相似定理"><a class="header" href="#拉伸相似定理">拉伸（相似）定理</a></h2>
+<p>如果我们在时间域中拉伸或收缩变量，傅里叶变换会发生什么变化？如果我们将 t 缩放到 at，f(at) 的傅里叶变换会发生什么变化？</p>
+<p>我们假定\(a \ne 0\)。首先假设\(a\gt 0\)。那么</p>
+<p>\begin{align}
+\int_{-\infty}^{\infty}f(at)e^{-2\pi ist}\ dt &amp;= \int_{-\infty}^{\infty}f(u)e^{-2\pi is(u/a)}\frac{1}{a}\ du \\
+&amp;(\text{代入 u = at; the limits go the same way because a &gt; 0})\\
+&amp;= \frac{1}{a}\int_{-\infty}^{\infty}f(u)e^{-2\pi i(s/a)u}\ du = \frac{1}{a}\mathcal{F}f(\frac{s}{a}).
+\end{align}</p>
+<p>若\(a\lt 0\)，当我们进行替换u=at时，积分的极限会颠倒：</p>
+<p>\begin{align}
+\int_{-\infty}^{\infty}f(at)e^{-2\pi ist}\ dt &amp;= \frac{1}{a}\int_{+\infty}^{-\infty}f(u)e^{-2\pi is(u/a)}\ du\\
+&amp;= -\frac{1}{a}\int_{-\infty}^{+\infty}f(u)e^{-2\pi i(s/a)u}\ du\\
+&amp;(\text{flipping the limits back introduces a minus sign})\\
+&amp;= -\frac{1}{a}\mathcal{F}f(\frac{s}{a}).
+\end{align}</p>
+<p>由于当a为负时−a为正（−a=|a|），我们可以将这两种情况结合起来，充分展示拉伸定理：</p>
+<ul>
+<li>若\(f(t)\rightleftharpoons F(s)\)， 那么 \(f(at)\rightleftharpoons \frac{1}{|a|}F(\frac{s}{a})\)。</li>
+</ul>
+<p>这有时也被称为相似定理，因为将变量从 x 更改为 ax（作为尺度的变化）也称为相似性。</p>
+<p>傅里叶逆变换的结果看起来是一样的：</p>
+<ul>
+<li>若\(F(s)\rightleftharpoons f(t)\)， 那么 \(F(as)\rightleftharpoons \frac{1}{|a|}f(\frac{t}{a})\)。</li>
+</ul>
+<hr />
+<p>一些重要的观察结果与拉伸定理相符。首先，这两个域之间显然存在倒数关系——又来了。</p>
+<p>再多说一点，假设a为正，这是最常见的情况。如果<strong>a很大</strong>（至少大于1），那么f(at)的图像相对于f(t)在水平方向上会被<strong>挤压</strong>。在频域中发生了一些不同的事情，实际上表现在两个方面。傅里叶变换是(1/a)F(s/a)。如果a很大，那么F(s/a)相对于F(s)会被<strong>拉伸</strong>，而不是被挤压。此外，由于变换是(1/a)F(a/s)，乘以1/a也会<strong>压缩</strong>变换的值。如果a很小（小于1），则情况相反。在这种情况下，f(at)的图像相对于f(t)在水平方向上会被拉伸，而傅里叶变换在水平方向上被压缩，在垂直方向上被拉伸。</p>
+<p>总而言之，<strong>在时域中拉伸的函数在频域中会被压缩</strong>，反之亦然。通常用来描述这一现象的说法是，信号无法同时在时域和频域中局部化（即集中在某一点）。我们将看到这一原理的更精确的表述。</p>
+<p>这有点类似于周期函数的频谱在长周期或短周期下的变化。假设周期为 T，回想一下，频谱中的点间距为 1/T，我们已经多次提到过这一点。如果 T 很大，那么可以认为函数在时域中是分散的——它会在重复之前持续很长时间。但是由于 1/T 较小，频谱会被挤压。另一方面，如果 T 较小，那么函数在时域中会被挤压——它在重复之前只持续很短的时间——而频谱会因为 1/T 较大而分散。</p>
+<p><strong>这里要小心</strong>。在上面的讨论中，我尽量不去讨论变换图的性质——尽管你可能本能地想到了这些术语，而我稍微提到了一点——因为变换通常是复数。通过观察时间域中 f(t) 的图（假设 f(t) 为实数）和频域中傅里叶变换的幅值 |Ff(s)|，你确实可以从几何角度看到这种挤压和扩散现象。</p>
+<p><strong>示例：拉伸的矩形。</strong>  “拉伸矩形”这个说法不太恰当，但这个函数在实际应用中经常出现。设 p &gt; 0，定义</p>
+<p>\[\Pi_p(t)=\begin{cases}&amp;1,\quad&amp;|t|\lt p/2,\\&amp;0,&amp;|t|\ge p/2.\end{cases}\]</p>
+<p>因此，\(\Pi_p\)是宽度为p的矩形函数。我们可以通过直接积分找到其傅里叶变换，但也可以通过拉伸定理，若我们观测到</p>
+<p>\[\Pi_p(t) = \Pi(t/p)\ .\]</p>
+<p>为了确保万无一失，写下\(\Pi\)的定义并遵照：</p>
+<p>\[\Pi(t/p) = \begin{cases}&amp;1,\quad &amp;|t/p| &lt; 1/2,\\&amp;0, &amp;|t/p|\ge 1/2\end{cases} =
+\begin{cases}&amp;1, \quad &amp;|t| \lt p/2,\\&amp;0, &amp;|t|\ge p/2\end{cases} = \Pi_p(t).\]</p>
+<p>通过应用拉伸定理到\(\Pi(t/p)\)，得到</p>
+<p>\[\mathcal{F}\Pi_p(s) = p\mathcal{F}\Pi(ps) = p\ \text{sinc}\ ps .\]</p>
+<p>这经常出现，足以记住。</p>
+<p>这里分别是p=1/5和p=5的傅里叶变换对的图。注意轴上的刻度。</p>
+<p><img src="stretched-rect.png" alt="" /></p>
+<p><strong>示例：拉伸三角形</strong>。让我们加入拉伸三角函数及其傅里叶变换；这些也会经常出现。对于p&gt;0，让</p>
+<p>\[\Lambda_p(t) = \Lambda(t/p) = \begin{cases}&amp;1 - |t/p|,\quad&amp;|t|\le p,\\&amp;0,&amp;|t|\ge p.\end{cases}\]</p>
+<p>注意三角的宽度是2p。</p>
+<p>以下是p=0.5,1,2时\(\Lambda_p(t)\)的图：</p>
+<p><img src="stretch-triangle.png" alt="" /></p>
+<p>根据应用于\(\Lambda(t/p)\)的拉伸定理，我们得到</p>
+<p>\[\mathcal{F}\Lambda_p(s) = p\mathcal{F}\Lambda(ps) = p\ \text{sinc}^2(ps).\]</p>
+<p>再一次，值得铭记。</p>
+<p>这是相应傅里叶变换的图。把它们匹配起来！</p>
+<p><img src="stretch-triangle-ft.png" alt="" /></p>
+<p><strong>示例：双边指数衰减。</strong> 这里有一个例子，说明如何结合我们开发的属性来查找另一个常见信号的变换。让我们求双边指数衰减的傅里叶变换</p>
+<p>\[g(t) = e^{-a|t|}, \quad \mathcal{a}\text{ a positive constant.}\]</p>
+<p>这是a=0.5,1,2时g（t）的图。匹配他们！</p>
+<p><img src="two-side-exp-decay.png" alt="" /></p>
+<p>我们可以直接计算变换；代入傅里叶变换公式就能得到积分。然而，当我们找到单边指数衰减的傅里叶变换时，就已经完成了一半的工作。回想一下</p>
+<p>\[f(t) = \begin{cases}&amp;0,\quad &amp;t\lt 0,\\&amp;e^{-at},&amp;t\ge 0\end{cases} \quad\Rightarrow \quad F(s) = \mathcal{F}f(s) = \frac{1}{2\pi is + a}\]</p>
+<p>现在意识到</p>
+<p>\[g(t)\quad \text{is almost eqaul to }f(t) + f(-t).\]</p>
+<p>除了在原点 g(0) = 1 且 f(t) 和 f(-t) 都为 1 的情况下，它们是一致的。但是，如果两个函数除一点外都一致，那么在对 \(e^{-2\pi ist}\)进行积分时，显然会得到相同的结果。因此</p>
+<p>\begin{align}
+G(s) = \mathcal{F}g(s) &amp;= F(s) + F(-s)\\
+&amp;= \frac{1}{2\pi is + a} + \frac{1}{-2\pi is + a} = \frac{2a}{a^2 + 4\pi^2s^2} \ .
+\end{align}</p>
+<p>注意，g(t) 是偶函数，G(s) 是实数。这类快速检查正确性和一致性（偶数、奇数、实数或纯虚数等）的方法在计算时非常有用。以下是 a = 0.5, 1, 2 的 G(s) 图。把它们匹配起来！</p>
+<p><img src="two-side-exp-decay-ft.png" alt="" /></p>
+<p>接下来我们将看到双边指数衰减在解决二阶常微分方程中的应用。</p>
+<p><strong>示例：其他高斯分布</strong>。如上所述，还有其他方法可以对高斯分布进行归一化。例如，我们可以代替\(e^{-\pi x^2}\)取</p>
+<p>\[g(x) = \frac{1}{\sigma\sqrt{2\pi}}e^{-x^2/2\sigma^2}\ .\]</p>
+<p>你可能在概率统计应用中见过：均值为零，标准差为 σ（或方差为 σ²）。均值为 μ，标准差为 σ 的高斯分布是以下移位版本：</p>
+<p>\[g(x,\mu,\sigma) = \frac{1}{\sigma\sqrt{2\pi}}e^{-(x-\mu)^2/2\sigma^2}\ .\]</p>
+<p>从几何学上讲，σ 衡量的是曲线相对于均值的尖峰化程度或扩散程度。从图中可以看出，拐点出现在 μ ± σ 处；因此，如果 σ 较大，曲线扩散；如果 σ 较小，曲线则呈现尖峰状。图下的面积仍然为 1。下一章讲解中心极限定理时，我们会再次遇到高斯分布。</p>
+<p>我们这里的问题是，当高斯函数以这种方式修改时，傅里叶变换会发生什么。这可以通过平移和拉伸的结果来回答。为了简单起见，我们以 μ = 0 为例。为了求傅里叶变换，我们可以应用相似定理：f(ax) ⇋ (1/|a|)F (s/a)。当 \(a = 1/\sigma\sqrt{2\pi}\) 时，得到</p>
+<p>\[g(t) = \frac{1}{\sigma\sqrt{2\pi}}e^{-x^2/2\sigma^2} \quad\Rightarrow\quad \mathcal{F}g(s) = e^{-2\pi^2\sigma^2s^2}\ ,\]</p>
+<p>仍然是高斯分布，但并非我们一开始的精确复制。注意，当 μ = 0 时，高斯分布为偶函数，而傅里叶变换为实数且偶函数。</p>
+<h2 id="移位运算符和缩放运算符"><a class="header" href="#移位运算符和缩放运算符">移位运算符和缩放运算符</a></h2>
+<p>有时将移位和缩放视为对信号的操作会很有帮助。我们定义对信号 f(x) 进行操作的延迟算子（或移位算子或平移算子）\(\tau_b\) 为</p>
+<p>\[\tau_b f(x) = f(x-b)\]</p>
+<p>（“\(\tau\)“表示 “转换”(translation)）。我们定义缩放算法，或拉伸算子\(\sigma_a\)为</p>
+<p>\[\sigma_af(x) = f(ax)\]</p>
+<p>（“\(\sigma\)“表示 “缩放”(scaling)）。你也可以用系统术语来思考，其中输入是信号f（x），输出是延迟信号\(\tau_bf(x) = f(x-b)\)，或缩放信号\(\sigma_a f(x) = f(ax)\)。</p>
+<p>如果没有别的，引入这些运算符可能会使移位定理和缩放定理的表述更清晰，即变量之间的冲突更少：</p>
+<p>\[\mathcal{F}(\tau_bf)(s) = e^{-2\pi isb}\mathcal{F}f(s),\]</p>
+<p>\[\mathcal{F}(\sigma_af)(s) = \frac{1}{|a|}\mathcal{F}f(\frac{s}{a}).\]</p>
+<p>我们甚至可以将拉伸定理更进一步，记作</p>
+<p>\[\frac{1}{|a|}\mathcal{F}f(\frac{s}{a}) = \frac{1}{|a|}\sigma_{1/a}(\mathcal{F}f)(s), \]</p>
+<p>这样做可以让我们完全抑制s变量，如果你喜欢这样的话：</p>
+<p>\[\mathcal{F}(\sigma_af) = \frac{1}{|a|}\sigma_{1/a}(\mathcal{F}f).\]</p>
+<p>对于逆傅里叶变换</p>
+<p>\[\mathcal{F}^{-1}(\tau_bf)(t) = e^{2\pi itb}\mathcal{F}^{-1}f(t)\ .\]</p>
+<p>\(\mathcal{F}^{-1}\)根据\(\sigma_a\)的拉伸定理只是将\(\mathcal{F}^{-1}\)换成了\(\mathcal{F}\)。</p>
+<p>我见过，当平移和缩放结合在一起时，经常会让人感到困惑，例如 \(\tau_b(\sigma_af)\)与 \(\sigma_a(\tau_bf)\)。它们并不相同。接下来，让我们慢慢来理解这一点。</p>
+<p><strong>组合移位和拉伸</strong>。 我们可以结合平移定理和拉伸定理来找到 f(ax − b) 的傅里叶变换公式，但我们先准备好一个例子。</p>
+<p>通过直接积分，很容找到\(f(x) = \Pi((x-3)/2) = \Pi(\frac{1}{2} - \frac{3}{2})\)的傅里叶变换。移位缩放的矩形函数仅在\(2 &lt; t &lt; 4\) 时为非零，因此</p>
+<p>\begin{align}
+F(s) &amp;= \int_2^4 e^{-2\pi isx}\ dx \\
+&amp;= -\frac{1}{2\pi is}e^{-2\pi isx}\Big]_{x=2}^{x=4} = -\frac{1}{2\pi is}(e^{-8\pi is} - e^{-4\pi is}).
+\end{align}</p>
+<p>我们仍然可以引入sinc函数，但分解有点棘手：</p>
+<p>\[e^{-8\pi is} - e^{-4\pi is} = e^{-6\pi is}(e^{-2\pi is} - e^{2\pi is}) = e^{-6\pi is}(-2i)\ sin\ 2\pi s\ .\]</p>
+<p>这是例子的一部分。代入得到</p>
+<p>\[F(s) = e^{-6\pi is}\frac{\text{sin}\ 2\pi s}{\pi s} = 2 e^{-6\pi is}\ \text{sin}\ 2s \ .\]</p>
+<p>傅里叶变换变为复数，因为移动矩形函数破坏了它的对称性。</p>
+<p>这是\(\Pi((x-3)/2) \)和\(4\ \text{sinc}^22s\)（其傅里叶变换幅值的平方）的图。同样，查看后者并不能提供关于光谱相位的信息，只能提供关于能量的信息。</p>
+<p><img src="rect-shit-scretch.png" alt="" /></p>
+<hr />
+<p>现在我们来计算一下通式。对于 f(ax − b) 的傅里叶变换，只需代入傅里叶变换积分即可。我们已经习惯了这种计算方式，所以就不赘述了：</p>
 
                     </main>
 

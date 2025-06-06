@@ -172,6 +172,53 @@
                 <div id="content" class="content">
                     <main>
                         <h1 id="滤波器再现"><a class="header" href="#滤波器再现">滤波器再现</a></h1>
+<p>我们最初使用卷积的一个应用是建立和研究几个简单的滤波器。让我们回顾一下 3.4 节中提到的术语和一些未完成的工作。未滤波的输入 v(t) 和滤波后的输出 w(t) 通过与脉冲响应 h(t) 的卷积建立关联：</p>
+<p>\[w(t) = (h\star v)(t).\]</p>
+<p>（我们还没有准备好解释为什么 h 被称为脉冲响​​应。）滤波器的动作在频域中更容易理解，因为根据卷积定理，它通过乘法起作用：</p>
+<p>\[W(s) = H(s)V(s).\]</p>
+<p>这里</p>
+<p>\[W = \mathcal{F}w,\quad H =\mathcal{F}h, \quad\text{and}\quad V = \mathcal{F}v.\]</p>
+<p>\(H(s)\)被称为传递函数（transfer function）。</p>
+<p>最简单的例子是具有传递函数的低通滤波器，其他例子都可以由此构建：</p>
+<p>\[\text{Low}(s) = \prod_{2v_c}(s) = \prod(\frac{s}{2v_c}) = \begin{cases}
+&amp;1,\quad &amp;|s|\lt v_c,\\
+&amp;0, &amp;|s| \ge v_c.\end{cases}
+\]</p>
+<p>该脉冲响应是</p>
+<p>\[\text{low}(t) = 2v_c sinc(2v_ct),\]</p>
+<p>一个缩放的sinc函数。来自输入v（t）的输出w（t）是卷积</p>
+<p>\[w(t) = v(t)\star 2v_c sinc(2v_ct)=2v_c\int_{-\infty}^{\infty}sinc(2v_c(t-\tau))v(\tau)\ d\tau.\]</p>
+<p><strong>高通滤波器</strong>。回到第3章，我们展示了理想高通滤波器的传递函数图：</p>
+<p><img src="ideal-high-pass-filter-graph.png" alt="" /></p>
+<p>传递函数的公式为</p>
+<p>\[\text{High}(s) = 1 - Low(s) = 1 - \prod_{2v_c}(s),\]</p>
+<p>其中，\(v_c\)是截断频率。那时，我们不能简单通过取逆傅里叶变换完成分析，因为没有\(\delta\)。现在可以了。该脉冲响应是</p>
+<p>\[\text{high}(t) = \delta(t) = 2v_csinc(2v_ct).\]</p>
+<p>对于输入\(v(t)\)，输出是</p>
+<p>\begin{align}
+w(t) &amp;= (\text{high}\ \star v)(t)\\
+&amp;= (\delta(t) - 2v_c sinc(2v_ct))\star v(t)\\
+&amp;= v(t) - 2v_c\int_{-\infty}^{\infty} sinc(2v_c(t-\tau))v(\tau)\ d\tau.
+\end{align}</p>
+<p>\(\delta\)δ的卷积性质在这个公式中的作用再次向我们表明，高通滤波器实际上减去了部分信号。</p>
+<p><strong>陷波滤波器</strong>。陷波滤波器的传递函数仅为
+\[1 - (\text{transfer function for band-pass filter})\]</p>
+<p>它看起来如下：</p>
+<p><img src="notch-filter.png" alt="" /></p>
+<p>陷波内的频率被滤除，其他所有频率保持不变。假设陷波的中心位置为\(\pm v_0\)，宽度为\(2ν_c\)。对于截断频率为\(ν_c\)的低通滤波器，其传递函数公式为：</p>
+<p>\[\text{Notch}(s) = 1 - (\text{Low}(s-v_0) + \text{Low}(s+v_0)).\]</p>
+<p>对于脉冲响应，我们得到</p>
+<p>\begin{align}
+\text{notch}(t) &amp;= \delta(t) - (e^{-2\pi i v_0 t}\text{low}(t) + e^{2\pi v_0t}\text{low}(t))\\
+&amp;= \delta(t) - 4v_c\ \text{cos}(2\pi v_0 t)sinc(2v_c t).
+\end{align}</p>
+<p>因此</p>
+<p>\begin{align}
+w(t) &amp;= (\delta(t) - 4v_c \text{cos}(2\pi v_0 t) sinc(2v_ct))\star v(t)\\
+&amp;= v(t) - 4v_c\int_{-\infty}^{\infty}\text{cos}(2\pi v_0(t-\tau))\ sinc(2v_c(t-\tau))v(\tau)\ d\tau,
+\end{align}</p>
+<p>我们再次看到陷波滤波器减去了部分信号。</p>
+<p>我们将在第8章中再次回到这些过滤器。</p>
 
                     </main>
 

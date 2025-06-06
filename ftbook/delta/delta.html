@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>δ - ftbook</title>
+        <title>δ努力工作 - ftbook</title>
 
 
         <!-- Custom HTML head -->
@@ -171,7 +171,19 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="δ"><a class="header" href="#δ">δ</a></h1>
+                        <h1 id="δ努力工作"><a class="header" href="#δ努力工作">δ努力工作</a></h1>
+<p>我们在一般理论方面投入了大量精力，现在是时候看看一些应用了。这些应用涵盖了从完成一些关于滤波器的研究，到光学、衍射，再到X射线晶体学。通过本章将要介绍的III函数（非常重要！），后者甚至会引导我们走向下一章的采样定理。所有这些例子的共同点是它们都使用了δ。本章篇幅短小，内容精挑细选，但主题都引人入胜，富有启发性。</p>
+<p>我们需要的\(\delta\)的主要性质是卷积和乘法。回想一下，对于函数f，</p>
+<p>\[(f\star\delta)(x) = f(x) \quad \text{and}\quad f(x)\delta(x) = f(0)\delta{x}.\]</p>
+<p>在本章中，我们倾向于用变量来表示\(\delta\)，并且我们也可以自由地对\(\delta\)进行积分，写成</p>
+<p>\[(f\star\delta)(x) = \int_{-\infty}^{\infty}f(y)\delta(x-y)\ dy = f(x).\]</p>
+<p>对于偏移（shifted）\(\delta\)，</p>
+<p>\[f(x)\star\delta(x-a) = (f\star\delta)(x-a) = f(x-a), \]</p>
+<p>\[f(x)\delta(x-a) = f(a)\delta(x-a).\]</p>
+<p>我们还将使用缩放（scaling）性质</p>
+<p>\[\delta(ax) = \frac{1}{|a|}\delta(x),\]</p>
+<p>当然，我们还需要傅里叶变换，</p>
+<p>\[\mathcal{F}\delta(x-a) = e^{-2\pi isa}.\]</p>
 
                     </main>
 
